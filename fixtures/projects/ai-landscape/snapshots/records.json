@@ -1,0 +1,79 @@
+[
+  {
+    "assetIds": [],
+    "id": "7e1cb9ea-d77f-402f-8164-0437ca619b30",
+    "manifestPath": "snapshots/7e1cb9ea-d77f-402f-8164-0437ca619b30/manifest.json",
+    "publishedAt": "2026-09-30T09:24:45.404Z",
+    "revision": 1
+  },
+  {
+    "assetIds": [],
+    "id": "54c1fb22-4f17-422f-8f1a-58fdb1fe5665",
+    "manifestPath": "snapshots/54c1fb22-4f17-422f-8f1a-58fdb1fe5665/manifest.json",
+    "publishedAt": "2026-09-30T10:40:08.774Z",
+    "revision": 2
+  },
+  {
+    "assetIds": [],
+    "id": "41e50f3a-b35c-4a6a-b7e1-a5ccdd19b3c7",
+    "manifestPath": "snapshots/41e50f3a-b35c-4a6a-b7e1-a5ccdd19b3c7/manifest.json",
+    "publishedAt": "2026-09-30T10:40:35.492Z",
+    "revision": 3
+  },
+  {
+    "assetIds": [],
+    "id": "a921e0e7-57a6-48ff-a6fc-4cc276ae9229",
+    "manifestPath": "snapshots/a921e0e7-57a6-48ff-a6fc-4cc276ae9229/manifest.json",
+    "publishedAt": "2026-09-30T14:22:36.955Z",
+    "revision": 4
+  },
+  {
+    "assetIds": [],
+    "id": "7c157c52-75d4-41c6-8b9b-522f54bf37fa",
+    "manifestPath": "snapshots/7c157c52-75d4-41c6-8b9b-522f54bf37fa/manifest.json",
+    "publishedAt": "2026-09-30T14:22:40.190Z",
+    "revision": 5
+  },
+  {
+    "assetIds": [],
+    "id": "1a2cb99f-52f3-4945-8fd9-d8bfa8dc7e72",
+    "manifestPath": "snapshots/1a2cb99f-52f3-4945-8fd9-d8bfa8dc7e72/manifest.json",
+    "publishedAt": "2026-09-30T14:44:53.243Z",
+    "revision": 7
+  },
+  {
+    "assetIds": [],
+    "id": "42ece98e-31de-44e1-b6c7-b5f734278fbd",
+    "manifestPath": "snapshots/42ece98e-31de-44e1-b6c7-b5f734278fbd/manifest.json",
+    "publishedAt": "2026-09-30T14:45:18.045Z",
+    "revision": 8
+  },
+  {
+    "assetIds": [],
+    "id": "bd32e0ec-2ca1-4495-9c76-1246ca1f41e0",
+    "manifestPath": "snapshots/bd32e0ec-2ca1-4495-9c76-1246ca1f41e0/manifest.json",
+    "publishedAt": "2026-09-30T14:47:25.436Z",
+    "revision": 9
+  },
+  {
+    "assetIds": [],
+    "id": "e2004e5f-8c73-49b9-ac31-a5e4bb08df04",
+    "manifestPath": "snapshots/e2004e5f-8c73-49b9-ac31-a5e4bb08df04/manifest.json",
+    "publishedAt": "2026-09-30T16:15:57.782Z",
+    "revision": 12
+  },
+  {
+    "assetIds": [],
+    "id": "38f5df21-989e-41df-a51d-c87e5086980a",
+    "manifestPath": "snapshots/38f5df21-989e-41df-a51d-c87e5086980a/manifest.json",
+    "publishedAt": "2026-09-30T16:17:22.290Z",
+    "revision": 13
+  },
+  {
+    "assetIds": [],
+    "id": "a7aeda93-7f18-40e1-ba67-de2b8113b48a",
+    "manifestPath": "snapshots/a7aeda93-7f18-40e1-ba67-de2b8113b48a/manifest.json",
+    "publishedAt": "2026-09-30T16:56:26.159Z",
+    "revision": 14
+  }
+]

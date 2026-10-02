@@ -1,0 +1,983 @@
+[
+  {
+    "createdAt": "2026-09-03T09:00:00.000Z",
+    "id": "relationship-001",
+    "keyIssueId": "issue-agents",
+    "order": 0,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-world-models",
+    "updatedAt": "2026-09-03T09:00:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:01:00.000Z",
+    "id": "relationship-002",
+    "keyIssueId": "issue-agents",
+    "order": 1,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-science",
+    "updatedAt": "2026-09-03T09:01:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:02:00.000Z",
+    "id": "relationship-003",
+    "keyIssueId": "issue-trust",
+    "order": 0,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-digital-identity",
+    "updatedAt": "2026-09-03T09:02:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:03:00.000Z",
+    "id": "relationship-004",
+    "keyIssueId": "issue-trust",
+    "order": 1,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-interpretability",
+    "updatedAt": "2026-09-03T09:03:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:04:00.000Z",
+    "id": "relationship-005",
+    "keyIssueId": "issue-trust",
+    "order": 2,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-disinformation",
+    "updatedAt": "2026-09-03T09:04:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:05:00.000Z",
+    "id": "relationship-006",
+    "keyIssueId": "issue-workforce",
+    "order": 0,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-work",
+    "updatedAt": "2026-09-03T09:05:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:06:00.000Z",
+    "id": "relationship-007",
+    "keyIssueId": "issue-workforce",
+    "order": 1,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-education",
+    "updatedAt": "2026-09-03T09:06:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:07:00.000Z",
+    "id": "relationship-008",
+    "keyIssueId": "issue-environment",
+    "order": 0,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-climate",
+    "updatedAt": "2026-09-03T09:07:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:08:00.000Z",
+    "id": "relationship-009",
+    "keyIssueId": "issue-environment",
+    "order": 1,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-data-centers",
+    "updatedAt": "2026-09-03T09:08:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:09:00.000Z",
+    "id": "relationship-010",
+    "keyIssueId": "issue-security",
+    "order": 0,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-security",
+    "updatedAt": "2026-09-03T09:09:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:10:00.000Z",
+    "id": "relationship-011",
+    "keyIssueId": "issue-security",
+    "order": 1,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-governance",
+    "updatedAt": "2026-09-03T09:10:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:11:00.000Z",
+    "id": "relationship-012",
+    "keyIssueId": "issue-security",
+    "order": 2,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-data-centers",
+    "updatedAt": "2026-09-03T09:11:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:12:00.000Z",
+    "id": "relationship-013",
+    "keyIssueId": "issue-security",
+    "order": 3,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-geopolitics",
+    "updatedAt": "2026-09-03T09:12:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:13:00.000Z",
+    "id": "relationship-014",
+    "keyIssueId": "issue-research",
+    "order": 0,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-science",
+    "updatedAt": "2026-09-03T09:13:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T09:14:00.000Z",
+    "id": "relationship-015",
+    "keyIssueId": "issue-research",
+    "order": 1,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-open-source",
+    "updatedAt": "2026-09-03T09:14:00.000Z"
+  },
+  {
+    "createdAt": "2026-09-03T10:00:00.000Z",
+    "id": "relationship-016",
+    "keyIssueId": "issue-science-ai",
+    "order": 0,
+    "sourceTopicId": "topic-science",
+    "targetTopicId": "topic-ai",
+    "updatedAt": "2026-09-03T10:00:00.000Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-science-ai-topic-health",
+    "keyIssueId": "issue-science-ai",
+    "order": 2,
+    "sourceTopicId": "topic-science",
+    "targetTopicId": "topic-health",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-science-evidence-topic-datasets",
+    "keyIssueId": "issue-science-evidence",
+    "order": 0,
+    "sourceTopicId": "topic-science",
+    "targetTopicId": "topic-datasets",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-science-evidence-topic-evaluation",
+    "keyIssueId": "issue-science-evidence",
+    "order": 1,
+    "sourceTopicId": "topic-science",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-world-models-simulation-topic-robotics",
+    "keyIssueId": "issue-world-models-simulation",
+    "order": 0,
+    "sourceTopicId": "topic-world-models",
+    "targetTopicId": "topic-robotics",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-world-models-simulation-topic-computer-vision",
+    "keyIssueId": "issue-world-models-simulation",
+    "order": 1,
+    "sourceTopicId": "topic-world-models",
+    "targetTopicId": "topic-computer-vision",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-world-models-transfer-topic-evaluation",
+    "keyIssueId": "issue-world-models-transfer",
+    "order": 0,
+    "sourceTopicId": "topic-world-models",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-world-models-transfer-topic-security",
+    "keyIssueId": "issue-world-models-transfer",
+    "order": 1,
+    "sourceTopicId": "topic-world-models",
+    "targetTopicId": "topic-security",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-digital-identity-credentials-topic-privacy",
+    "keyIssueId": "issue-digital-identity-credentials",
+    "order": 0,
+    "sourceTopicId": "topic-digital-identity",
+    "targetTopicId": "topic-privacy",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-digital-identity-credentials-topic-governance",
+    "keyIssueId": "issue-digital-identity-credentials",
+    "order": 1,
+    "sourceTopicId": "topic-digital-identity",
+    "targetTopicId": "topic-governance",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-digital-identity-provenance-topic-disinformation",
+    "keyIssueId": "issue-digital-identity-provenance",
+    "order": 0,
+    "sourceTopicId": "topic-digital-identity",
+    "targetTopicId": "topic-disinformation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-digital-identity-provenance-topic-security",
+    "keyIssueId": "issue-digital-identity-provenance",
+    "order": 1,
+    "sourceTopicId": "topic-digital-identity",
+    "targetTopicId": "topic-security",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-climate-measurement-topic-science",
+    "keyIssueId": "issue-climate-measurement",
+    "order": 0,
+    "sourceTopicId": "topic-climate",
+    "targetTopicId": "topic-science",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-climate-measurement-topic-datasets",
+    "keyIssueId": "issue-climate-measurement",
+    "order": 1,
+    "sourceTopicId": "topic-climate",
+    "targetTopicId": "topic-datasets",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-climate-energy-topic-data-centers",
+    "keyIssueId": "issue-climate-energy",
+    "order": 0,
+    "sourceTopicId": "topic-climate",
+    "targetTopicId": "topic-data-centers",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-climate-energy-topic-compute",
+    "keyIssueId": "issue-climate-energy",
+    "order": 1,
+    "sourceTopicId": "topic-climate",
+    "targetTopicId": "topic-compute",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-work-tasks-topic-language-models",
+    "keyIssueId": "issue-work-tasks",
+    "order": 0,
+    "sourceTopicId": "topic-work",
+    "targetTopicId": "topic-language-models",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-work-tasks-topic-robotics",
+    "keyIssueId": "issue-work-tasks",
+    "order": 1,
+    "sourceTopicId": "topic-work",
+    "targetTopicId": "topic-robotics",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-work-skills-topic-education",
+    "keyIssueId": "issue-work-skills",
+    "order": 0,
+    "sourceTopicId": "topic-work",
+    "targetTopicId": "topic-education",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-work-skills-topic-governance",
+    "keyIssueId": "issue-work-skills",
+    "order": 1,
+    "sourceTopicId": "topic-work",
+    "targetTopicId": "topic-governance",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-education-learning-topic-language-models",
+    "keyIssueId": "issue-education-learning",
+    "order": 0,
+    "sourceTopicId": "topic-education",
+    "targetTopicId": "topic-language-models",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-education-learning-topic-evaluation",
+    "keyIssueId": "issue-education-learning",
+    "order": 1,
+    "sourceTopicId": "topic-education",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-education-literacy-topic-work",
+    "keyIssueId": "issue-education-literacy",
+    "order": 0,
+    "sourceTopicId": "topic-education",
+    "targetTopicId": "topic-work",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-education-literacy-topic-datasets",
+    "keyIssueId": "issue-education-literacy",
+    "order": 1,
+    "sourceTopicId": "topic-education",
+    "targetTopicId": "topic-datasets",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-governance-risk-topic-evaluation",
+    "keyIssueId": "issue-governance-risk",
+    "order": 0,
+    "sourceTopicId": "topic-governance",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-governance-risk-topic-security",
+    "keyIssueId": "issue-governance-risk",
+    "order": 1,
+    "sourceTopicId": "topic-governance",
+    "targetTopicId": "topic-security",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-governance-policy-topic-privacy",
+    "keyIssueId": "issue-governance-policy",
+    "order": 0,
+    "sourceTopicId": "topic-governance",
+    "targetTopicId": "topic-privacy",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-governance-policy-topic-geopolitics",
+    "keyIssueId": "issue-governance-policy",
+    "order": 1,
+    "sourceTopicId": "topic-governance",
+    "targetTopicId": "topic-geopolitics",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-security-attacks-topic-language-models",
+    "keyIssueId": "issue-security-attacks",
+    "order": 0,
+    "sourceTopicId": "topic-security",
+    "targetTopicId": "topic-language-models",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-security-attacks-topic-privacy",
+    "keyIssueId": "issue-security-attacks",
+    "order": 1,
+    "sourceTopicId": "topic-security",
+    "targetTopicId": "topic-privacy",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-security-controls-topic-governance",
+    "keyIssueId": "issue-security-controls",
+    "order": 0,
+    "sourceTopicId": "topic-security",
+    "targetTopicId": "topic-governance",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-security-controls-topic-robotics",
+    "keyIssueId": "issue-security-controls",
+    "order": 1,
+    "sourceTopicId": "topic-security",
+    "targetTopicId": "topic-robotics",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-data-centers-energy-topic-climate",
+    "keyIssueId": "issue-data-centers-energy",
+    "order": 0,
+    "sourceTopicId": "topic-data-centers",
+    "targetTopicId": "topic-climate",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-data-centers-energy-topic-compute",
+    "keyIssueId": "issue-data-centers-energy",
+    "order": 1,
+    "sourceTopicId": "topic-data-centers",
+    "targetTopicId": "topic-compute",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-data-centers-capacity-topic-geopolitics",
+    "keyIssueId": "issue-data-centers-capacity",
+    "order": 0,
+    "sourceTopicId": "topic-data-centers",
+    "targetTopicId": "topic-geopolitics",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-data-centers-capacity-topic-security",
+    "keyIssueId": "issue-data-centers-capacity",
+    "order": 1,
+    "sourceTopicId": "topic-data-centers",
+    "targetTopicId": "topic-security",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-open-source-licensing-topic-datasets",
+    "keyIssueId": "issue-open-source-licensing",
+    "order": 0,
+    "sourceTopicId": "topic-open-source",
+    "targetTopicId": "topic-datasets",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-open-source-licensing-topic-geopolitics",
+    "keyIssueId": "issue-open-source-licensing",
+    "order": 1,
+    "sourceTopicId": "topic-open-source",
+    "targetTopicId": "topic-geopolitics",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-open-source-reproduction-topic-science",
+    "keyIssueId": "issue-open-source-reproduction",
+    "order": 0,
+    "sourceTopicId": "topic-open-source",
+    "targetTopicId": "topic-science",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-open-source-reproduction-topic-evaluation",
+    "keyIssueId": "issue-open-source-reproduction",
+    "order": 1,
+    "sourceTopicId": "topic-open-source",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-geopolitics-capacity-topic-compute",
+    "keyIssueId": "issue-geopolitics-capacity",
+    "order": 0,
+    "sourceTopicId": "topic-geopolitics",
+    "targetTopicId": "topic-compute",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-geopolitics-capacity-topic-data-centers",
+    "keyIssueId": "issue-geopolitics-capacity",
+    "order": 1,
+    "sourceTopicId": "topic-geopolitics",
+    "targetTopicId": "topic-data-centers",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-geopolitics-cooperation-topic-governance",
+    "keyIssueId": "issue-geopolitics-cooperation",
+    "order": 0,
+    "sourceTopicId": "topic-geopolitics",
+    "targetTopicId": "topic-governance",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-geopolitics-cooperation-topic-open-source",
+    "keyIssueId": "issue-geopolitics-cooperation",
+    "order": 1,
+    "sourceTopicId": "topic-geopolitics",
+    "targetTopicId": "topic-open-source",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-disinformation-provenance-topic-digital-identity",
+    "keyIssueId": "issue-disinformation-provenance",
+    "order": 0,
+    "sourceTopicId": "topic-disinformation",
+    "targetTopicId": "topic-digital-identity",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-disinformation-provenance-topic-governance",
+    "keyIssueId": "issue-disinformation-provenance",
+    "order": 1,
+    "sourceTopicId": "topic-disinformation",
+    "targetTopicId": "topic-governance",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-disinformation-media-topic-language-models",
+    "keyIssueId": "issue-disinformation-media",
+    "order": 0,
+    "sourceTopicId": "topic-disinformation",
+    "targetTopicId": "topic-language-models",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-disinformation-media-topic-computer-vision",
+    "keyIssueId": "issue-disinformation-media",
+    "order": 1,
+    "sourceTopicId": "topic-disinformation",
+    "targetTopicId": "topic-computer-vision",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-interpretability-features-topic-language-models",
+    "keyIssueId": "issue-interpretability-features",
+    "order": 0,
+    "sourceTopicId": "topic-interpretability",
+    "targetTopicId": "topic-language-models",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-interpretability-features-topic-computer-vision",
+    "keyIssueId": "issue-interpretability-features",
+    "order": 1,
+    "sourceTopicId": "topic-interpretability",
+    "targetTopicId": "topic-computer-vision",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-interpretability-validation-topic-evaluation",
+    "keyIssueId": "issue-interpretability-validation",
+    "order": 0,
+    "sourceTopicId": "topic-interpretability",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-interpretability-validation-topic-governance",
+    "keyIssueId": "issue-interpretability-validation",
+    "order": 1,
+    "sourceTopicId": "topic-interpretability",
+    "targetTopicId": "topic-governance",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-language-models-architecture-topic-interpretability",
+    "keyIssueId": "issue-language-models-architecture",
+    "order": 0,
+    "sourceTopicId": "topic-language-models",
+    "targetTopicId": "topic-interpretability",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-language-models-architecture-topic-compute",
+    "keyIssueId": "issue-language-models-architecture",
+    "order": 1,
+    "sourceTopicId": "topic-language-models",
+    "targetTopicId": "topic-compute",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-language-models-grounding-topic-datasets",
+    "keyIssueId": "issue-language-models-grounding",
+    "order": 0,
+    "sourceTopicId": "topic-language-models",
+    "targetTopicId": "topic-datasets",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-language-models-grounding-topic-evaluation",
+    "keyIssueId": "issue-language-models-grounding",
+    "order": 1,
+    "sourceTopicId": "topic-language-models",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-robotics-perception-topic-computer-vision",
+    "keyIssueId": "issue-robotics-perception",
+    "order": 0,
+    "sourceTopicId": "topic-robotics",
+    "targetTopicId": "topic-computer-vision",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-robotics-perception-topic-world-models",
+    "keyIssueId": "issue-robotics-perception",
+    "order": 1,
+    "sourceTopicId": "topic-robotics",
+    "targetTopicId": "topic-world-models",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-robotics-deployment-topic-security",
+    "keyIssueId": "issue-robotics-deployment",
+    "order": 0,
+    "sourceTopicId": "topic-robotics",
+    "targetTopicId": "topic-security",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-robotics-deployment-topic-work",
+    "keyIssueId": "issue-robotics-deployment",
+    "order": 1,
+    "sourceTopicId": "topic-robotics",
+    "targetTopicId": "topic-work",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-health-research-topic-science",
+    "keyIssueId": "issue-health-research",
+    "order": 0,
+    "sourceTopicId": "topic-health",
+    "targetTopicId": "topic-science",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-health-research-topic-datasets",
+    "keyIssueId": "issue-health-research",
+    "order": 1,
+    "sourceTopicId": "topic-health",
+    "targetTopicId": "topic-datasets",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-health-oversight-topic-privacy",
+    "keyIssueId": "issue-health-oversight",
+    "order": 0,
+    "sourceTopicId": "topic-health",
+    "targetTopicId": "topic-privacy",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-health-oversight-topic-evaluation",
+    "keyIssueId": "issue-health-oversight",
+    "order": 1,
+    "sourceTopicId": "topic-health",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-computer-vision-recognition-topic-robotics",
+    "keyIssueId": "issue-computer-vision-recognition",
+    "order": 0,
+    "sourceTopicId": "topic-computer-vision",
+    "targetTopicId": "topic-robotics",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-computer-vision-recognition-topic-interpretability",
+    "keyIssueId": "issue-computer-vision-recognition",
+    "order": 1,
+    "sourceTopicId": "topic-computer-vision",
+    "targetTopicId": "topic-interpretability",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-computer-vision-data-topic-datasets",
+    "keyIssueId": "issue-computer-vision-data",
+    "order": 0,
+    "sourceTopicId": "topic-computer-vision",
+    "targetTopicId": "topic-datasets",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-computer-vision-data-topic-evaluation",
+    "keyIssueId": "issue-computer-vision-data",
+    "order": 1,
+    "sourceTopicId": "topic-computer-vision",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-datasets-documentation-topic-privacy",
+    "keyIssueId": "issue-datasets-documentation",
+    "order": 0,
+    "sourceTopicId": "topic-datasets",
+    "targetTopicId": "topic-privacy",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-datasets-documentation-topic-open-source",
+    "keyIssueId": "issue-datasets-documentation",
+    "order": 1,
+    "sourceTopicId": "topic-datasets",
+    "targetTopicId": "topic-open-source",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-datasets-splits-topic-evaluation",
+    "keyIssueId": "issue-datasets-splits",
+    "order": 0,
+    "sourceTopicId": "topic-datasets",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-datasets-splits-topic-computer-vision",
+    "keyIssueId": "issue-datasets-splits",
+    "order": 1,
+    "sourceTopicId": "topic-datasets",
+    "targetTopicId": "topic-computer-vision",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-compute-performance-topic-data-centers",
+    "keyIssueId": "issue-compute-performance",
+    "order": 0,
+    "sourceTopicId": "topic-compute",
+    "targetTopicId": "topic-data-centers",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-compute-performance-topic-evaluation",
+    "keyIssueId": "issue-compute-performance",
+    "order": 1,
+    "sourceTopicId": "topic-compute",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-compute-access-topic-geopolitics",
+    "keyIssueId": "issue-compute-access",
+    "order": 0,
+    "sourceTopicId": "topic-compute",
+    "targetTopicId": "topic-geopolitics",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-compute-access-topic-climate",
+    "keyIssueId": "issue-compute-access",
+    "order": 1,
+    "sourceTopicId": "topic-compute",
+    "targetTopicId": "topic-climate",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-privacy-guarantees-topic-datasets",
+    "keyIssueId": "issue-privacy-guarantees",
+    "order": 0,
+    "sourceTopicId": "topic-privacy",
+    "targetTopicId": "topic-datasets",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-privacy-guarantees-topic-evaluation",
+    "keyIssueId": "issue-privacy-guarantees",
+    "order": 1,
+    "sourceTopicId": "topic-privacy",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-privacy-governance-topic-digital-identity",
+    "keyIssueId": "issue-privacy-governance",
+    "order": 0,
+    "sourceTopicId": "topic-privacy",
+    "targetTopicId": "topic-digital-identity",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-privacy-governance-topic-health",
+    "keyIssueId": "issue-privacy-governance",
+    "order": 1,
+    "sourceTopicId": "topic-privacy",
+    "targetTopicId": "topic-health",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-evaluation-metrics-topic-language-models",
+    "keyIssueId": "issue-evaluation-metrics",
+    "order": 0,
+    "sourceTopicId": "topic-evaluation",
+    "targetTopicId": "topic-language-models",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-evaluation-metrics-topic-datasets",
+    "keyIssueId": "issue-evaluation-metrics",
+    "order": 1,
+    "sourceTopicId": "topic-evaluation",
+    "targetTopicId": "topic-datasets",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-evaluation-reporting-topic-governance",
+    "keyIssueId": "issue-evaluation-reporting",
+    "order": 0,
+    "sourceTopicId": "topic-evaluation",
+    "targetTopicId": "topic-governance",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-evaluation-reporting-topic-health",
+    "keyIssueId": "issue-evaluation-reporting",
+    "order": 1,
+    "sourceTopicId": "topic-evaluation",
+    "targetTopicId": "topic-health",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-agents-topic-robotics",
+    "keyIssueId": "issue-agents",
+    "order": 2,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-robotics",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-trust-topic-privacy",
+    "keyIssueId": "issue-trust",
+    "order": 3,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-privacy",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-trust-topic-health",
+    "keyIssueId": "issue-trust",
+    "order": 4,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-health",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-environment-topic-compute",
+    "keyIssueId": "issue-environment",
+    "order": 2,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-compute",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-research-topic-evaluation",
+    "keyIssueId": "issue-research",
+    "order": 2,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-evaluation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-research-topic-datasets",
+    "keyIssueId": "issue-research",
+    "order": 3,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-datasets",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-issue-research-topic-computer-vision",
+    "keyIssueId": "issue-research",
+    "order": 4,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-computer-vision",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-f6abf51f-2420-4e17-a75e-21ab73f7820e-topic-language-models",
+    "keyIssueId": "f6abf51f-2420-4e17-a75e-21ab73f7820e",
+    "order": 0,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-language-models",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-f6abf51f-2420-4e17-a75e-21ab73f7820e-topic-disinformation",
+    "keyIssueId": "f6abf51f-2420-4e17-a75e-21ab73f7820e",
+    "order": 1,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-disinformation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "relationship-f6abf51f-2420-4e17-a75e-21ab73f7820e-topic-computer-vision",
+    "keyIssueId": "f6abf51f-2420-4e17-a75e-21ab73f7820e",
+    "order": 2,
+    "sourceTopicId": "topic-ai",
+    "targetTopicId": "topic-computer-vision",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  }
+]

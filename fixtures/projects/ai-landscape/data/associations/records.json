@@ -1,0 +1,1622 @@
+[
+  {
+    "id": "association-evaluation",
+    "knowledgeItemId": "knowledge-evaluation",
+    "order": 0,
+    "pinned": true,
+    "targetId": "issue-research",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-environment",
+    "knowledgeItemId": "knowledge-environment-note",
+    "order": 0,
+    "targetId": "issue-environment",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-governance",
+    "knowledgeItemId": "knowledge-governance",
+    "order": 1,
+    "pinned": false,
+    "targetId": "topic-ai",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-issue-science-ai-knowledge-alphafold",
+    "knowledgeItemId": "knowledge-alphafold",
+    "order": 0,
+    "targetId": "issue-science-ai",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-science-ai-knowledge-note-science",
+    "knowledgeItemId": "knowledge-note-science",
+    "order": 1,
+    "targetId": "issue-science-ai",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-science-evidence-knowledge-evaluation",
+    "knowledgeItemId": "knowledge-evaluation",
+    "order": 0,
+    "targetId": "issue-science-evidence",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-science-evidence-knowledge-uci",
+    "knowledgeItemId": "knowledge-uci",
+    "order": 1,
+    "targetId": "issue-science-evidence",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-science-evidence-knowledge-note-science",
+    "knowledgeItemId": "knowledge-note-science",
+    "order": 2,
+    "targetId": "issue-science-evidence",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-world-models-simulation-knowledge-world-models",
+    "knowledgeItemId": "knowledge-world-models",
+    "order": 0,
+    "targetId": "issue-world-models-simulation",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-world-models-simulation-knowledge-video-world",
+    "knowledgeItemId": "knowledge-video-world",
+    "order": 1,
+    "targetId": "issue-world-models-simulation",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-world-models-simulation-knowledge-note-world-models",
+    "knowledgeItemId": "knowledge-note-world-models",
+    "order": 2,
+    "targetId": "issue-world-models-simulation",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-world-models-transfer-knowledge-rt2",
+    "knowledgeItemId": "knowledge-rt2",
+    "order": 0,
+    "targetId": "issue-world-models-transfer",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-world-models-transfer-knowledge-evaluation",
+    "knowledgeItemId": "knowledge-evaluation",
+    "order": 1,
+    "targetId": "issue-world-models-transfer",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-world-models-transfer-knowledge-note-world-models",
+    "knowledgeItemId": "knowledge-note-world-models",
+    "order": 2,
+    "targetId": "issue-world-models-transfer",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-digital-identity-credentials-knowledge-credentials",
+    "knowledgeItemId": "knowledge-credentials",
+    "order": 0,
+    "targetId": "issue-digital-identity-credentials",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-digital-identity-credentials-knowledge-note-digital-identity",
+    "knowledgeItemId": "knowledge-note-digital-identity",
+    "order": 1,
+    "targetId": "issue-digital-identity-credentials",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-digital-identity-provenance-knowledge-synthetic",
+    "knowledgeItemId": "knowledge-synthetic",
+    "order": 0,
+    "targetId": "issue-digital-identity-provenance",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-digital-identity-provenance-knowledge-note-digital-identity",
+    "knowledgeItemId": "knowledge-note-digital-identity",
+    "order": 1,
+    "targetId": "issue-digital-identity-provenance",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-climate-measurement-knowledge-nasa",
+    "knowledgeItemId": "knowledge-nasa",
+    "order": 0,
+    "targetId": "issue-climate-measurement",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-climate-measurement-knowledge-note-climate",
+    "knowledgeItemId": "knowledge-note-climate",
+    "order": 1,
+    "targetId": "issue-climate-measurement",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-climate-energy-knowledge-iea",
+    "knowledgeItemId": "knowledge-iea",
+    "order": 0,
+    "targetId": "issue-climate-energy",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-climate-energy-knowledge-note-climate",
+    "knowledgeItemId": "knowledge-note-climate",
+    "order": 1,
+    "targetId": "issue-climate-energy",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-work-tasks-knowledge-ilo",
+    "knowledgeItemId": "knowledge-ilo",
+    "order": 0,
+    "targetId": "issue-work-tasks",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-work-tasks-knowledge-note-work",
+    "knowledgeItemId": "knowledge-note-work",
+    "order": 1,
+    "targetId": "issue-work-tasks",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-work-skills-knowledge-ilo",
+    "knowledgeItemId": "knowledge-ilo",
+    "order": 0,
+    "targetId": "issue-work-skills",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-work-skills-knowledge-unesco",
+    "knowledgeItemId": "knowledge-unesco",
+    "order": 1,
+    "targetId": "issue-work-skills",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-work-skills-knowledge-note-work",
+    "knowledgeItemId": "knowledge-note-work",
+    "order": 2,
+    "targetId": "issue-work-skills",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-education-learning-knowledge-unesco",
+    "knowledgeItemId": "knowledge-unesco",
+    "order": 0,
+    "targetId": "issue-education-learning",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-education-learning-knowledge-note-education",
+    "knowledgeItemId": "knowledge-note-education",
+    "order": 1,
+    "targetId": "issue-education-learning",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-education-literacy-knowledge-video-intro",
+    "knowledgeItemId": "knowledge-video-intro",
+    "order": 0,
+    "targetId": "issue-education-literacy",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-education-literacy-knowledge-uci",
+    "knowledgeItemId": "knowledge-uci",
+    "order": 1,
+    "targetId": "issue-education-literacy",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-education-literacy-knowledge-note-education",
+    "knowledgeItemId": "knowledge-note-education",
+    "order": 2,
+    "targetId": "issue-education-literacy",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-governance-risk-knowledge-governance",
+    "knowledgeItemId": "knowledge-governance",
+    "order": 0,
+    "targetId": "issue-governance-risk",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-governance-risk-knowledge-modelcards",
+    "knowledgeItemId": "knowledge-modelcards",
+    "order": 1,
+    "targetId": "issue-governance-risk",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-governance-risk-knowledge-note-governance",
+    "knowledgeItemId": "knowledge-note-governance",
+    "order": 2,
+    "targetId": "issue-governance-risk",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-governance-policy-knowledge-eu-act",
+    "knowledgeItemId": "knowledge-eu-act",
+    "order": 0,
+    "targetId": "issue-governance-policy",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-governance-policy-knowledge-note-governance",
+    "knowledgeItemId": "knowledge-note-governance",
+    "order": 1,
+    "targetId": "issue-governance-policy",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-security-attacks-knowledge-adversarial",
+    "knowledgeItemId": "knowledge-adversarial",
+    "order": 0,
+    "targetId": "issue-security-attacks",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-security-attacks-knowledge-note-security",
+    "knowledgeItemId": "knowledge-note-security",
+    "order": 1,
+    "targetId": "issue-security-attacks",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-security-controls-knowledge-governance",
+    "knowledgeItemId": "knowledge-governance",
+    "order": 0,
+    "targetId": "issue-security-controls",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-security-controls-knowledge-react",
+    "knowledgeItemId": "knowledge-react",
+    "order": 1,
+    "targetId": "issue-security-controls",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-security-controls-knowledge-note-security",
+    "knowledgeItemId": "knowledge-note-security",
+    "order": 2,
+    "targetId": "issue-security-controls",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-data-centers-energy-knowledge-iea",
+    "knowledgeItemId": "knowledge-iea",
+    "order": 0,
+    "targetId": "issue-data-centers-energy",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-data-centers-energy-knowledge-environment-note",
+    "knowledgeItemId": "knowledge-environment-note",
+    "order": 1,
+    "targetId": "issue-data-centers-energy",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-data-centers-capacity-knowledge-oecd",
+    "knowledgeItemId": "knowledge-oecd",
+    "order": 0,
+    "targetId": "issue-data-centers-capacity",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-data-centers-capacity-knowledge-mlperf",
+    "knowledgeItemId": "knowledge-mlperf",
+    "order": 1,
+    "targetId": "issue-data-centers-capacity",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-data-centers-capacity-knowledge-environment-note",
+    "knowledgeItemId": "knowledge-environment-note",
+    "order": 2,
+    "targetId": "issue-data-centers-capacity",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-open-source-licensing-knowledge-osi",
+    "knowledgeItemId": "knowledge-osi",
+    "order": 0,
+    "targetId": "issue-open-source-licensing",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-open-source-licensing-knowledge-datasheets",
+    "knowledgeItemId": "knowledge-datasheets",
+    "order": 1,
+    "targetId": "issue-open-source-licensing",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-open-source-licensing-knowledge-note-open-source",
+    "knowledgeItemId": "knowledge-note-open-source",
+    "order": 2,
+    "targetId": "issue-open-source-licensing",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-open-source-reproduction-knowledge-modelcards",
+    "knowledgeItemId": "knowledge-modelcards",
+    "order": 0,
+    "targetId": "issue-open-source-reproduction",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-open-source-reproduction-knowledge-note-open-source",
+    "knowledgeItemId": "knowledge-note-open-source",
+    "order": 1,
+    "targetId": "issue-open-source-reproduction",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-geopolitics-capacity-knowledge-oecd",
+    "knowledgeItemId": "knowledge-oecd",
+    "order": 0,
+    "targetId": "issue-geopolitics-capacity",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-geopolitics-capacity-knowledge-iea",
+    "knowledgeItemId": "knowledge-iea",
+    "order": 1,
+    "targetId": "issue-geopolitics-capacity",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-geopolitics-capacity-knowledge-note-geopolitics",
+    "knowledgeItemId": "knowledge-note-geopolitics",
+    "order": 2,
+    "targetId": "issue-geopolitics-capacity",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-geopolitics-cooperation-knowledge-oecd",
+    "knowledgeItemId": "knowledge-oecd",
+    "order": 0,
+    "targetId": "issue-geopolitics-cooperation",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-geopolitics-cooperation-knowledge-osi",
+    "knowledgeItemId": "knowledge-osi",
+    "order": 1,
+    "targetId": "issue-geopolitics-cooperation",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-geopolitics-cooperation-knowledge-note-geopolitics",
+    "knowledgeItemId": "knowledge-note-geopolitics",
+    "order": 2,
+    "targetId": "issue-geopolitics-cooperation",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-disinformation-provenance-knowledge-synthetic",
+    "knowledgeItemId": "knowledge-synthetic",
+    "order": 0,
+    "targetId": "issue-disinformation-provenance",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-disinformation-provenance-knowledge-credentials",
+    "knowledgeItemId": "knowledge-credentials",
+    "order": 1,
+    "targetId": "issue-disinformation-provenance",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-disinformation-provenance-knowledge-note-disinformation",
+    "knowledgeItemId": "knowledge-note-disinformation",
+    "order": 2,
+    "targetId": "issue-disinformation-provenance",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-disinformation-media-knowledge-synthetic",
+    "knowledgeItemId": "knowledge-synthetic",
+    "order": 0,
+    "targetId": "issue-disinformation-media",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-disinformation-media-knowledge-diffusion",
+    "knowledgeItemId": "knowledge-diffusion",
+    "order": 1,
+    "targetId": "issue-disinformation-media",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-disinformation-media-knowledge-note-disinformation",
+    "knowledgeItemId": "knowledge-note-disinformation",
+    "order": 2,
+    "targetId": "issue-disinformation-media",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-interpretability-features-knowledge-features",
+    "knowledgeItemId": "knowledge-features",
+    "order": 0,
+    "targetId": "issue-interpretability-features",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-interpretability-features-knowledge-video-attention",
+    "knowledgeItemId": "knowledge-video-attention",
+    "order": 1,
+    "targetId": "issue-interpretability-features",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-interpretability-features-knowledge-note-interpretability",
+    "knowledgeItemId": "knowledge-note-interpretability",
+    "order": 2,
+    "targetId": "issue-interpretability-features",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-interpretability-validation-knowledge-modelcards",
+    "knowledgeItemId": "knowledge-modelcards",
+    "order": 0,
+    "targetId": "issue-interpretability-validation",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-interpretability-validation-knowledge-evaluation",
+    "knowledgeItemId": "knowledge-evaluation",
+    "order": 1,
+    "targetId": "issue-interpretability-validation",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-interpretability-validation-knowledge-note-interpretability",
+    "knowledgeItemId": "knowledge-note-interpretability",
+    "order": 2,
+    "targetId": "issue-interpretability-validation",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-language-models-architecture-knowledge-attention",
+    "knowledgeItemId": "knowledge-attention",
+    "order": 0,
+    "targetId": "issue-language-models-architecture",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-language-models-architecture-knowledge-video-transformers",
+    "knowledgeItemId": "knowledge-video-transformers",
+    "order": 1,
+    "targetId": "issue-language-models-architecture",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-language-models-architecture-knowledge-video-attention",
+    "knowledgeItemId": "knowledge-video-attention",
+    "order": 2,
+    "targetId": "issue-language-models-architecture",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-language-models-architecture-knowledge-note-language-models",
+    "knowledgeItemId": "knowledge-note-language-models",
+    "order": 3,
+    "targetId": "issue-language-models-architecture",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-language-models-grounding-knowledge-rag",
+    "knowledgeItemId": "knowledge-rag",
+    "order": 0,
+    "targetId": "issue-language-models-grounding",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-language-models-grounding-knowledge-note-language-models",
+    "knowledgeItemId": "knowledge-note-language-models",
+    "order": 1,
+    "targetId": "issue-language-models-grounding",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-robotics-perception-knowledge-rt2",
+    "knowledgeItemId": "knowledge-rt2",
+    "order": 0,
+    "targetId": "issue-robotics-perception",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-robotics-perception-knowledge-world-models",
+    "knowledgeItemId": "knowledge-world-models",
+    "order": 1,
+    "targetId": "issue-robotics-perception",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-robotics-perception-knowledge-note-robotics",
+    "knowledgeItemId": "knowledge-note-robotics",
+    "order": 2,
+    "targetId": "issue-robotics-perception",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-robotics-deployment-knowledge-rt2",
+    "knowledgeItemId": "knowledge-rt2",
+    "order": 0,
+    "targetId": "issue-robotics-deployment",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-robotics-deployment-knowledge-evaluation",
+    "knowledgeItemId": "knowledge-evaluation",
+    "order": 1,
+    "targetId": "issue-robotics-deployment",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-robotics-deployment-knowledge-note-robotics",
+    "knowledgeItemId": "knowledge-note-robotics",
+    "order": 2,
+    "targetId": "issue-robotics-deployment",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-health-research-knowledge-alphafold",
+    "knowledgeItemId": "knowledge-alphafold",
+    "order": 0,
+    "targetId": "issue-health-research",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-health-research-knowledge-note-health",
+    "knowledgeItemId": "knowledge-note-health",
+    "order": 1,
+    "targetId": "issue-health-research",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-health-oversight-knowledge-who",
+    "knowledgeItemId": "knowledge-who",
+    "order": 0,
+    "targetId": "issue-health-oversight",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-health-oversight-knowledge-modelcards",
+    "knowledgeItemId": "knowledge-modelcards",
+    "order": 1,
+    "targetId": "issue-health-oversight",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-health-oversight-knowledge-note-health",
+    "knowledgeItemId": "knowledge-note-health",
+    "order": 2,
+    "targetId": "issue-health-oversight",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-computer-vision-recognition-knowledge-resnet",
+    "knowledgeItemId": "knowledge-resnet",
+    "order": 0,
+    "targetId": "issue-computer-vision-recognition",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-computer-vision-recognition-knowledge-video-vision",
+    "knowledgeItemId": "knowledge-video-vision",
+    "order": 1,
+    "targetId": "issue-computer-vision-recognition",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-computer-vision-recognition-knowledge-note-computer-vision",
+    "knowledgeItemId": "knowledge-note-computer-vision",
+    "order": 2,
+    "targetId": "issue-computer-vision-recognition",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-computer-vision-data-knowledge-imagenet",
+    "knowledgeItemId": "knowledge-imagenet",
+    "order": 0,
+    "targetId": "issue-computer-vision-data",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-computer-vision-data-knowledge-datasheets",
+    "knowledgeItemId": "knowledge-datasheets",
+    "order": 1,
+    "targetId": "issue-computer-vision-data",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-computer-vision-data-knowledge-note-computer-vision",
+    "knowledgeItemId": "knowledge-note-computer-vision",
+    "order": 2,
+    "targetId": "issue-computer-vision-data",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-datasets-documentation-knowledge-datasheets",
+    "knowledgeItemId": "knowledge-datasheets",
+    "order": 0,
+    "targetId": "issue-datasets-documentation",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-datasets-documentation-knowledge-note-datasets",
+    "knowledgeItemId": "knowledge-note-datasets",
+    "order": 1,
+    "targetId": "issue-datasets-documentation",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-datasets-splits-knowledge-uci",
+    "knowledgeItemId": "knowledge-uci",
+    "order": 0,
+    "targetId": "issue-datasets-splits",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-datasets-splits-knowledge-imagenet",
+    "knowledgeItemId": "knowledge-imagenet",
+    "order": 1,
+    "targetId": "issue-datasets-splits",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-datasets-splits-knowledge-note-datasets",
+    "knowledgeItemId": "knowledge-note-datasets",
+    "order": 2,
+    "targetId": "issue-datasets-splits",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-compute-performance-knowledge-mlperf",
+    "knowledgeItemId": "knowledge-mlperf",
+    "order": 0,
+    "targetId": "issue-compute-performance",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-compute-performance-knowledge-note-compute",
+    "knowledgeItemId": "knowledge-note-compute",
+    "order": 1,
+    "targetId": "issue-compute-performance",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-compute-access-knowledge-oecd",
+    "knowledgeItemId": "knowledge-oecd",
+    "order": 0,
+    "targetId": "issue-compute-access",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-compute-access-knowledge-iea",
+    "knowledgeItemId": "knowledge-iea",
+    "order": 1,
+    "targetId": "issue-compute-access",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-compute-access-knowledge-note-compute",
+    "knowledgeItemId": "knowledge-note-compute",
+    "order": 2,
+    "targetId": "issue-compute-access",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-privacy-guarantees-knowledge-privacy",
+    "knowledgeItemId": "knowledge-privacy",
+    "order": 0,
+    "targetId": "issue-privacy-guarantees",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-privacy-guarantees-knowledge-note-privacy",
+    "knowledgeItemId": "knowledge-note-privacy",
+    "order": 1,
+    "targetId": "issue-privacy-guarantees",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-privacy-governance-knowledge-datasheets",
+    "knowledgeItemId": "knowledge-datasheets",
+    "order": 0,
+    "targetId": "issue-privacy-governance",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-privacy-governance-knowledge-credentials",
+    "knowledgeItemId": "knowledge-credentials",
+    "order": 1,
+    "targetId": "issue-privacy-governance",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-privacy-governance-knowledge-who",
+    "knowledgeItemId": "knowledge-who",
+    "order": 2,
+    "targetId": "issue-privacy-governance",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-privacy-governance-knowledge-note-privacy",
+    "knowledgeItemId": "knowledge-note-privacy",
+    "order": 3,
+    "targetId": "issue-privacy-governance",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-evaluation-metrics-knowledge-evaluation",
+    "knowledgeItemId": "knowledge-evaluation",
+    "order": 0,
+    "targetId": "issue-evaluation-metrics",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-evaluation-metrics-knowledge-mlperf",
+    "knowledgeItemId": "knowledge-mlperf",
+    "order": 1,
+    "targetId": "issue-evaluation-metrics",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-evaluation-metrics-knowledge-note-evaluation",
+    "knowledgeItemId": "knowledge-note-evaluation",
+    "order": 2,
+    "targetId": "issue-evaluation-metrics",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-evaluation-reporting-knowledge-modelcards",
+    "knowledgeItemId": "knowledge-modelcards",
+    "order": 0,
+    "targetId": "issue-evaluation-reporting",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-evaluation-reporting-knowledge-note-evaluation",
+    "knowledgeItemId": "knowledge-note-evaluation",
+    "order": 1,
+    "targetId": "issue-evaluation-reporting",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-agents-knowledge-react",
+    "knowledgeItemId": "knowledge-react",
+    "order": 0,
+    "targetId": "issue-agents",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-agents-knowledge-world-models",
+    "knowledgeItemId": "knowledge-world-models",
+    "order": 1,
+    "targetId": "issue-agents",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-agents-knowledge-video-world",
+    "knowledgeItemId": "knowledge-video-world",
+    "order": 2,
+    "targetId": "issue-agents",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-agents-knowledge-note-issue-agents",
+    "knowledgeItemId": "knowledge-note-issue-agents",
+    "order": 3,
+    "targetId": "issue-agents",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-trust-knowledge-governance",
+    "knowledgeItemId": "knowledge-governance",
+    "order": 0,
+    "targetId": "issue-trust",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-trust-knowledge-modelcards",
+    "knowledgeItemId": "knowledge-modelcards",
+    "order": 1,
+    "targetId": "issue-trust",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-trust-knowledge-features",
+    "knowledgeItemId": "knowledge-features",
+    "order": 2,
+    "targetId": "issue-trust",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-trust-knowledge-note-issue-trust",
+    "knowledgeItemId": "knowledge-note-issue-trust",
+    "order": 3,
+    "targetId": "issue-trust",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-workforce-knowledge-ilo",
+    "knowledgeItemId": "knowledge-ilo",
+    "order": 0,
+    "targetId": "issue-workforce",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-workforce-knowledge-unesco",
+    "knowledgeItemId": "knowledge-unesco",
+    "order": 1,
+    "targetId": "issue-workforce",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-workforce-knowledge-note-issue-workforce",
+    "knowledgeItemId": "knowledge-note-issue-workforce",
+    "order": 2,
+    "targetId": "issue-workforce",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-environment-knowledge-iea",
+    "knowledgeItemId": "knowledge-iea",
+    "order": 0,
+    "targetId": "issue-environment",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-environment-knowledge-nasa",
+    "knowledgeItemId": "knowledge-nasa",
+    "order": 1,
+    "targetId": "issue-environment",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-environment-knowledge-note-issue-environment",
+    "knowledgeItemId": "knowledge-note-issue-environment",
+    "order": 2,
+    "targetId": "issue-environment",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-security-knowledge-adversarial",
+    "knowledgeItemId": "knowledge-adversarial",
+    "order": 0,
+    "targetId": "issue-security",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-security-knowledge-eu-act",
+    "knowledgeItemId": "knowledge-eu-act",
+    "order": 1,
+    "targetId": "issue-security",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-security-knowledge-governance",
+    "knowledgeItemId": "knowledge-governance",
+    "order": 2,
+    "targetId": "issue-security",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-security-knowledge-note-issue-security",
+    "knowledgeItemId": "knowledge-note-issue-security",
+    "order": 3,
+    "targetId": "issue-security",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-research-knowledge-datasheets",
+    "knowledgeItemId": "knowledge-datasheets",
+    "order": 1,
+    "targetId": "issue-research",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-research-knowledge-modelcards",
+    "knowledgeItemId": "knowledge-modelcards",
+    "order": 2,
+    "targetId": "issue-research",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-research-knowledge-video-vision",
+    "knowledgeItemId": "knowledge-video-vision",
+    "order": 3,
+    "targetId": "issue-research",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-issue-research-knowledge-note-issue-research",
+    "knowledgeItemId": "knowledge-note-issue-research",
+    "order": 4,
+    "targetId": "issue-research",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-f6abf51f-2420-4e17-a75e-21ab73f7820e-knowledge-attention",
+    "knowledgeItemId": "knowledge-attention",
+    "order": 0,
+    "targetId": "f6abf51f-2420-4e17-a75e-21ab73f7820e",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-f6abf51f-2420-4e17-a75e-21ab73f7820e-knowledge-diffusion",
+    "knowledgeItemId": "knowledge-diffusion",
+    "order": 1,
+    "targetId": "f6abf51f-2420-4e17-a75e-21ab73f7820e",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-f6abf51f-2420-4e17-a75e-21ab73f7820e-knowledge-rag",
+    "knowledgeItemId": "knowledge-rag",
+    "order": 2,
+    "targetId": "f6abf51f-2420-4e17-a75e-21ab73f7820e",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-f6abf51f-2420-4e17-a75e-21ab73f7820e-knowledge-video-transformers",
+    "knowledgeItemId": "knowledge-video-transformers",
+    "order": 3,
+    "targetId": "f6abf51f-2420-4e17-a75e-21ab73f7820e",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-f6abf51f-2420-4e17-a75e-21ab73f7820e-knowledge-video-attention",
+    "knowledgeItemId": "knowledge-video-attention",
+    "order": 4,
+    "targetId": "f6abf51f-2420-4e17-a75e-21ab73f7820e",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-f6abf51f-2420-4e17-a75e-21ab73f7820e-knowledge-note-f6abf51f-2420-4e17-a75e-21ab73f7820e",
+    "knowledgeItemId": "knowledge-note-f6abf51f-2420-4e17-a75e-21ab73f7820e",
+    "order": 5,
+    "targetId": "f6abf51f-2420-4e17-a75e-21ab73f7820e",
+    "targetKind": "keyIssue"
+  },
+  {
+    "id": "association-topic-ai-knowledge-evaluation",
+    "knowledgeItemId": "knowledge-evaluation",
+    "order": 1,
+    "pinned": true,
+    "targetId": "topic-ai",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-ai-knowledge-attention",
+    "knowledgeItemId": "knowledge-attention",
+    "order": 2,
+    "targetId": "topic-ai",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-ai-knowledge-video-neural",
+    "knowledgeItemId": "knowledge-video-neural",
+    "order": 3,
+    "targetId": "topic-ai",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-ai-knowledge-video-intro",
+    "knowledgeItemId": "knowledge-video-intro",
+    "order": 4,
+    "targetId": "topic-ai",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-ai-knowledge-video-ai-intro",
+    "knowledgeItemId": "knowledge-video-ai-intro",
+    "order": 5,
+    "targetId": "topic-ai",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-ai-knowledge-uci",
+    "knowledgeItemId": "knowledge-uci",
+    "order": 6,
+    "targetId": "topic-ai",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-ai-knowledge-note-ai",
+    "knowledgeItemId": "knowledge-note-ai",
+    "order": 7,
+    "targetId": "topic-ai",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-science-knowledge-alphafold",
+    "knowledgeItemId": "knowledge-alphafold",
+    "order": 0,
+    "targetId": "topic-science",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-science-knowledge-evaluation",
+    "knowledgeItemId": "knowledge-evaluation",
+    "order": 1,
+    "targetId": "topic-science",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-science-knowledge-uci",
+    "knowledgeItemId": "knowledge-uci",
+    "order": 2,
+    "targetId": "topic-science",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-science-knowledge-note-science",
+    "knowledgeItemId": "knowledge-note-science",
+    "order": 3,
+    "targetId": "topic-science",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-world-models-knowledge-world-models",
+    "knowledgeItemId": "knowledge-world-models",
+    "order": 0,
+    "targetId": "topic-world-models",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-world-models-knowledge-rt2",
+    "knowledgeItemId": "knowledge-rt2",
+    "order": 1,
+    "targetId": "topic-world-models",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-world-models-knowledge-video-world",
+    "knowledgeItemId": "knowledge-video-world",
+    "order": 2,
+    "targetId": "topic-world-models",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-world-models-knowledge-note-world-models",
+    "knowledgeItemId": "knowledge-note-world-models",
+    "order": 3,
+    "targetId": "topic-world-models",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-digital-identity-knowledge-credentials",
+    "knowledgeItemId": "knowledge-credentials",
+    "order": 0,
+    "targetId": "topic-digital-identity",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-digital-identity-knowledge-synthetic",
+    "knowledgeItemId": "knowledge-synthetic",
+    "order": 1,
+    "targetId": "topic-digital-identity",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-digital-identity-knowledge-note-digital-identity",
+    "knowledgeItemId": "knowledge-note-digital-identity",
+    "order": 2,
+    "targetId": "topic-digital-identity",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-climate-knowledge-nasa",
+    "knowledgeItemId": "knowledge-nasa",
+    "order": 0,
+    "targetId": "topic-climate",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-climate-knowledge-iea",
+    "knowledgeItemId": "knowledge-iea",
+    "order": 1,
+    "targetId": "topic-climate",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-climate-knowledge-note-climate",
+    "knowledgeItemId": "knowledge-note-climate",
+    "order": 2,
+    "targetId": "topic-climate",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-work-knowledge-ilo",
+    "knowledgeItemId": "knowledge-ilo",
+    "order": 0,
+    "targetId": "topic-work",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-work-knowledge-unesco",
+    "knowledgeItemId": "knowledge-unesco",
+    "order": 1,
+    "targetId": "topic-work",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-work-knowledge-note-work",
+    "knowledgeItemId": "knowledge-note-work",
+    "order": 2,
+    "targetId": "topic-work",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-education-knowledge-unesco",
+    "knowledgeItemId": "knowledge-unesco",
+    "order": 0,
+    "targetId": "topic-education",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-education-knowledge-video-intro",
+    "knowledgeItemId": "knowledge-video-intro",
+    "order": 1,
+    "targetId": "topic-education",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-education-knowledge-uci",
+    "knowledgeItemId": "knowledge-uci",
+    "order": 2,
+    "targetId": "topic-education",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-education-knowledge-note-education",
+    "knowledgeItemId": "knowledge-note-education",
+    "order": 3,
+    "targetId": "topic-education",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-governance-knowledge-governance",
+    "knowledgeItemId": "knowledge-governance",
+    "order": 0,
+    "targetId": "topic-governance",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-governance-knowledge-eu-act",
+    "knowledgeItemId": "knowledge-eu-act",
+    "order": 1,
+    "targetId": "topic-governance",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-governance-knowledge-modelcards",
+    "knowledgeItemId": "knowledge-modelcards",
+    "order": 2,
+    "targetId": "topic-governance",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-governance-knowledge-note-governance",
+    "knowledgeItemId": "knowledge-note-governance",
+    "order": 3,
+    "targetId": "topic-governance",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-security-knowledge-adversarial",
+    "knowledgeItemId": "knowledge-adversarial",
+    "order": 0,
+    "targetId": "topic-security",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-security-knowledge-governance",
+    "knowledgeItemId": "knowledge-governance",
+    "order": 1,
+    "targetId": "topic-security",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-security-knowledge-react",
+    "knowledgeItemId": "knowledge-react",
+    "order": 2,
+    "targetId": "topic-security",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-security-knowledge-note-security",
+    "knowledgeItemId": "knowledge-note-security",
+    "order": 3,
+    "targetId": "topic-security",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-data-centers-knowledge-iea",
+    "knowledgeItemId": "knowledge-iea",
+    "order": 0,
+    "targetId": "topic-data-centers",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-data-centers-knowledge-mlperf",
+    "knowledgeItemId": "knowledge-mlperf",
+    "order": 1,
+    "targetId": "topic-data-centers",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-data-centers-knowledge-oecd",
+    "knowledgeItemId": "knowledge-oecd",
+    "order": 2,
+    "targetId": "topic-data-centers",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-data-centers-knowledge-environment-note",
+    "knowledgeItemId": "knowledge-environment-note",
+    "order": 3,
+    "targetId": "topic-data-centers",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-open-source-knowledge-osi",
+    "knowledgeItemId": "knowledge-osi",
+    "order": 0,
+    "targetId": "topic-open-source",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-open-source-knowledge-modelcards",
+    "knowledgeItemId": "knowledge-modelcards",
+    "order": 1,
+    "targetId": "topic-open-source",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-open-source-knowledge-datasheets",
+    "knowledgeItemId": "knowledge-datasheets",
+    "order": 2,
+    "targetId": "topic-open-source",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-open-source-knowledge-note-open-source",
+    "knowledgeItemId": "knowledge-note-open-source",
+    "order": 3,
+    "targetId": "topic-open-source",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-geopolitics-knowledge-oecd",
+    "knowledgeItemId": "knowledge-oecd",
+    "order": 0,
+    "targetId": "topic-geopolitics",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-geopolitics-knowledge-iea",
+    "knowledgeItemId": "knowledge-iea",
+    "order": 1,
+    "targetId": "topic-geopolitics",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-geopolitics-knowledge-osi",
+    "knowledgeItemId": "knowledge-osi",
+    "order": 2,
+    "targetId": "topic-geopolitics",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-geopolitics-knowledge-note-geopolitics",
+    "knowledgeItemId": "knowledge-note-geopolitics",
+    "order": 3,
+    "targetId": "topic-geopolitics",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-disinformation-knowledge-synthetic",
+    "knowledgeItemId": "knowledge-synthetic",
+    "order": 0,
+    "targetId": "topic-disinformation",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-disinformation-knowledge-credentials",
+    "knowledgeItemId": "knowledge-credentials",
+    "order": 1,
+    "targetId": "topic-disinformation",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-disinformation-knowledge-diffusion",
+    "knowledgeItemId": "knowledge-diffusion",
+    "order": 2,
+    "targetId": "topic-disinformation",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-disinformation-knowledge-note-disinformation",
+    "knowledgeItemId": "knowledge-note-disinformation",
+    "order": 3,
+    "targetId": "topic-disinformation",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-interpretability-knowledge-features",
+    "knowledgeItemId": "knowledge-features",
+    "order": 0,
+    "targetId": "topic-interpretability",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-interpretability-knowledge-modelcards",
+    "knowledgeItemId": "knowledge-modelcards",
+    "order": 1,
+    "targetId": "topic-interpretability",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-interpretability-knowledge-video-attention",
+    "knowledgeItemId": "knowledge-video-attention",
+    "order": 2,
+    "targetId": "topic-interpretability",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-interpretability-knowledge-note-interpretability",
+    "knowledgeItemId": "knowledge-note-interpretability",
+    "order": 3,
+    "targetId": "topic-interpretability",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-language-models-knowledge-attention",
+    "knowledgeItemId": "knowledge-attention",
+    "order": 0,
+    "targetId": "topic-language-models",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-language-models-knowledge-rag",
+    "knowledgeItemId": "knowledge-rag",
+    "order": 1,
+    "targetId": "topic-language-models",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-language-models-knowledge-video-transformers",
+    "knowledgeItemId": "knowledge-video-transformers",
+    "order": 2,
+    "targetId": "topic-language-models",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-language-models-knowledge-video-attention",
+    "knowledgeItemId": "knowledge-video-attention",
+    "order": 3,
+    "targetId": "topic-language-models",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-language-models-knowledge-note-language-models",
+    "knowledgeItemId": "knowledge-note-language-models",
+    "order": 4,
+    "targetId": "topic-language-models",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-robotics-knowledge-rt2",
+    "knowledgeItemId": "knowledge-rt2",
+    "order": 0,
+    "targetId": "topic-robotics",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-robotics-knowledge-world-models",
+    "knowledgeItemId": "knowledge-world-models",
+    "order": 1,
+    "targetId": "topic-robotics",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-robotics-knowledge-video-world",
+    "knowledgeItemId": "knowledge-video-world",
+    "order": 2,
+    "targetId": "topic-robotics",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-robotics-knowledge-note-robotics",
+    "knowledgeItemId": "knowledge-note-robotics",
+    "order": 3,
+    "targetId": "topic-robotics",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-health-knowledge-who",
+    "knowledgeItemId": "knowledge-who",
+    "order": 0,
+    "targetId": "topic-health",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-health-knowledge-alphafold",
+    "knowledgeItemId": "knowledge-alphafold",
+    "order": 1,
+    "targetId": "topic-health",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-health-knowledge-modelcards",
+    "knowledgeItemId": "knowledge-modelcards",
+    "order": 2,
+    "targetId": "topic-health",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-health-knowledge-note-health",
+    "knowledgeItemId": "knowledge-note-health",
+    "order": 3,
+    "targetId": "topic-health",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-computer-vision-knowledge-resnet",
+    "knowledgeItemId": "knowledge-resnet",
+    "order": 0,
+    "targetId": "topic-computer-vision",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-computer-vision-knowledge-imagenet",
+    "knowledgeItemId": "knowledge-imagenet",
+    "order": 1,
+    "targetId": "topic-computer-vision",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-computer-vision-knowledge-video-vision",
+    "knowledgeItemId": "knowledge-video-vision",
+    "order": 2,
+    "targetId": "topic-computer-vision",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-computer-vision-knowledge-note-computer-vision",
+    "knowledgeItemId": "knowledge-note-computer-vision",
+    "order": 3,
+    "targetId": "topic-computer-vision",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-datasets-knowledge-datasheets",
+    "knowledgeItemId": "knowledge-datasheets",
+    "order": 0,
+    "targetId": "topic-datasets",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-datasets-knowledge-uci",
+    "knowledgeItemId": "knowledge-uci",
+    "order": 1,
+    "targetId": "topic-datasets",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-datasets-knowledge-imagenet",
+    "knowledgeItemId": "knowledge-imagenet",
+    "order": 2,
+    "targetId": "topic-datasets",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-datasets-knowledge-note-datasets",
+    "knowledgeItemId": "knowledge-note-datasets",
+    "order": 3,
+    "targetId": "topic-datasets",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-compute-knowledge-mlperf",
+    "knowledgeItemId": "knowledge-mlperf",
+    "order": 0,
+    "targetId": "topic-compute",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-compute-knowledge-oecd",
+    "knowledgeItemId": "knowledge-oecd",
+    "order": 1,
+    "targetId": "topic-compute",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-compute-knowledge-iea",
+    "knowledgeItemId": "knowledge-iea",
+    "order": 2,
+    "targetId": "topic-compute",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-compute-knowledge-note-compute",
+    "knowledgeItemId": "knowledge-note-compute",
+    "order": 3,
+    "targetId": "topic-compute",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-privacy-knowledge-privacy",
+    "knowledgeItemId": "knowledge-privacy",
+    "order": 0,
+    "targetId": "topic-privacy",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-privacy-knowledge-datasheets",
+    "knowledgeItemId": "knowledge-datasheets",
+    "order": 1,
+    "targetId": "topic-privacy",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-privacy-knowledge-credentials",
+    "knowledgeItemId": "knowledge-credentials",
+    "order": 2,
+    "targetId": "topic-privacy",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-privacy-knowledge-note-privacy",
+    "knowledgeItemId": "knowledge-note-privacy",
+    "order": 3,
+    "targetId": "topic-privacy",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-evaluation-knowledge-evaluation",
+    "knowledgeItemId": "knowledge-evaluation",
+    "order": 0,
+    "targetId": "topic-evaluation",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-evaluation-knowledge-modelcards",
+    "knowledgeItemId": "knowledge-modelcards",
+    "order": 1,
+    "targetId": "topic-evaluation",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-evaluation-knowledge-mlperf",
+    "knowledgeItemId": "knowledge-mlperf",
+    "order": 2,
+    "targetId": "topic-evaluation",
+    "targetKind": "topic"
+  },
+  {
+    "id": "association-topic-evaluation-knowledge-note-evaluation",
+    "knowledgeItemId": "knowledge-note-evaluation",
+    "order": 3,
+    "targetId": "topic-evaluation",
+    "targetKind": "topic"
+  }
+]

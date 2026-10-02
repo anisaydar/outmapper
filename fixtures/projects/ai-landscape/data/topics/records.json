@@ -1,0 +1,160 @@
+[
+  {
+    "createdAt": "2026-09-01T09:00:00.000Z",
+    "description": "Artificial intelligence connects computational methods with work, science, education, and public life. Explore the inner issues for focused questions, then open outer topics to compare research, institutions, infrastructure, and practical constraints.",
+    "id": "topic-ai",
+    "tags": [
+      "technology",
+      "society"
+    ],
+    "title": "Artificial Intelligence",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:01:00.000Z",
+    "description": "AI can support scientific modelling and discovery, while scientific methods remain essential for testing its claims. Explore protein-structure prediction, evaluation design, and the data needed to reproduce a result.",
+    "id": "topic-science",
+    "title": "Science",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:02:00.000Z",
+    "description": "World models learn representations of an environment and its dynamics for prediction or control. They connect simulation, reinforcement learning, robotics, and the question of how well learned behaviour transfers beyond training conditions.",
+    "id": "topic-world-models",
+    "title": "World Models",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:03:00.000Z",
+    "description": "Digital identity concerns how people and institutions establish and verify claims. AI introduces questions about impersonation, credential verification, and provenance, linking identity systems to privacy and information integrity.",
+    "id": "topic-digital-identity",
+    "title": "Digital Identity",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:04:00.000Z",
+    "description": "Climate indicators describe observed changes in the Earth system. Connecting these measurements with AI requires separating the footprint of computing from proposed uses of AI in climate and energy analysis.",
+    "id": "topic-climate",
+    "title": "Climate Indicators",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:05:00.000Z",
+    "description": "AI changes tasks, workflows, and skill needs within occupations. Occupational exposure, realized adoption, job quality, and employment outcomes are different questions that need different forms of evidence.",
+    "id": "topic-work",
+    "title": "Future of Work",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:06:00.000Z",
+    "description": "AI in education raises questions about learning goals, assessment, privacy, and teacher oversight. Technical study resources can help build understanding, while institutional guidance helps evaluate whether a particular use supports learners.",
+    "id": "topic-education",
+    "title": "Education & Skills",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:07:00.000Z",
+    "description": "AI governance combines organizational risk management, public rules, and accountability. Compare voluntary frameworks with legal requirements and examine how evaluation, documentation, and oversight relate to a system's use.",
+    "id": "topic-governance",
+    "title": "Regulatory Innovation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:08:00.000Z",
+    "description": "AI security examines attacks on data, models, and the systems around them. Threat modelling, adversarial evaluation, access controls, and recovery procedures connect technical safeguards with operational resilience.",
+    "id": "topic-security",
+    "title": "Security & Resilience",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:09:00.000Z",
+    "description": "Data centres host the computing systems used to train and run AI models. Electricity supply, cooling, hardware, and location connect capacity planning with environmental accounting and infrastructure resilience.",
+    "id": "topic-data-centers",
+    "title": "Data Centers",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:10:00.000Z",
+    "description": "Open AI systems vary in which code, parameters, data information, and licences are available. Openness supports inspection and reuse only within the permissions and components actually provided.",
+    "id": "topic-open-source",
+    "title": "Open Source",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:11:00.000Z",
+    "description": "AI capability depends on access to computing infrastructure, skills, data, and institutions. National compute planning connects industrial capacity with access, international cooperation, security, and sustainability.",
+    "id": "topic-geopolitics",
+    "title": "Geo-economics and Strategic Competition",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:12:00.000Z",
+    "description": "Synthetic media complicates questions about authorship, authenticity, and factual claims. Content provenance, detection, and verification address different parts of information integrity and each has limits.",
+    "id": "topic-disinformation",
+    "title": "التضليل المعلوماتي · Disinformation",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-09-01T09:13:00.000Z",
+    "description": "Interpretability studies how a model's internal representations relate to its behaviour. Explanatory diagrams, feature extraction, and behavioural evaluation provide different evidence and should not be treated as interchangeable guarantees.",
+    "id": "topic-interpretability",
+    "title": "Интерпретируемость моделей",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "description": "Language models learn statistical patterns in token sequences. Transformer architecture, retrieval, and evaluation help explain how generated answers are produced and why fluent output still needs evidence and contextual testing.",
+    "id": "topic-language-models",
+    "title": "Language Models",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "description": "Robotics connects perception, planning, and control in physical environments. Vision-language-action research links model training with robot tasks, while simulation and testing expose the constraints of real-world operation.",
+    "id": "topic-robotics",
+    "title": "Robotics",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "description": "AI in health spans research tools and systems intended for clinical workflows. Protein modelling, clinical evaluation, privacy, and accountability are connected, but research performance and patient benefit are distinct outcomes.",
+    "id": "topic-health",
+    "title": "AI & Health",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "description": "Computer vision learns from images and other visual data for recognition and related tasks. Architecture, training data, and deployment conditions connect benchmark performance with robotics, scientific imaging, and synthetic media.",
+    "id": "topic-computer-vision",
+    "title": "Computer Vision",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "description": "Dataset composition, collection, documentation, and reuse shape what AI systems can learn and how they are evaluated. Provenance, permissions, missing data, and train-test separation connect data quality with reliable interpretation.",
+    "id": "topic-datasets",
+    "title": "Datasets & Data Quality",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "description": "AI compute depends on processors, memory, software, and the infrastructure that supports them. System benchmarks and capacity planning connect hardware choices with performance, access, and energy demand.",
+    "id": "topic-compute",
+    "title": "Semiconductors & Compute",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "description": "Privacy in AI concerns what personal information is collected, exposed, inferred, and retained. Differential privacy, dataset documentation, and identity design offer different tools for reasoning about protection and its limits.",
+    "id": "topic-privacy",
+    "title": "Privacy & Data Protection",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "description": "AI evaluation compares system behaviour against defined tasks, metrics, and conditions. Multi-metric testing, model documentation, and system benchmarks connect performance claims with uncertainty, limitations, and intended use.",
+    "id": "topic-evaluation",
+    "title": "Evaluation & Benchmarks",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  }
+]

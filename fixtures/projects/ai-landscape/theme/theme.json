@@ -1,0 +1,8 @@
+{
+  "id": "theme-default",
+  "name": "Outmapper",
+  "tokens": {
+    "accent": "#4c9dff",
+    "density": "comfortable"
+  }
+}

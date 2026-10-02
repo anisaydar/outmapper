@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+.outmapper/
+*.log
+.DS_Store
+
+# Shared secrets and machine-local settings
+.env
+.env.*
+!.env.example
+*.local

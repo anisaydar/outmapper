@@ -1,0 +1,1204 @@
+[
+  {
+    "availability": "external",
+    "createdAt": "2026-09-10T09:00:00.000Z",
+    "externalUrl": "https://arxiv.org/abs/2211.09110",
+    "id": "knowledge-evaluation",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "[2211.09110] Holistic Evaluation of Language Models"
+    },
+    "publishedAt": "2022-11-16T00:00:00.000Z",
+    "source": "Stanford CRFM · arXiv",
+    "summary": "The HELM paper evaluates language models across multiple scenarios and metrics, including accuracy, calibration, robustness, fairness, bias, toxicity, and efficiency. Read it as an evaluation framework, not a ranking of today's models.",
+    "tags": [
+      "evaluation",
+      "research"
+    ],
+    "title": "Holistic Evaluation of Language Models (HELM)",
+    "type": "research-paper",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-09-12T09:00:00.000Z",
+    "externalUrl": "https://www.nist.gov/itl/ai-risk-management-framework",
+    "id": "knowledge-governance",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "AI Risk Management Framework | NIST"
+    },
+    "source": "NIST",
+    "summary": "NIST's voluntary framework organizes AI risk management around Govern, Map, Measure, and Manage. The official page links the framework, playbook, and generative AI profile; it is guidance rather than a certification.",
+    "title": "NIST AI Risk Management Framework",
+    "type": "article",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://arxiv.org/abs/2210.03629",
+    "id": "knowledge-react",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "[2210.03629] ReAct: Synergizing Reasoning and Acting in Language Models"
+    },
+    "publishedAt": "2022-10-06T00:00:00.000Z",
+    "source": "ReAct authors · arXiv",
+    "summary": "ReAct interleaves reasoning traces with actions such as retrieving information. Its experiments provide a concrete way to examine tool use, task completion, and failure recovery in language-model agents.",
+    "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+    "type": "research-paper",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://arxiv.org/abs/1706.03762",
+    "id": "knowledge-attention",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "[1706.03762] Attention Is All You Need"
+    },
+    "publishedAt": "2017-06-12T00:00:00.000Z",
+    "source": "Transformer authors · arXiv",
+    "summary": "The original Transformer paper introduces an attention-based architecture and evaluates it on machine translation. It is a foundation for understanding later language models, not evidence that attention alone solves every task.",
+    "title": "Attention Is All You Need",
+    "type": "research-paper",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://arxiv.org/abs/2005.11401",
+    "id": "knowledge-rag",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "[2005.11401] Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"
+    },
+    "publishedAt": "2020-05-22T00:00:00.000Z",
+    "source": "RAG authors · arXiv",
+    "summary": "The paper combines a language generator with retrieval from an external document index. Compare what is stored in model parameters with what is retrieved at answer time, and inspect whether retrieved evidence supports the output.",
+    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    "type": "research-paper",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://worldmodels.github.io/",
+    "id": "knowledge-world-models",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z"
+    },
+    "publishedAt": "2018-03-27T00:00:00.000Z",
+    "source": "David Ha & Jürgen Schmidhuber",
+    "summary": "The authors' 2018 article explains a learned environment model and a compact controller, with interactive demonstrations. Its simulated car-racing and game results are specific experiments, not proof of general real-world autonomy.",
+    "title": "World Models: interactive research article",
+    "type": "article",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.w3.org/TR/vc-data-model-2.0/",
+    "id": "knowledge-credentials",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "Verifiable Credentials Data Model v2.0"
+    },
+    "source": "W3C",
+    "summary": "The W3C recommendation defines a data model for credentials shared by issuers, holders, and verifiers. Use it to distinguish verifiable claims and identity infrastructure from claims that digital content itself is true.",
+    "title": "Verifiable Credentials Data Model v2.0",
+    "type": "article",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.ilo.org/publications/generative-ai-and-jobs-2025-update",
+    "id": "knowledge-ilo",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "Generative AI and jobs: A 2025 update | International Labour Organization"
+    },
+    "source": "International Labour Organization",
+    "summary": "The ILO's 2025 update estimates occupational exposure to generative AI using task-level analysis. Exposure indicates potential for work to change; it does not directly predict job losses or realized productivity gains.",
+    "title": "Generative AI and jobs: A 2025 update",
+    "type": "article",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://iea.blob.core.windows.net/assets/de9dea13-b07d-42c5-a398-d1b3ae17d866/EnergyandAI.pdf",
+    "id": "knowledge-iea",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z"
+    },
+    "publishedAt": "2025-04-10T00:00:00.000Z",
+    "source": "International Energy Agency",
+    "summary": "The IEA's 2025 report examines electricity demand from data centres, supply constraints, and AI applications in energy. Separate historical estimates, projections, and scenario assumptions when comparing infrastructure and environmental claims.",
+    "title": "Energy and AI (2025): full report",
+    "type": "pdf",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research",
+    "id": "knowledge-unesco",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "Guidance for generative AI in education and research | UNESCO"
+    },
+    "source": "UNESCO",
+    "summary": "UNESCO's guidance addresses human agency, privacy, inclusion, and institutional validation of generative AI in education and research. Use it to frame learning objectives and teacher oversight before choosing classroom tools.",
+    "title": "Guidance for generative AI in education and research",
+    "type": "article",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+    "id": "knowledge-eu-act",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "AI Act | Shaping Europe’s digital future"
+    },
+    "source": "European Commission",
+    "summary": "The Commission's official overview explains the AI Act's risk-based approach and links implementation information. Consult the current official text and guidance for specific obligations; this overview is not a compliance determination.",
+    "title": "EU AI Act: official policy overview",
+    "type": "article",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-2e2025.pdf",
+    "id": "knowledge-adversarial",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z"
+    },
+    "source": "NIST",
+    "summary": "NIST's taxonomy organizes adversarial machine-learning threats and mitigations. Read it to distinguish attacks on training data, deployed models, and generative systems, and to relate safeguards to a stated threat model.",
+    "title": "Adversarial Machine Learning: attacks and mitigations (2025)",
+    "type": "research-paper",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://opensource.org/ai/open-source-ai-definition",
+    "id": "knowledge-osi",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "The Open Source AI Definition &#8211; 1.0 &#8211; Open Source Initiative"
+    },
+    "source": "Open Source Initiative",
+    "summary": "OSI's definition describes freedoms to use, study, modify, and share AI systems and the components needed for modification. Compare the definition with a model's actual licence, code, parameters, and data information.",
+    "title": "The Open Source AI Definition 1.0",
+    "type": "article",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://oecd.ai/en/ai-publications/national-compute-blueprint",
+    "id": "knowledge-oecd",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "A blueprint for building national compute capacity for artificial intelligence - OECD.AI"
+    },
+    "source": "OECD",
+    "summary": "This OECD policy paper offers a framework for assessing national AI compute capacity. It connects infrastructure, access, and policy planning; it does not supply a simple league table of national AI capability.",
+    "title": "A blueprint for building national compute capacity for AI",
+    "type": "article",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.nist.gov/publications/reducing-risks-posed-synthetic-content-overview-technical-approaches-digital-content",
+    "id": "knowledge-synthetic",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "Reducing Risks Posed by Synthetic Content An Overview of Technical Approaches to Digital Content Transparency | NIST"
+    },
+    "source": "NIST",
+    "summary": "NIST reviews technical approaches to content transparency, including provenance, watermarking, and detection. Compare their assumptions and limitations instead of treating an authenticity signal as proof that a claim is true.",
+    "title": "Reducing Risks Posed by Synthetic Content",
+    "type": "article",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.anthropic.com/research/mapping-mind-language-model",
+    "id": "knowledge-features",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "Mapping the mind of a large language model \\ Anthropic"
+    },
+    "publishedAt": "2024-05-21T00:00:00.000Z",
+    "source": "Anthropic",
+    "summary": "Anthropic describes extracting interpretable features from Claude 3 Sonnet using sparse autoencoders. This is the research team's account of a specific model experiment; interpretable features are not a complete explanation or safety guarantee.",
+    "title": "Mapping the mind of a large language model",
+    "type": "article",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8371605/",
+    "id": "knowledge-alphafold",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "Highly accurate protein structure prediction with AlphaFold - PMC"
+    },
+    "publishedAt": "2021-07-15T00:00:00.000Z",
+    "source": "Nature · AlphaFold authors",
+    "summary": "The AlphaFold paper reports advances in predicting protein structures and evaluates them against experimental structures. Structural prediction can support biological research, but it does not itself establish a treatment's safety or clinical benefit.",
+    "title": "Highly accurate protein structure prediction with AlphaFold",
+    "type": "research-paper",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.who.int/publications/i/item/9789240084759",
+    "id": "knowledge-who",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "Ethics and governance of artificial intelligence for health: Guidance on large multi-modal models"
+    },
+    "source": "World Health Organization",
+    "summary": "WHO's guidance examines ethical and governance questions for large multi-modal models in health. It is a source for discussing oversight, accountability, and evaluation rather than advice to use a particular model for diagnosis.",
+    "title": "WHO: governance of large multi-modal models for health",
+    "type": "article",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://arxiv.org/abs/2307.15818",
+    "id": "knowledge-rt2",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "[2307.15818] RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control"
+    },
+    "publishedAt": "2023-07-28T00:00:00.000Z",
+    "source": "RT-2 authors · arXiv",
+    "summary": "RT-2 studies transferring knowledge from vision-language pretraining into robotic control. Examine the tested tasks and robot setup when interpreting generalization; successful demonstrations do not imply unrestricted physical-world reliability.",
+    "title": "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+    "type": "research-paper",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://arxiv.org/abs/1512.03385",
+    "id": "knowledge-resnet",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "[1512.03385] Deep Residual Learning for Image Recognition"
+    },
+    "publishedAt": "2015-12-10T00:00:00.000Z",
+    "source": "Kaiming He, Xiangyu Zhang, Shaoqing Ren & Jian Sun · arXiv",
+    "summary": "The ResNet paper introduces residual learning to make deeper networks easier to optimize. Its image-recognition benchmarks are a useful starting point for examining architecture, datasets, and the limits of benchmark transfer.",
+    "title": "Deep Residual Learning for Image Recognition",
+    "type": "research-paper",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://arxiv.org/abs/1803.09010",
+    "id": "knowledge-datasheets",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "[1803.09010] Datasheets for Datasets"
+    },
+    "publishedAt": "2018-03-23T00:00:00.000Z",
+    "source": "Timnit Gebru and co-authors · arXiv",
+    "summary": "The authors propose documenting dataset motivation, composition, collection, and recommended uses. Use the questions to inspect what a dataset contains, whose experience it represents, and where reuse may be inappropriate.",
+    "title": "Datasheets for Datasets",
+    "type": "research-paper",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://arxiv.org/abs/1810.03993",
+    "id": "knowledge-modelcards",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "[1810.03993] Model Cards for Model Reporting"
+    },
+    "publishedAt": "2018-10-05T00:00:00.000Z",
+    "source": "Margaret Mitchell and co-authors · arXiv",
+    "summary": "Model cards document intended uses, evaluation conditions, and performance across relevant groups. Read them alongside benchmark results to understand limitations and avoid assuming that one aggregate score describes every user or setting.",
+    "title": "Model Cards for Model Reporting",
+    "type": "research-paper",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://arxiv.org/abs/2006.11239",
+    "id": "knowledge-diffusion",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "[2006.11239] Denoising Diffusion Probabilistic Models"
+    },
+    "publishedAt": "2020-06-19T00:00:00.000Z",
+    "source": "Jonathan Ho, Ajay Jain & Pieter Abbeel · arXiv",
+    "summary": "This foundational diffusion paper studies image synthesis through a learned denoising process. It helps explain the mechanism behind a family of generative models; image-quality scores do not establish factual accuracy or provenance.",
+    "title": "Denoising Diffusion Probabilistic Models",
+    "type": "research-paper",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://csrc.nist.gov/pubs/sp/800/226/final",
+    "id": "knowledge-privacy",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "SP 800-226, Guidelines for Evaluating Differential Privacy Guarantees | CSRC"
+    },
+    "source": "NIST",
+    "summary": "NIST explains differential privacy as a mathematical framework for quantifying privacy loss and examines implementation hazards. A meaningful claim needs the privacy parameters, protected unit, assumptions, and accounting across repeated uses.",
+    "title": "Guidelines for Evaluating Differential Privacy Guarantees",
+    "type": "article",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://archive.ics.uci.edu/",
+    "id": "knowledge-uci",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "UCI Machine Learning Repository"
+    },
+    "source": "University of California, Irvine",
+    "summary": "UCI hosts datasets with descriptions and task metadata for machine-learning research and teaching. Check each dataset's licence, variables, provenance, missing values, and suitable evaluation split before using it.",
+    "title": "UCI Machine Learning Repository",
+    "type": "dataset",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.image-net.org/",
+    "id": "knowledge-imagenet",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "ImageNet"
+    },
+    "source": "ImageNet research team",
+    "summary": "The official ImageNet site describes its image database and research access. Dataset versions and access conditions matter; an image-classification benchmark should not be mistaken for a representative sample of every deployment environment.",
+    "title": "ImageNet: dataset and research access",
+    "type": "dataset",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://mlcommons.org/benchmarks/inference-datacenter/",
+    "id": "knowledge-mlperf",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "Benchmark MLPerf Inference: Datacenter | MLCommons V6.1"
+    },
+    "source": "MLCommons",
+    "summary": "MLPerf publishes inference benchmark rules and submitted system results. Compare workload, scenario, accuracy target, hardware, software, and reporting division before drawing conclusions about performance or efficiency.",
+    "title": "MLPerf Inference: Datacenter results",
+    "type": "dataset",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://science.nasa.gov/climate-change/",
+    "id": "knowledge-nasa",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "Climate Change - NASA Science"
+    },
+    "source": "NASA",
+    "summary": "NASA's climate portal links scientific evidence, indicators, and explanatory material. Use observed climate measurements to distinguish environmental evidence from forecasts about AI infrastructure and from proposed AI climate applications.",
+    "title": "NASA Climate Change: evidence and indicators",
+    "type": "dataset",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.youtube.com/watch?v=aircAruvnKk",
+    "id": "knowledge-video-neural",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verificationPage": "https://www.3blue1brown.com/lessons/neural-networks/",
+      "verifiedPublisher": "3Blue1Brown",
+      "verifiedTitle": "But what is a neural network? | Deep learning chapter 1"
+    },
+    "publishedAt": "2017-10-05T00:00:00.000Z",
+    "source": "3Blue1Brown · Grant Sanderson",
+    "summary": "A visual introduction to neurons, layers, weights, and handwritten-digit recognition. Start here before the Transformer lectures; the small digit classifier is a teaching example, not a model of every AI system.",
+    "title": "But what is a neural network?",
+    "type": "video",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.youtube.com/watch?v=wjZofJX0v4M",
+    "id": "knowledge-video-transformers",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verificationPage": "https://www.3blue1brown.com/lessons/gpt/",
+      "verifiedPublisher": "3Blue1Brown",
+      "verifiedTitle": "Transformers, the tech behind LLMs | Deep Learning Chapter 5"
+    },
+    "publishedAt": "2024-04-01T00:00:00.000Z",
+    "source": "3Blue1Brown · Grant Sanderson",
+    "summary": "A visual tour of Transformer structure, tokens, and word embeddings. Pair the lecture with the original attention paper to connect the diagrams to the architecture and its training objective.",
+    "title": "Transformers, the tech behind LLMs",
+    "type": "video",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.youtube.com/watch?v=eMlx5fFNoYc",
+    "id": "knowledge-video-attention",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verificationPage": "https://www.3blue1brown.com/lessons/attention/",
+      "verifiedPublisher": "3Blue1Brown",
+      "verifiedTitle": "Attention in transformers, step-by-step | Deep Learning Chapter 6"
+    },
+    "publishedAt": "2024-04-07T00:00:00.000Z",
+    "source": "3Blue1Brown · Grant Sanderson",
+    "summary": "The lecture visualizes queries, keys, values, and the updating of token representations. Useful after the Transformer overview; attention weights should not automatically be read as a faithful explanation of an answer.",
+    "title": "Attention in transformers, step-by-step",
+    "type": "video",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.youtube.com/watch?v=HzA8LRqhujk",
+    "id": "knowledge-video-world",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verificationPage": "https://worldmodels.github.io/",
+      "verifiedPublisher": "David Ha",
+      "verifiedTitle": "Recurrent World Models Facilitate Policy Evolution"
+    },
+    "source": "World Models authors",
+    "summary": "The talk linked by the World Models authors presents learned environment representations and policy learning. Watch alongside their interactive article, then compare simulated performance with the evidence needed for real-world control.",
+    "title": "Recurrent World Models Facilitate Policy Evolution",
+    "type": "video",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.youtube.com/watch?v=alfdI7S6wCY",
+    "id": "knowledge-video-intro",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verificationPage": "https://introtodeeplearning.com/2025/",
+      "verifiedPublisher": "Alexander Amini",
+      "verifiedTitle": "MIT Introduction to Deep Learning (2025) | 6.S191"
+    },
+    "source": "MIT 6.S191 · Alexander Amini",
+    "summary": "The opening MIT 6.S191 lecture introduces neural networks and deep-learning foundations. The official course archive also provides slides and labs, making this a useful entry point for a practical study path.",
+    "title": "MIT Introduction to Deep Learning (2025)",
+    "type": "video",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://www.youtube.com/watch?v=oGpzWAlP5p0",
+    "id": "knowledge-video-vision",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verificationPage": "https://introtodeeplearning.com/2025/",
+      "verifiedPublisher": "Alexander Amini",
+      "verifiedTitle": "MIT 6.S191 (2025): Convolutional Neural Networks"
+    },
+    "source": "MIT 6.S191",
+    "summary": "The computer-vision lecture in MIT's 2025 deep-learning course introduces learning from images. Pair it with ResNet and ImageNet to compare model design with the data and tasks used to evaluate it.",
+    "title": "MIT 6.S191 (2025): Convolutional Neural Networks",
+    "type": "video",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "external",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "externalUrl": "https://ocw.mit.edu/courses/6-034-artificial-intelligence-fall-2010/resources/lecture-1-introduction-and-scope/",
+    "id": "knowledge-video-ai-intro",
+    "language": "en",
+    "metadata": {
+      "httpStatus": 200,
+      "linkCheckedAt": "2026-10-01T20:25:11.570Z",
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "verifiedTitle": "Lecture 1: Introduction and Scope | Artificial Intelligence | Electrical Engineering and Computer Science | MIT OpenCourseWare"
+    },
+    "source": "MIT OpenCourseWare · Patrick H. Winston",
+    "summary": "Winston introduces the scope and history of artificial intelligence in this 2010 lecture. It provides historical foundations; use the newer research elsewhere in the map for contemporary model architectures and evaluation.",
+    "title": "MIT Artificial Intelligence: Introduction and Scope",
+    "type": "video",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading guide: start with a neural-network lecture, compare research with its evaluation conditions, then follow an application or policy branch. Which claims are measured, projected, or proposed?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-ai",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-governance",
+        "knowledge-evaluation",
+        "knowledge-attention",
+        "knowledge-uci"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Artificial Intelligence",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: distinguish a prediction from an experimental observation. What held-out evidence, uncertainty estimates, and reproducible data would support the proposed scientific use?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-science",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-alphafold",
+        "knowledge-evaluation",
+        "knowledge-uci"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Science",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: what does the simulated environment omit? Compare observation quality, control constraints, and evaluation tasks before transferring a result to a physical system.",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-world-models",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-world-models",
+        "knowledge-rt2"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: World Models",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: who issued a claim, who verifies it, and what is actually verified? Separate identity assurance, consent, content provenance, and factual truth.",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-digital-identity",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-credentials",
+        "knowledge-synthetic"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Digital Identity",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: distinguish observed climate data from infrastructure projections. Which geographic region, time period, energy mix, and system boundary does each claim describe?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-climate",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-nasa",
+        "knowledge-iea"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Climate Indicators",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: exposure is not a job-loss forecast. Which tasks change, who controls deployment, and how would you measure worker learning, job quality, and actual outcomes?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-work",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-ilo",
+        "knowledge-unesco"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Future of Work",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: define the learning objective before choosing a tool. Can learners check outputs, explain the method, and complete an assessment that tests their own understanding?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-education",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-unesco",
+        "knowledge-uci"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Education & Skills",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: identify the jurisdiction, system purpose, responsible actor, and evidence required. Which controls are voluntary guidance, and which obligations need verification against current official law?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-governance",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-governance",
+        "knowledge-eu-act",
+        "knowledge-modelcards"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Regulatory Innovation",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: name the adversary, assets, permissions, and failure consequence. How could you test the control, monitor misuse, and recover safely when a model or tool fails?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-security",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-adversarial",
+        "knowledge-governance",
+        "knowledge-react"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Security & Resilience",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: compare energy, water, hardware lifecycles, and regional grid conditions within a stated boundary. Separate total facility demand from an individual AI workload and projections from observations.",
+    "createdAt": "2026-09-11T09:00:00.000Z",
+    "id": "knowledge-environment-note",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-iea",
+        "knowledge-mlperf",
+        "knowledge-oecd"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "tags": [
+      "infrastructure"
+    ],
+    "title": "Reading note: Data Centers",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: inspect the licence and released components separately. Can another researcher reproduce the evaluation, understand the training data, and modify the system within its stated permissions?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-open-source",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-osi",
+        "knowledge-modelcards",
+        "knowledge-datasheets"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Open Source",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: which capacity is measured, who can access it, and for what purpose? Compare availability, effective use, and resilience without inferring capability from a single infrastructure count.",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-geopolitics",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-oecd",
+        "knowledge-iea",
+        "knowledge-osi"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Geo-economics and Strategic Competition",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: separate the source, edit history, and truth of a claim. What independent evidence would verify it if a detector or provenance record is absent or inconclusive?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-disinformation",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-synthetic",
+        "knowledge-credentials",
+        "knowledge-diffusion"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Disinformation",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: what is being explained: an architecture, a feature, or an output? Which intervention or independent behavioural test could challenge the proposed explanation?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-interpretability",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-features",
+        "knowledge-modelcards"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Model Interpretability",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: which evidence came from retrieval, and which text was generated? Compare the answer with its cited documents and test failures beyond a few persuasive examples.",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-language-models",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-attention",
+        "knowledge-rag"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Language Models",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: specify the robot, environment, sensors, and permitted actions. What happens under unfamiliar objects, failed perception, or an unsafe instruction? How is success measured?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-robotics",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-rt2",
+        "knowledge-world-models"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Robotics",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: distinguish a research benchmark from clinical validation. Which population, workflow, comparator, and outcome were studied, and who is responsible for reviewing errors?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-health",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-who",
+        "knowledge-alphafold",
+        "knowledge-modelcards"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: AI & Health",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: what images, labels, and conditions define the task? Test lighting, viewpoint, and population differences before assuming that benchmark accuracy transfers to a new setting.",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-computer-vision",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-resnet",
+        "knowledge-imagenet"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Computer Vision",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: inspect collection methods, consent, licences, and missing groups. Could duplicate or leaked examples cross the train-test boundary? What is the dataset suitable for?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-datasets",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-datasheets",
+        "knowledge-uci",
+        "knowledge-imagenet"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Datasets & Data Quality",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: compare systems under the same workload, accuracy target, and scenario. Are you measuring throughput, latency, energy, or access cost, and what hardware and software are included?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-compute",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-mlperf",
+        "knowledge-oecd",
+        "knowledge-iea"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Semiconductors & Compute",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: what is protected, against whom, and under which assumptions? Request privacy parameters and repeated-use accounting; removing names alone does not establish a differential-privacy guarantee.",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-privacy",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-privacy",
+        "knowledge-datasheets",
+        "knowledge-credentials"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Privacy & Data Protection",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: define the deployment task before choosing a benchmark. Which groups and failure modes are omitted, and would an independent dataset or repeated trial change the conclusion?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-evaluation",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-evaluation",
+        "knowledge-modelcards",
+        "knowledge-mlperf"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Evaluation & Benchmarks",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: list the agent's tools and permissions. What constitutes task success, how are actions checked, and when should a person approve or stop execution?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-issue-agents",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-react",
+        "knowledge-world-models"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Agents & Autonomy",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: ask whose experience the evaluation covers. Compare documentation, subgroup results, accountability, and practical recourse when a system makes an error.",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-issue-trust",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-governance",
+        "knowledge-modelcards",
+        "knowledge-features"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Ethical & Trustworthy AI",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: compare tasks within a job rather than assigning the entire occupation one outcome. How would adoption, training, and worker participation affect the result?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-issue-workforce",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-ilo",
+        "knowledge-unesco"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Workforce Transformation",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: define the environmental boundary before comparing systems. Which electricity, cooling, hardware, and location assumptions are included, and are figures measured or projected?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-issue-environment",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-iea",
+        "knowledge-nasa"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Environmental Impact",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: distinguish a technical safeguard from a legal obligation. Name the threat model and responsible actor, then check the relevant official guidance for the use case.",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-issue-security",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-adversarial",
+        "knowledge-eu-act",
+        "knowledge-governance"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Security & Regulation",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: specify task, dataset split, metric, and uncertainty. Can another team reproduce the comparison, and what important deployment behaviour does the benchmark leave out?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-issue-research",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-evaluation",
+        "knowledge-datasheets",
+        "knowledge-modelcards"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Research & Evaluation",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  },
+  {
+    "availability": "local",
+    "body": "Reading note: separate generated content, retrieved evidence, and verified facts. Which failure modes matter for the intended use, and how will sources and provenance be checked?",
+    "createdAt": "2026-10-01T20:25:44.103Z",
+    "id": "knowledge-note-f6abf51f-2420-4e17-a75e-21ab73f7820e",
+    "language": "en",
+    "metadata": {
+      "reviewedAt": "2026-10-01T20:25:44.103Z",
+      "sourceKnowledgeIds": [
+        "knowledge-attention",
+        "knowledge-diffusion",
+        "knowledge-rag"
+      ]
+    },
+    "source": "Outmapper reading note",
+    "title": "Reading note: Generative AI",
+    "type": "note",
+    "updatedAt": "2026-10-01T20:25:44.103Z"
+  }
+]

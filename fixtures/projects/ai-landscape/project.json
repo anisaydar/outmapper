@@ -1,0 +1,15 @@
+{
+  "createdAt": "2026-09-01T09:00:00.000Z",
+  "defaultDirection": "auto",
+  "defaultLocale": "en",
+  "description": "A portable research map of artificial intelligence and its connected systems.",
+  "format": "outmapper-project",
+  "formatVersion": 1,
+  "homeTopicId": "topic-ai",
+  "id": "project-ai-landscape",
+  "publishedSnapshotId": "a7aeda93-7f18-40e1-ba67-de2b8113b48a",
+  "revision": 16,
+  "themeId": "theme-default",
+  "title": "AI Landscape",
+  "updatedAt": "2026-10-01T20:25:44.103Z"
+}

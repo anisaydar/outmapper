@@ -1,0 +1,103 @@
+{
+  "name": "outmapper",
+  "version": "0.1.0",
+  "description": "A local-first workspace for building and exploring interconnected knowledge maps.",
+  "author": {
+    "name": "Anis Aydar",
+    "email": "130869669+anisaydar@users.noreply.github.com",
+    "url": "https://github.com/anisaydar"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anisaydar/outmapper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anisaydar/outmapper/issues"
+  },
+  "homepage": "https://github.com/anisaydar/outmapper#readme",
+  "type": "module",
+  "bin": {
+    "outmapper": "dist/server/src/server/cli-entry.js"
+  },
+  "files": [
+    "dist/",
+    "fixtures/projects/ai-landscape/",
+    "!fixtures/projects/ai-landscape/.outmapper/",
+    "CHANGELOG.md",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "keywords": [
+    "knowledge-graph",
+    "knowledge-management",
+    "local-first",
+    "research"
+  ],
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "allowScripts": {
+    "esbuild": true
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:client": "vite --host 127.0.0.1",
+    "dev:server": "tsx watch src/server/main.ts",
+    "build": "npm run typecheck && vite build && node scripts/clean-server-build.mjs && tsc -p tsconfig.server.json",
+    "typecheck": "tsc -p tsconfig.client.json --noEmit && tsc -p tsconfig.server.json --noEmit",
+    "lint": "eslint src scripts eslint.config.js vite.config.ts vitest.config.ts",
+    "check:renderer": "node scripts/renderer-check.mjs",
+    "check:topic-navigation": "node scripts/topic-navigation-check.mjs",
+    "check:studio-density": "node scripts/studio-density-check.mjs",
+    "check:runtime-index": "node scripts/runtime-index-check.mjs",
+    "check:archive-streaming": "node scripts/archive-streaming-check.mjs",
+    "check:multilingual-search": "node scripts/multilingual-search-check.mjs",
+    "check:pdf-extraction": "node scripts/pdf-extraction-check.mjs",
+    "check:responsive-layout": "node scripts/responsive-layout-check.mjs",
+    "check:pdf": "npm run build && node scripts/pdf-integration.mjs",
+    "check:offline-release": "npm run build && node scripts/offline-release-check.mjs",
+    "test": "vitest run",
+    "test:browser": "node scripts/browser-smoke.mjs",
+    "test:browser:authoring": "node scripts/browser-authoring-check.mjs",
+    "check:package": "npm run build && node scripts/package-check.mjs",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run lint && npm test && npm run check:package",
+    "start": "node dist/server/src/server/cli-entry.js"
+  },
+  "dependencies": {
+    "@fastify/static": "^10.1.5",
+    "@zip.js/zip.js": "^2.18.2",
+    "ajv": "^8.20.0",
+    "d3": "^7.9.0",
+    "fastify": "^5.12.5",
+    "pdfjs-dist": "^6.3.289",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/d3": "^7.4.3",
+    "@types/node": "^26.6.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "eslint": "^10.11.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "jsdom": "^30.1.1",
+    "playwright-core": "^1.63.0",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "vite": "^8.3.1",
+    "vitest": "^5.0.2"
+  }
+}
