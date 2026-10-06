@@ -139,4 +139,43 @@ describe("GraphProjection", () => {
     const next = buildGraphProjection(project, "topic-2", { previousProjection: previous });
     expect(next.transition).toEqual({ fromTopicId: "topic-1", sharedTopicIds: [] });
   });
+
+  it("projects outgoing portals with live registry titles and cached fallbacks", () => {
+    const project = createValidProject();
+    project.projectLinks.push({ id: "portal-1", sourceTopicId: "topic-1", keyIssueId: "issue-1", targetProjectId: "project-b", cachedProjectTitle: "Cached B", note: "Follow the evidence", createdAt: timestamp, updatedAt: timestamp });
+    project.projectLinks.push({ id: "portal-2", sourceTopicId: "topic-1", keyIssueId: "issue-1", targetProjectId: "project-c", targetTopicId: "topic-c", cachedProjectTitle: "Cached C", cachedTopicTitle: "Policy", createdAt: timestamp, updatedAt: timestamp });
+
+    const projection = buildGraphProjection(project, "topic-1", { portalProjects: { "project-b": { title: "Live B", available: true } } });
+
+    expect(projection.portals).toEqual([
+      expect.objectContaining({ id: "portal-1", direction: "outgoing", projectTitle: "Live B", availability: "available", keyIssueTitle: "Issue", note: "Follow the evidence" }),
+      expect.objectContaining({ id: "portal-2", projectTitle: "Cached C", topicTitle: "Policy", availability: "unavailable" })
+    ]);
+  });
+
+  it("projects derived incoming portals without changing the target Project", () => {
+    const project = createValidProject();
+    const before = structuredClone(project);
+    const projection = buildGraphProjection(project, "topic-1", { incomingLinks: [{
+      linkId: "incoming-1",
+      sourceInstanceId: "source-instance",
+      sourceProjectId: "source-project",
+      sourceProjectTitle: "Source Project",
+      sourceTopicId: "source-topic",
+      sourceTopicTitle: "Source Topic",
+      keyIssueId: "source-issue",
+      keyIssueTitle: "Source Issue",
+      availability: "available"
+    }] });
+
+    expect(projection.portals).toEqual([expect.objectContaining({
+      id: "incoming:source-instance:incoming-1",
+      direction: "incoming",
+      projectTitle: "Source Project",
+      sourceTopicTitle: "Source Topic",
+      sourceKeyIssueTitle: "Source Issue",
+      availability: "available"
+    })]);
+    expect(project).toEqual(before);
+  });
 });

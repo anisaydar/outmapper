@@ -57,6 +57,19 @@ describe("Knowledge item disclosure", () => {
     expect(secondRow).toHaveAttribute("aria-expanded", "true");
   });
 
+  it("hides the Pinned group while it is empty and shows it once an item is pinned", () => {
+    const props = propsFor();
+    const { rerender } = render(<KnowledgePanel {...props} />);
+    expect(document.querySelector("[data-section-kind='pinned']")).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Pinned" })).not.toBeInTheDocument();
+
+    const project = createValidProject();
+    project.knowledgeItems = [firstItem];
+    project.associations = [{ id: "association-pinned", knowledgeItemId: firstItem.id, targetKind: "topic", targetId: "topic-1", pinned: true }];
+    rerender(<KnowledgePanel {...props} context={queryKnowledgeContext(project, { kind: "topic", id: "topic-1" })} />);
+    expect(screen.getByRole("heading", { name: "Pinned" })).toBeInTheDocument();
+  });
+
   it("clears disclosure when the selected context changes", async () => {
     const props = propsFor();
     const { rerender } = render(<KnowledgePanel {...props} />);

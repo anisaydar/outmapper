@@ -6,7 +6,7 @@ export function createValidProject(): CanonicalProject {
   return {
     manifest: {
       format: "outmapper-project",
-      formatVersion: 1,
+      formatVersion: 2,
       id: "project-1",
       title: "Test Project",
       createdAt: timestamp,
@@ -38,6 +38,7 @@ export function createValidProject(): CanonicalProject {
         updatedAt: timestamp
       }
     ],
+    projectLinks: [],
     knowledgeItems: [],
     associations: [],
     assets: [],

@@ -33,6 +33,7 @@ export function assertDomainInvariants(project: CanonicalProject): void {
   assertUniqueIds("topics", project.topics);
   assertUniqueIds("keyIssues", project.keyIssues);
   assertUniqueIds("relationships", project.relationships);
+  assertUniqueIds("projectLinks", project.projectLinks);
   assertUniqueIds("knowledgeItems", project.knowledgeItems);
   assertUniqueIds("associations", project.associations);
   assertUniqueIds("assets", project.assets);
@@ -91,6 +92,20 @@ export function assertDomainInvariants(project: CanonicalProject): void {
       `/relationships/${relationship.id}/keyIssueId`,
       "Key Issue must belong to the source Topic"
     );
+  }
+
+  const linkTargets = new Set<string>();
+  for (const link of project.projectLinks) {
+    const issue = keyIssues.get(link.keyIssueId);
+    assertReference(topics.has(link.sourceTopicId), `/projectLinks/${link.id}/sourceTopicId`, "Source Topic does not exist");
+    assertReference(Boolean(issue), `/projectLinks/${link.id}/keyIssueId`, "Key Issue does not exist");
+    assertReference(issue?.topicId === link.sourceTopicId, `/projectLinks/${link.id}/keyIssueId`, "Key Issue must belong to the source Topic");
+    assertReference(link.targetProjectId !== project.manifest.id, `/projectLinks/${link.id}/targetProjectId`, "Project Link must target a different Project");
+    const key = `${link.keyIssueId}\u0000${link.targetProjectId}\u0000${link.targetTopicId ?? ""}`;
+    if (linkTargets.has(key)) {
+      throw new DomainError("duplicate-id", "A Key Issue cannot link to the same Project target more than once", { path: `/projectLinks/${link.id}` });
+    }
+    linkTargets.add(key);
   }
 
   for (const item of project.knowledgeItems) {

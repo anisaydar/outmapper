@@ -5,7 +5,9 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: "dist/client",
-    emptyOutDir: true
+    emptyOutDir: true,
+    // local-first app served from localhost; code splitting is deferred to a later version.
+    chunkSizeWarningLimit: 700
   },
   server: {
     host: "127.0.0.1",

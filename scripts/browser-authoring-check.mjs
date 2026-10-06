@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import { cp, mkdtemp, readFile, rm } from "node:fs/promises";
+import { cp, mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { chromium } from "playwright-core";
@@ -38,13 +38,11 @@ try {
   const page = await context.newPage();
   await page.goto(origin, { waitUntil: "domcontentloaded" });
   await page.locator("[data-map-ready='true']").waitFor();
-  const initialProject = await (await fetch(`${origin}/api/project`)).json();
-
-  assert((await page.getByText("Governing high-impact AI systems").count()) > 0, "Topic Knowledge did not render");
+  assert((await page.getByText("NIST AI Risk Management Framework").count()) > 0, "Topic Knowledge did not render");
   const issue = page.locator("[data-entity-id='issue-research']");
   await issue.focus();
   await issue.press("Enter");
-  assert((await page.getByText("Evaluating frontier systems in context").count()) > 0, "Key Issue Knowledge did not synchronize");
+  assert((await page.getByText("Holistic Evaluation of Language Models (HELM)").count()) > 0, "Key Issue Knowledge did not synchronize");
   assert((await page.getByText("External").count()) > 0, "External availability was not explicit");
   await page.getByRole("button", { name: "Hide Panel" }).click();
   await page.getByRole("button", { name: "Show Panel" }).click();
@@ -62,7 +60,7 @@ try {
   await science.waitFor();
   await page.getByRole("button", { name: "Home" }).click();
   await page.locator("[data-map-node='central'][data-entity-id='topic-ai']").waitFor();
-  assert(await page.getByRole("button", { name: "Back" }).isDisabled(), "Home did not reset history");
+  assert(!await page.getByRole("button", { name: "Back" }).isDisabled(), "Home did not preserve session history");
 
   await page.locator("[data-entity-id='issue-research']").focus();
   await page.locator("[data-entity-id='issue-research']").press("Enter");
@@ -76,23 +74,49 @@ try {
   await page.waitForFunction(() => document.querySelector("input")?.value === "Research & Evaluation");
   await page.keyboard.press("Control+Shift+z");
   await page.waitForFunction(() => document.querySelector("input")?.value === "Research, Evaluation & Evidence");
-  await page.getByRole("button", { name: "Preview" }).click();
-  assert((await page.locator("[data-map-node='central'][data-entity-id='topic-ai']").count()) === 1, "Preview did not use Viewer map path");
-  await page.getByRole("button", { name: "Back to Studio" }).click();
-  await page.getByRole("button", { name: "Publish" }).click();
-  await page.getByText("Published to this Project").waitFor();
+  await page.getByRole("button", { name: "Done" }).click();
+  await page.getByRole("button", { name: "Edit", exact: true }).waitFor();
 
   const project = await (await fetch(`${origin}/api/project`)).json();
   const search = await (await fetch(`${origin}/api/search?q=evaluation`)).json();
-  assert(Boolean(project.manifest.publishedSnapshotId), "Publish did not update canonical publication metadata");
-  assert(project.snapshots.length === initialProject.snapshots.length + 1, "Publish did not retain the snapshot record");
+  assert(project.keyIssues.find(({ id }) => id === "issue-research")?.title === "Research, Evaluation & Evidence", "Done did not persist the Studio edit");
   assert(search.total > 0, "Derived SQLite search did not reflect canonical content");
-  const snapshot = project.snapshots[0];
-  const manifest = JSON.parse(await readFile(path.join(projectDirectory, snapshot.manifestPath), "utf8"));
-  assert(manifest.snapshot.revision === snapshot.revision, "Snapshot manifest revision diverged");
 
-  console.log(JSON.stringify({ knowledgeContext: "passed", panelSelection: "passed", cycleBackHome: "passed", focusRestoration: "passed", autosave: "passed", undoRedo: "passed", viewerPreview: "passed", publication: "passed", sqliteSearch: "passed", publishedRevision: snapshot.revision, searchHits: search.total }));
+  await page.getByRole("button", { name: "Edit", exact: true }).click();
+  await page.getByLabel("Title", { exact: true }).fill("Discard this title");
+  await page.waitForFunction(() => document.querySelector(".save-state")?.textContent?.includes("Autosaved"));
+  await page.getByRole("button", { name: "Cancel editing" }).click();
+  const discard = page.getByRole("dialog", { name: "Discard changes?" });
+  await discard.getByRole("button", { name: "Discard changes" }).click();
+  await page.getByRole("button", { name: "Edit", exact: true }).waitFor();
+  const revertedProject = await (await fetch(`${origin}/api/project`)).json();
+  assert(revertedProject.keyIssues.find(({ id }) => id === "issue-research")?.title === "Research, Evaluation & Evidence", "Cancel did not revert the editing session");
+
   await context.close();
+
+  const mobileContext = await browser.newContext({ viewport: { width: 360, height: 740 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+  const mobile = await mobileContext.newPage();
+  await mobile.goto(origin, { waitUntil: "domcontentloaded" });
+  await mobile.locator("[data-map-ready='true']").waitFor();
+  const mobileIssue = mobile.locator("[data-entity-id='issue-research']");
+  await mobileIssue.focus();
+  await mobileIssue.press("Enter");
+  await mobile.locator(".mobile-tabs button").nth(1).click();
+  await mobile.getByRole("button", { name: "Edit", exact: true }).click();
+  const combobox = mobile.getByRole("combobox", { name: "Add relationship" });
+  await combobox.scrollIntoViewIfNeeded();
+  await combobox.click();
+  const listbox = mobile.getByRole("listbox", { name: "Add relationship" });
+  await listbox.waitFor();
+  const [listBounds, tabsBounds] = await Promise.all([listbox.boundingBox(), mobile.locator(".mobile-tabs").boundingBox()]);
+  assert(listBounds && tabsBounds, "Mobile relationship dropdown geometry was unavailable");
+  assert(listBounds.y + listBounds.height <= tabsBounds.y + 1, `Relationship dropdown is hidden behind the mobile tab bar: ${JSON.stringify({ listBounds, tabsBounds })}`);
+  assert(await listbox.locator("[role='option']").last().isVisible(), "Relationship dropdown's lower rows are not visible at 360px");
+  await mobile.keyboard.press("Escape");
+  await mobile.getByRole("button", { name: "Done" }).click();
+  await mobileContext.close();
+
+  console.log(JSON.stringify({ knowledgeContext: "passed", panelSelection: "passed", cycleBackHome: "passed", focusRestoration: "passed", autosave: "passed", undoRedo: "passed", done: "passed", cancel: "passed", mobileCombobox360: "passed", sqliteSearch: "passed", searchHits: search.total }));
 } finally {
   await browser?.close();
   server.kill();

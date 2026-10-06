@@ -29,7 +29,7 @@ async function waitForServer() {
 async function startServer() {
   const child = spawn(process.execPath, ["dist/server/src/server/main.js"], {
     cwd: process.cwd(),
-    env: { ...process.env, OUTMAPPER_PORT: String(port), OUTMAPPER_PROJECT_DIR: projectDirectory },
+    env: { ...process.env, OUTMAPPER_PORT: String(port), OUTMAPPER_PROJECT_DIR: projectDirectory, OUTMAPPER_DATA_DIR: parent },
     stdio: "ignore"
   });
   await waitForServer();
@@ -64,7 +64,7 @@ try {
 
   await unlink(runtimePath);
   server = await startServer();
-  const rebuiltSearch = await (await fetch(`${origin}/api/search?q=governing`)).json();
+  const rebuiltSearch = await (await fetch(`${origin}/api/search?q=governance`)).json();
   assert(rebuiltSearch.total > 0, "Search did not recover after runtime database deletion");
   assert((await stat(runtimePath)).isFile(), "Derived SQLite runtime was not rebuilt");
 
@@ -89,7 +89,7 @@ try {
   assert(offlineBoundary.local && !offlineBoundary.external, "External-network-disabled localhost boundary failed");
 
   await page.getByRole("button", { name: "Search", exact: true }).click();
-  await page.getByRole("searchbox", { name: "Search" }).fill("governing");
+  await page.getByRole("searchbox", { name: "Search" }).fill("governance");
   await page.waitForFunction(() => document.querySelectorAll(".search-result").length > 0);
   await page.getByRole("button", { name: "Close search" }).click();
   await page.locator("[data-entity-id='issue-trust']").click();
@@ -101,7 +101,7 @@ try {
   const uploadResponse = page.waitForResponse((response) => response.url().endsWith("/api/assets") && response.request().method() === "POST");
   await attachment.setInputFiles({ name: "offline-evidence.txt", mimeType: "text/plain", buffer: Buffer.from("Local-only acceptance evidence") });
   assert((await uploadResponse).status() === 201, "Managed Asset upload failed");
-  await page.getByRole("button", { name: "Preview" }).click();
+  await page.getByRole("button", { name: "Done" }).click();
   const attachmentRow = page.getByRole("button", { name: /offline-evidence\.txt/ });
   await attachmentRow.click();
   assert(await page.getByRole("link", { name: /offline-evidence\.txt.*Open file/ }).isVisible(), "Attached Project file was not openable");
@@ -119,10 +119,11 @@ try {
   const committed = await fetch(`${origin}/api/packages/import/${plan.id}/commit`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ directoryName: "reimported-release-check" })
+    body: JSON.stringify({ directoryName: "reimported-release-check", mode: "anyway" })
   });
-  assert(committed.ok, "Validated Project reimport did not commit");
-  const importedDirectory = (await committed.json()).projectDirectory;
+  const committedBody = await committed.json();
+  assert(committed.ok, `Validated Project reimport did not commit: ${JSON.stringify(committedBody)}`);
+  const importedDirectory = committedBody.projectDirectory;
   const importedManifest = JSON.parse(await readFile(path.join(importedDirectory, "project.json"), "utf8"));
   assert(importedManifest.id === opened.manifest.id, "Reimport changed Project identity");
   const importedAssets = JSON.parse(await readFile(path.join(importedDirectory, "data", "assets", "records.json"), "utf8"));
@@ -134,7 +135,7 @@ try {
     startupReopen: "passed",
     sqliteDeleteRebuild: "passed",
     externalNetworkBlockedLocalhostAvailable: "passed",
-    viewerSearchStudioPreview: "passed",
+    viewerSearchStudioRoundtrip: "passed",
     managedAsset: "passed",
     backupExportReimport: "passed",
     unexpectedExternalRequests: 0,

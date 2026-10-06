@@ -1,5 +1,6 @@
 import { DomainError } from "../domain/errors.js";
 import type { CanonicalProject, EntityId } from "../domain/types.js";
+import type { IncomingProjectLink } from "../domain/workspace.js";
 
 export type ProjectionEmphasis = "default" | "selected" | "highlighted" | "dimmed";
 
@@ -37,6 +38,36 @@ export interface ProjectedRelationship {
   emphasis: ProjectionEmphasis;
 }
 
+interface ProjectedPortalBase {
+  id: EntityId;
+  direction: "outgoing" | "incoming";
+  projectTitle: string;
+  topicTitle?: string;
+  note?: string;
+  order: number;
+  availability: "available" | "unavailable";
+}
+
+export interface ProjectedOutgoingPortal extends ProjectedPortalBase {
+  direction: "outgoing";
+  keyIssueId: EntityId;
+  keyIssueTitle: string;
+  targetProjectId: EntityId;
+  targetTopicId?: EntityId;
+}
+
+export interface ProjectedIncomingPortal extends ProjectedPortalBase {
+  direction: "incoming";
+  sourceInstanceId: string;
+  sourceProjectId: EntityId;
+  sourceTopicId: EntityId;
+  sourceTopicTitle: string;
+  sourceKeyIssueId: EntityId;
+  sourceKeyIssueTitle: string;
+}
+
+export type ProjectedPortal = ProjectedOutgoingPortal | ProjectedIncomingPortal;
+
 export interface SemanticRelationshipGroup {
   keyIssueId: EntityId;
   keyIssueTitle: string;
@@ -55,10 +86,12 @@ export interface GraphProjection {
   keyIssues: ProjectedKeyIssue[];
   relatedTopics: ProjectedRelatedTopic[];
   relationships: ProjectedRelationship[];
+  portals: ProjectedPortal[];
   semanticRelationships: SemanticRelationshipGroup[];
   layoutInput: {
     keyIssueIds: EntityId[];
     relatedTopicIds: EntityId[];
+    portalIds: EntityId[];
   };
   transition: {
     fromTopicId?: EntityId;
@@ -70,6 +103,8 @@ export interface GraphProjectionOptions {
   selectedKeyIssueId?: EntityId;
   selectedRelatedTopicId?: EntityId;
   previousProjection?: GraphProjection;
+  portalProjects?: Record<string, { title: string; available: boolean }>;
+  incomingLinks?: IncomingProjectLink[];
 }
 
 function compareOrdered(
@@ -103,6 +138,12 @@ export function buildGraphProjection(
         (issueIndex.get(left.keyIssueId) ?? Number.MAX_SAFE_INTEGER) -
         (issueIndex.get(right.keyIssueId) ?? Number.MAX_SAFE_INTEGER);
       return issueDifference || compareOrdered(left, right) || left.targetTopicId.localeCompare(right.targetTopicId);
+    });
+  const sourcePortals = project.projectLinks
+    .filter(({ sourceTopicId }) => sourceTopicId === centralTopicId)
+    .sort((left, right) => {
+      const issueDifference = (issueIndex.get(left.keyIssueId) ?? Number.MAX_SAFE_INTEGER) - (issueIndex.get(right.keyIssueId) ?? Number.MAX_SAFE_INTEGER);
+      return issueDifference || compareOrdered(left, right);
     });
 
   for (const relationship of sourceRelationships) {
@@ -220,6 +261,39 @@ export function buildGraphProjection(
       emphasis: highlighted ? "highlighted" : hasSelection ? "dimmed" : "default"
     };
   });
+  const outgoingPortals: ProjectedPortal[] = sourcePortals.map((portal) => {
+    const issue = sourceIssues.find(({ id }) => id === portal.keyIssueId);
+    if (!issue) throw new DomainError("invalid-reference", `Project Link ${portal.id} has no Key Issue in this Topic`);
+    const live = options.portalProjects?.[portal.targetProjectId];
+    return {
+      id: portal.id,
+      direction: "outgoing",
+      keyIssueId: portal.keyIssueId,
+      keyIssueTitle: issue.title,
+      targetProjectId: portal.targetProjectId,
+      ...(portal.targetTopicId ? { targetTopicId: portal.targetTopicId } : {}),
+      projectTitle: live?.title ?? portal.cachedProjectTitle,
+      ...(portal.cachedTopicTitle ? { topicTitle: portal.cachedTopicTitle } : {}),
+      ...(portal.note ? { note: portal.note } : {}),
+      order: portal.order ?? Number.MAX_SAFE_INTEGER,
+      availability: live?.available ? "available" : "unavailable"
+    };
+  });
+  const incomingPortals: ProjectedPortal[] = (options.incomingLinks ?? []).map((link, index) => ({
+    id: `incoming:${link.sourceInstanceId}:${link.linkId}`,
+    direction: "incoming",
+    sourceInstanceId: link.sourceInstanceId,
+    sourceProjectId: link.sourceProjectId,
+    sourceTopicId: link.sourceTopicId,
+    sourceTopicTitle: link.sourceTopicTitle,
+    sourceKeyIssueId: link.keyIssueId,
+    sourceKeyIssueTitle: link.keyIssueTitle,
+    projectTitle: link.sourceProjectTitle,
+    topicTitle: link.sourceTopicTitle,
+    order: index,
+    availability: link.availability
+  }));
+  const portals = [...outgoingPortals, ...incomingPortals];
 
   const relatedById = new Map(relatedTopics.map((topic) => [topic.id, topic]));
   const semanticRelationships: SemanticRelationshipGroup[] = keyIssues.map((issue) => ({
@@ -256,10 +330,12 @@ export function buildGraphProjection(
     keyIssues,
     relatedTopics,
     relationships,
+    portals,
     semanticRelationships,
     layoutInput: {
       keyIssueIds: keyIssues.map(({ id }) => id),
-      relatedTopicIds: relatedTopics.map(({ id }) => id)
+      relatedTopicIds: relatedTopics.map(({ id }) => id),
+      portalIds: portals.map(({ id }) => id)
     },
     transition: {
       ...(options.previousProjection ? { fromTopicId: options.previousProjection.centralTopic.id } : {}),

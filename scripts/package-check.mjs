@@ -24,18 +24,35 @@ if (packed.status !== 0) throw new Error(packed.stderr || packed.error?.message 
 const packResult = JSON.parse(packed.stdout);
 const report = Array.isArray(packResult) ? packResult[0] : Object.values(packResult)[0];
 const files = report.files.map(({ path }) => path.replaceAll("\\", "/"));
-const allowedRootFiles = new Set(["CHANGELOG.md", "LICENSE", "NOTICE", "README.md", "THIRD_PARTY_NOTICES.md", "package.json"]);
-const allowed = (file) => allowedRootFiles.has(file) || file.startsWith("dist/") || file.startsWith("fixtures/projects/ai-landscape/");
+const allowedRootFiles = new Set(["CHANGELOG.md", "CONTRIBUTING.md", "LICENSE", "NOTICE", "README.md", "SECURITY.md", "THIRD_PARTY_NOTICES.md", "package.json"]);
+const readmeImage = ".github/assets/outmapper-cover.webp";
+const allowed = (file) => file === readmeImage || allowedRootFiles.has(file) || file.startsWith("dist/") || file.startsWith("docs/") || file.startsWith("schemas/v1/") || file.startsWith("schemas/v2/") || file.startsWith("fixtures/projects/ai-landscape/");
 const unexpected = files.filter((file) => !allowed(file));
 
 assert(unexpected.length === 0, `Unexpected release files: ${unexpected.join(", ")}`);
 const forbidden = files.filter((file) => file.includes("/.outmapper/") || file.includes("/src/test/") || /\.test\.[^.]+(?:\.map)?$/.test(file));
 assert(forbidden.length === 0, `Private, derived, or test files entered the package: ${forbidden.join(", ")}`);
 for (const required of [
+  readmeImage,
   "NOTICE",
+  "LICENSE",
+  "THIRD_PARTY_NOTICES.md",
+  "CONTRIBUTING.md",
+  "SECURITY.md",
+  "schemas/v1/canonical-project.schema.json",
+  "schemas/v2/canonical-project.schema.json",
+  "docs/architecture.md",
+  "docs/data-model.md",
+  "docs/project-format.md",
+  "docs/security-model.md",
+  "docs/glossary.md",
+  "docs/ui-reference.md",
+  "docs/troubleshooting.md",
+  "docs/licenses/client-dependencies.txt",
   "dist/client/index.html",
   "dist/client/brand/outmapper-mark-dark.svg",
   "dist/client/brand/outmapper-mark-light.svg",
+  "dist/client/fonts/Cairo-OFL.txt",
   "dist/server/src/server/cli-entry.js",
   "fixtures/projects/ai-landscape/project.json"
 ]) {

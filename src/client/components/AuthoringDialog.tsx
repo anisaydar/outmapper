@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { closeOnBackdropPress } from "./dialog-backdrop.js";
 
 export function AuthoringDialog({ title, children, onClose, wide = false }: { title: string; children: ReactNode; onClose: () => void; wide?: boolean }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -16,7 +17,7 @@ export function AuthoringDialog({ title, children, onClose, wide = false }: { ti
       if (trigger?.isConnected) trigger.focus();
     };
   }, []);
-  return createPortal(<dialog ref={dialog} className={`authoring-dialog transfer-dialog${wide ? " authoring-dialog--wide" : ""}`} aria-labelledby={titleId} onCancel={(event) => { event.preventDefault(); onCloseRef.current(); }}>
+  return createPortal(<dialog ref={dialog} className={`authoring-dialog transfer-dialog${wide ? " authoring-dialog--wide" : ""}`} aria-labelledby={titleId} onCancel={(event) => { event.preventDefault(); onCloseRef.current(); }} onMouseDown={(event) => closeOnBackdropPress(event, () => onCloseRef.current())}>
     <h2 id={titleId}>{title}</h2>
     {children}
   </dialog>, document.body);

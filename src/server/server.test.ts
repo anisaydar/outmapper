@@ -1,7 +1,7 @@
 import { loadServerConfig } from "./config.js";
 import { buildServer } from "./server.js";
 import path from "node:path";
-import { mkdir, mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import { Buffer } from "node:buffer";
 import { FileSystemProjectStore } from "../project/filesystem-project-store.js";
@@ -62,7 +62,7 @@ describe("local server", () => {
   });
 
   it("creates, opens, and remembers user Projects in the managed Projects directory", async () => {
-    const { parent, projectDirectory, server } = await createServerProject();
+    const { parent, server } = await createServerProject();
     const created = await server.inject({ method: "POST", url: "/api/projects/new", payload: { title: "Research Atlas", locale: "en" } });
     expect(created.statusCode).toBe(201);
     expect(created.json().project.manifest).toMatchObject({ title: "Research Atlas", defaultLocale: "en" });
@@ -72,7 +72,8 @@ describe("local server", () => {
     const recent = await server.inject({ method: "GET", url: "/api/projects/recent" });
     expect(recent.json().projects[0]).toMatchObject({ directory: created.json().directory, title: "Research Atlas" });
 
-    const reopened = await server.inject({ method: "POST", url: "/api/projects/open", payload: { directory: projectDirectory } });
+    const original = recent.json().projects.find(({ projectId }: { projectId: string }) => projectId === "project-1");
+    const reopened = await server.inject({ method: "POST", url: `/api/workspace/projects/${original.instanceId}/activate`, payload: {} });
     expect(reopened.statusCode).toBe(200);
     expect(reopened.json().project.manifest.id).toBe("project-1");
     await server.close();
@@ -103,6 +104,48 @@ describe("local server", () => {
     await server.close();
   });
 
+  it("releases the API queue when an in-flight PATCH is aborted", async () => {
+    let pickerStarted!: () => void;
+    let finishPicker!: (directory: string | null) => void;
+    const started = new Promise<void>((resolve) => { pickerStarted = resolve; });
+    const picker = new Promise<string | null>((resolve) => { finishPicker = resolve; });
+    const { server } = await createServerProject(createValidProject(), {
+      selectFolder: () => {
+        pickerStarted();
+        return picker;
+      }
+    });
+    await server.listen({ host: "127.0.0.1", port: 0 });
+    const address = server.addresses()[0];
+    if (!address) throw new Error("Test server did not bind");
+    const origin = `http://127.0.0.1:${address.port}`;
+
+    const open = fetch(`${origin}/api/projects/open`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: "{}"
+    });
+    await started;
+    const controller = new AbortController();
+    const patch = fetch(`${origin}/api/topics/topic-1`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ title: "Interrupted autosave" }),
+      signal: controller.signal
+    });
+    controller.abort();
+    await expect(patch).rejects.toMatchObject({ name: "AbortError" });
+    finishPicker(null);
+    expect((await open).status).toBe(200);
+
+    const health = await Promise.race([
+      fetch(`${origin}/api/health`),
+      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("API queue remained locked")), 2_000))
+    ]);
+    expect(health.status).toBe(200);
+    await server.close();
+  });
+
   it("autosaves domain commands to canonical files and supports bounded undo", async () => {
     const { projectDirectory, server } = await createServerProject();
 
@@ -122,6 +165,91 @@ describe("local server", () => {
     expect(undo.json().project.manifest.revision).toBe(2);
     expect(undo.json().project.topics[0]).toMatchObject({ id: "topic-1", title: "Center" });
     expect(undo.json().history).toEqual({ canUndo: false, canRedo: true });
+    await server.close();
+  });
+
+  it("reads the active Project while a Project switch opens it, without a transient conflict", async () => {
+    const { projectDirectory, server } = await createServerProject();
+    const instanceA = (await server.inject({ method: "GET", url: "/api/workspace/projects" })).json().activeInstanceId as string;
+    const instanceB = (await server.inject({ method: "POST", url: "/api/projects/new", payload: { title: "Project B", locale: "en" } })).json().instanceId as string;
+    // A read left in flight by a closing page runs beside the next request, as these direct reads of folder A do.
+    const reader = new FileSystemProjectStore(projectDirectory);
+    let switching = true;
+    const readErrors: unknown[] = [];
+    const readLoop = async () => {
+      while (switching) await reader.load().catch((error: unknown) => { readErrors.push(error); });
+    };
+    const readers = [readLoop(), readLoop(), readLoop()];
+    const statuses: number[] = [];
+    for (let round = 0; round < 12; round += 1) {
+      const [toA, project] = await Promise.all([
+        server.inject({ method: "POST", url: `/api/workspace/projects/${instanceA}/activate`, payload: {} }),
+        reader.load()
+      ]);
+      statuses.push(toA.statusCode);
+      expect(project.manifest.id).toBe("project-1");
+      statuses.push((await server.inject({ method: "POST", url: `/api/workspace/projects/${instanceB}/activate`, payload: {} })).statusCode);
+    }
+    switching = false;
+    await Promise.all(readers);
+
+    expect(statuses.every((status) => status === 200), JSON.stringify(statuses)).toBe(true);
+    expect(readErrors).toEqual([]);
+    await server.close();
+  });
+
+  it("keeps Undo per folder instance, clears externally changed history, and reloads conflicts", async () => {
+    const { parent, projectDirectory, server } = await createServerProject();
+    const workspace = (await server.inject({ method: "GET", url: "/api/workspace/projects" })).json();
+    const instanceA = workspace.activeInstanceId as string;
+    await server.inject({ method: "PATCH", url: "/api/topics/topic-1", payload: { title: "Edited in A" } });
+    const createdB = await server.inject({ method: "POST", url: "/api/projects/new", payload: { title: "Project B", locale: "en" } });
+    const instanceB = createdB.json().instanceId as string;
+
+    const returnedA = await server.inject({ method: "POST", url: `/api/workspace/projects/${instanceA}/activate`, payload: {} });
+    expect(returnedA.json()).toMatchObject({ history: { canUndo: true }, historyCleared: false });
+    expect((await server.inject({ method: "POST", url: "/api/history/undo", payload: {} })).json().project.topics[0].title).toBe("Center");
+    await server.inject({ method: "PATCH", url: "/api/topics/topic-1", payload: { title: "Second edit" } });
+    await server.inject({ method: "POST", url: `/api/workspace/projects/${instanceB}/activate`, payload: {} });
+
+    const manifestPath = path.join(projectDirectory, "project.json");
+    const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as Record<string, unknown>;
+    manifest.title = "Externally renamed";
+    manifest.revision = Number(manifest.revision) + 1;
+    await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+    const changedA = await server.inject({ method: "POST", url: `/api/workspace/projects/${instanceA}/activate`, payload: {} });
+    expect(changedA.json()).toMatchObject({ historyCleared: true, history: { canUndo: false, canRedo: false }, project: { manifest: { title: "Externally renamed" } } });
+
+    const external = JSON.parse(await readFile(manifestPath, "utf8")) as Record<string, unknown>;
+    external.title = "Reloaded title";
+    external.revision = Number(external.revision) + 1;
+    await writeFile(manifestPath, `${JSON.stringify(external, null, 2)}\n`, "utf8");
+    expect((await server.inject({ method: "PATCH", url: "/api/topics/topic-1", headers: { "x-outmapper-project-id": "project-1", "x-outmapper-revision": String(changedA.json().project.manifest.revision) }, payload: { title: "Conflict" } })).statusCode).toBe(409);
+    const reloaded = await server.inject({ method: "POST", url: "/api/project/reload", payload: {} });
+    expect(reloaded.json()).toMatchObject({ historyCleared: true, project: { manifest: { title: "Reloaded title" } } });
+    expect(await realpath(parent)).toBeTruthy();
+    await server.close();
+  });
+
+  it("registers copied folders as duplicate instances and can give one a new identity", async () => {
+    let selected = "";
+    const { parent, projectDirectory, server } = await createServerProject(createValidProject(), { selectFolder: async () => selected });
+    const copyDirectory = path.join(parent, "copied-folder");
+    await cp(projectDirectory, copyDirectory, { recursive: true });
+    selected = copyDirectory;
+    const opened = await server.inject({ method: "POST", url: "/api/projects/open", payload: {} });
+    expect(opened.statusCode).toBe(200);
+    const workspace = (await server.inject({ method: "GET", url: "/api/workspace/projects" })).json();
+    const copies = Object.values(workspace.projects as Record<string, { projectId: string; status: string }>).filter((entry) => entry.projectId === "project-1");
+    expect(copies.every((entry) => entry.status === "duplicate")).toBe(true);
+    expect((await server.inject({ method: "GET", url: "/api/workspace/resolve/project-1" })).json().status).toBe("choose");
+    const identity = await server.inject({ method: "POST", url: `/api/workspace/projects/${opened.json().instanceId}/new-identity`, payload: {} });
+    expect(identity.json().project.manifest.id).not.toBe("project-1");
+    expect((await new FileSystemProjectStore(projectDirectory).open()).manifest.id).toBe("project-1");
+
+    const savedCopy = await server.inject({ method: "POST", url: "/api/project/save-copy", payload: {} });
+    expect(savedCopy.json().project.projectId).not.toBe(identity.json().project.manifest.id);
+    expect((await new FileSystemProjectStore(savedCopy.json().project.directory).open()).manifest.id).toBe(savedCopy.json().project.projectId);
     await server.close();
   });
 
@@ -259,7 +387,62 @@ describe("local server", () => {
     });
     expect(committed.statusCode).toBe(200);
     expect(committed.json().projectDirectory).toBe(path.join(parent, "imported-project"));
-    expect((await new FileSystemProjectStore(path.join(parent, "imported-project")).open()).manifest.id).toBe("project-1");
+    expect((await new FileSystemProjectStore(path.join(parent, "imported-project")).open()).manifest.id).not.toBe("project-1");
+    expect(committed.json().importMode).toBe("copy");
+
+    const secondPreview = await server.inject({ method: "POST", url: "/api/packages/import/preview", headers: { "content-type": "application/vnd.outmapper.package+zip", "x-outmapper-filename": "backup.outmapper" }, payload: exported.rawPayload });
+    const importedAnyway = await server.inject({ method: "POST", url: `/api/packages/import/${secondPreview.json().id}/commit`, payload: { directoryName: "imported-anyway", mode: "anyway" } });
+    expect(importedAnyway.json().importMode).toBe("anyway");
+    expect((await new FileSystemProjectStore(path.join(parent, "imported-anyway")).open()).manifest.id).toBe("project-1");
+    await server.close();
+  });
+
+  it("serves incoming links, the cached Universe, federated search, and stable workspace error codes", async () => {
+    const target = createValidProject();
+    target.manifest.title = "Target Project";
+    const parent = await mkdtemp(path.join(os.tmpdir(), "outmapper-workspace-server-"));
+    directories.push(parent);
+    const targetDirectory = path.join(parent, "target");
+    const sourceDirectory = path.join(parent, "source");
+    await new FileSystemProjectStore(targetDirectory).create(target);
+    const source = createValidProject();
+    source.manifest.id = "source-project";
+    source.manifest.title = "Source Project";
+    source.topics[0]!.title = "Source Alpha";
+    source.keyIssues[0]!.title = "Source Issue";
+    source.projectLinks = [{ id: "source-link", sourceTopicId: "topic-1", keyIssueId: "issue-1", targetProjectId: target.manifest.id, cachedProjectTitle: target.manifest.title, createdAt: timestamp, updatedAt: timestamp }];
+    await new FileSystemProjectStore(sourceDirectory).create(source);
+    const server = await buildServer({
+      ...loadServerConfig({}, process.cwd()),
+      projectDirectory: targetDirectory,
+      projectsDirectory: parent,
+      stateDirectory: path.join(parent, "state"),
+      clientDirectory: path.join(parent, "missing-client")
+    }, { selectFolder: async () => sourceDirectory });
+    const initialWorkspace = (await server.inject({ method: "GET", url: "/api/workspace/projects" })).json();
+    const targetInstance = initialWorkspace.activeInstanceId as string;
+    const opened = await server.inject({ method: "POST", url: "/api/projects/open", payload: {} });
+    const sourceInstance = opened.json().instanceId as string;
+    await server.inject({ method: "POST", url: `/api/workspace/projects/${targetInstance}/activate`, payload: {} });
+
+    const incoming = await server.inject({ method: "GET", url: "/api/workspace/incoming" });
+    expect(incoming.statusCode).toBe(200);
+    expect(incoming.json()).toMatchObject({ total: 1, groups: [{ topicId: "topic-1", links: [{ sourceInstanceId: sourceInstance, sourceProjectTitle: "Source Project", sourceTopicTitle: "Source Alpha", keyIssueTitle: "Source Issue" }] }] });
+    const universe = await server.inject({ method: "GET", url: "/api/workspace/universe" });
+    expect(universe.json()).toMatchObject({
+      nodes: expect.arrayContaining([expect.objectContaining({ projectId: "project-1" }), expect.objectContaining({ projectId: "source-project" })]),
+      edges: [{ sourceProjectId: "source-project", targetProjectId: "project-1", count: 1 }]
+    });
+    const search = await server.inject({ method: "GET", url: "/api/search?scope=workspace&q=source&match=prefix" });
+    expect(search.statusCode).toBe(200);
+    expect(search.json().items).toEqual(expect.arrayContaining([expect.objectContaining({ title: "Source Alpha", sourceInstanceId: sourceInstance, sourceProjectId: "source-project" })]));
+
+    const invalidScope = await server.inject({ method: "GET", url: "/api/search?scope=everywhere&q=source" });
+    expect(invalidScope.json()).toMatchObject({ code: "search-scope-invalid" });
+    const activeForget = await server.inject({ method: "DELETE", url: `/api/workspace/projects/${targetInstance}` });
+    expect(activeForget.json()).toMatchObject({ code: "active-project-forget" });
+    await server.inject({ method: "DELETE", url: `/api/workspace/projects/${sourceInstance}` });
+    expect((await server.inject({ method: "GET", url: "/api/workspace/incoming" })).json().total).toBe(0);
     await server.close();
   });
 
@@ -399,6 +582,145 @@ describe("local server", () => {
     const response = await server.inject({ method: "GET", url: "/api/assets/missing-asset" });
     expect(response.statusCode).toBe(404);
     expect(response.json().error).toContain("missing");
+    await server.close();
+  });
+});
+
+describe("local server authoring routes", () => {
+  const directories: string[] = [];
+
+  afterEach(async () => {
+    await Promise.all(directories.splice(0).map((directory) => rm(directory, { recursive: true, force: true })));
+  });
+
+  async function createServer(project = createValidProject()) {
+    const parent = await mkdtemp(path.join(os.tmpdir(), "outmapper-authoring-"));
+    directories.push(parent);
+    const projectDirectory = path.join(parent, "project");
+    await new FileSystemProjectStore(projectDirectory).create(project);
+    const server = await buildServer({
+      ...loadServerConfig({}, process.cwd()),
+      projectDirectory,
+      projectsDirectory: parent,
+      stateDirectory: path.join(parent, "state"),
+      clientDirectory: path.join(parent, "missing-client")
+    });
+    return { projectDirectory, server };
+  }
+
+  function png(width: number, height: number) {
+    const bytes = Buffer.alloc(64);
+    Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]).copy(bytes);
+    bytes.write("IHDR", 12, "ascii");
+    bytes.writeUInt32BE(width, 16);
+    bytes.writeUInt32BE(height, 20);
+    return bytes;
+  }
+
+  const coverHeaders = { "content-type": "application/vnd.outmapper.asset", "x-outmapper-filename": encodeURIComponent("cover.png") };
+
+  it("sets a cover as one Undo step without a Knowledge Item, and removes it back to the inherited cover", async () => {
+    const { projectDirectory, server } = await createServer();
+    const set = await server.inject({ method: "PUT", url: "/api/key-issues/issue-1/cover", headers: coverHeaders, payload: png(1200, 630) });
+    expect(set.statusCode).toBe(200);
+    const asset = set.json().asset;
+    expect(asset).toMatchObject({ mimeType: "image/png", width: 1200, height: 630 });
+    expect(set.json().project.keyIssues[0].visualAssetId).toBe(asset.id);
+    expect(set.json().project.knowledgeItems).toEqual([]);
+    expect(set.json().project.associations).toEqual([]);
+    expect(await readFile(path.join(projectDirectory, asset.path))).toHaveLength(64);
+
+    const removed = await server.inject({ method: "DELETE", url: "/api/key-issues/issue-1/cover", payload: {} });
+    expect(removed.json().project.keyIssues[0].visualAssetId).toBeUndefined();
+    await server.inject({ method: "POST", url: "/api/history/undo", payload: {} });
+    const undone = await server.inject({ method: "POST", url: "/api/history/undo", payload: {} });
+    expect(undone.json().project.keyIssues[0].visualAssetId).toBeUndefined();
+    expect(undone.json().project.assets).toEqual([]);
+    expect(undone.json().history.canUndo).toBe(false);
+    await server.close();
+  });
+
+  it("rejects animated WebP and GIF covers by their bytes before any canonical change", async () => {
+    const { projectDirectory, server } = await createServer();
+    const animated = Buffer.alloc(40);
+    animated.write("RIFF", 0, "ascii");
+    animated.write("WEBPVP8X", 8, "ascii");
+    animated[20] = 0x02;
+    for (const payload of [animated, Buffer.from("GIF89a\x01\x00\x01\x00", "latin1")]) {
+      const response = await server.inject({ method: "PUT", url: "/api/topics/topic-1/cover", headers: { ...coverHeaders, "x-outmapper-mime": "image/png" }, payload });
+      expect(response.statusCode).toBe(415);
+      expect(response.json().code).toBe("unsupported-cover");
+    }
+    const persisted = await new FileSystemProjectStore(projectDirectory).open();
+    expect(persisted.assets).toEqual([]);
+    expect(persisted.topics[0].visualAssetId).toBeUndefined();
+    expect((await server.inject({ method: "PUT", url: "/api/topics/missing/cover", headers: coverHeaders, payload: png(1, 1) })).statusCode).toBe(404);
+    await server.close();
+  });
+
+  it("creates and links a Topic as a single Undo step", async () => {
+    const { server } = await createServer();
+    const created = await server.inject({ method: "POST", url: "/api/relationships/new-topic", payload: { sourceTopicId: "topic-1", keyIssueId: "issue-1", title: "Policy" } });
+    expect(created.statusCode).toBe(201);
+    const topic = created.json().project.topics.find(({ title }: { title: string }) => title === "Policy");
+    expect(created.json().project.relationships.some(({ targetTopicId }: { targetTopicId: string }) => targetTopicId === topic.id)).toBe(true);
+
+    const undone = await server.inject({ method: "POST", url: "/api/history/undo", payload: {} });
+    expect(undone.json().project.topics).toHaveLength(2);
+    expect(undone.json().project.relationships).toHaveLength(1);
+    expect(undone.json().history.canUndo).toBe(false);
+    await server.close();
+  });
+
+  it("authors an outgoing Project portal as one Undo step", async () => {
+    const { server } = await createServer();
+    const linked = await server.inject({ method: "POST", url: "/api/project-links", payload: { sourceTopicId: "topic-1", keyIssueId: "issue-1", targetProjectId: "external-project", cachedProjectTitle: "External Atlas", note: "Follow-up" } });
+    expect(linked.statusCode).toBe(201);
+    expect(linked.json().project.projectLinks).toEqual([expect.objectContaining({ targetProjectId: "external-project", cachedProjectTitle: "External Atlas", note: "Follow-up" })]);
+    const undone = await server.inject({ method: "POST", url: "/api/history/undo", payload: {} });
+    expect(undone.json().project.projectLinks).toEqual([]);
+    expect(undone.json().history.canUndo).toBe(false);
+    await server.close();
+  });
+
+  it("groups text autosaves, reverts an editing session to its checkpoint, and refuses unknown checkpoints", async () => {
+    const { server } = await createServer();
+    const { checkpoint } = (await server.inject({ method: "POST", url: "/api/history/checkpoint", payload: {} })).json();
+    expect(checkpoint).toEqual({ depth: 0, revision: 0 });
+    for (const title of ["M", "Ma", "Machine"]) {
+      await server.inject({ method: "PATCH", url: "/api/topics/topic-1", payload: { title } });
+    }
+    await server.inject({ method: "PATCH", url: "/api/key-issues/issue-1", payload: { order: 3 } });
+
+    const reverted = await server.inject({ method: "POST", url: "/api/history/revert", payload: { checkpoint } });
+    expect(reverted.statusCode).toBe(200);
+    expect(reverted.json().project.topics[0].title).toBe("Center");
+    expect(reverted.json().project.keyIssues[0].order).toBe(0);
+
+    const undoRevert = await server.inject({ method: "POST", url: "/api/history/undo", payload: {} });
+    expect(undoRevert.json().project.keyIssues[0].order).toBe(3);
+    await server.inject({ method: "POST", url: "/api/history/undo", payload: {} });
+    const undoText = await server.inject({ method: "POST", url: "/api/history/undo", payload: {} });
+    expect(undoText.json().project.topics[0].title).toBe("Center");
+    expect(undoText.json().history.canUndo).toBe(false);
+
+    const missing = await server.inject({ method: "POST", url: "/api/history/revert", payload: { checkpoint: { depth: 7, revision: 99 } } });
+    expect(missing.statusCode).toBe(409);
+    expect(missing.json().code).toBe("checkpoint-unavailable");
+    expect((await server.inject({ method: "POST", url: "/api/history/revert", payload: {} })).statusCode).toBe(400);
+    await server.close();
+  });
+
+  it("updates Project metadata and the Home Topic through PATCH /api/project as undoable steps", async () => {
+    const { server } = await createServer();
+    const renamed = await server.inject({ method: "PATCH", url: "/api/project", payload: { title: "Atlas", description: "Research map" } });
+    expect(renamed.json().project.manifest).toMatchObject({ title: "Atlas", description: "Research map" });
+    const home = await server.inject({ method: "PATCH", url: "/api/project", payload: { homeTopicId: "topic-2" } });
+    expect(home.json().project.manifest.homeTopicId).toBe("topic-2");
+    expect((await server.inject({ method: "PATCH", url: "/api/project", payload: { title: " " } })).statusCode).toBe(400);
+
+    expect((await server.inject({ method: "POST", url: "/api/history/undo", payload: {} })).json().project.manifest.homeTopicId).toBe("topic-1");
+    expect((await server.inject({ method: "POST", url: "/api/history/undo", payload: {} })).json().project.manifest.title).toBe("Test Project");
     await server.close();
   });
 });

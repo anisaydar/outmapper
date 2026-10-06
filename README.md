@@ -1,4 +1,4 @@
-![Outmapper — open-source intelligence and knowledge mapping](https://github.com/anisaydar/outmapper/raw/main/.github/assets/outmapper-cover.webp)
+![Outmapper launch film: scattered research gathers into a knowledge map, follows a thread across Topics, opens the Universe of Projects, and ends on npx outmapper@latest](.github/assets/outmapper-launch.avif)
 
 # Outmapper
 
@@ -15,7 +15,8 @@ Outmapper is designed to support:
 - interactive Topic → Key Issue → Related Topic exploration;
 - contextual knowledge collections attached to Topics and Key Issues;
 - integrated Viewer and Studio editing modes;
-- search across graph entities and supported document content;
+- links and portals between separate Projects, with a Universe view of their connections;
+- search across one Project or all registered Projects and supported document content;
 - English, Arabic, and Russian interfaces;
 - desktop, tablet, and mobile use;
 - a localhost runtime without mandatory proprietary cloud services.
@@ -24,13 +25,13 @@ Outmapper treats the visual map as a projection over the knowledge model. The re
 
 ## Status
 
-Outmapper 0.1.0 is the initial open-source release. It runs locally through a CLI and browser interface, with Projects stored on the user's filesystem.
+Outmapper 0.2.0 runs locally through a CLI and browser interface, with portable Projects stored on the user's filesystem and connected through a machine-local workspace registry.
 
-The application release version is independent from the portable Project format, which remains at `formatVersion: 1`.
+The application release version is independent from the portable Project format. New and migrated Projects use `formatVersion: 2`.
 
 ## Quickstart
 
-Requires Node.js 22.22.2 or newer. Choose either launch option.
+Requires **Node.js >=22.22.2**. Node 22.22.2 and Node 24 are supported. Choose either launch option.
 
 ### Installation-free
 
@@ -65,7 +66,7 @@ npx outmapper@latest --help
 npx outmapper@latest --version
 npx outmapper@latest --no-open
 npx outmapper@latest --port 4310
-npx outmapper@latest --project "C:\path\to\project"
+npx outmapper@latest --project "../my-project"
 ```
 
 With a global installation, replace `npx outmapper@latest` in those examples with `outmapper`.
@@ -77,6 +78,17 @@ User Projects never live in the installed npm package or npm cache. The default 
 - Linux: `${XDG_DATA_HOME:-~/.local/share}/Outmapper/Projects`
 
 Use `OUTMAPPER_DATA_DIR` to move all managed application data or `OUTMAPPER_PROJECT_DIR`/`--project` to open an existing Project.
+
+### Build your first connected maps
+
+1. Open **Settings → Projects → New Project...**, enter a title, and choose **Create Project**. Use **Add Topic** to create the first Topic.
+2. Choose **Edit** to enter Studio. Edit the title and description, add Key Issues and Knowledge, or choose **New Topic** to start another Topic. Changes autosave; **Done** returns to the map.
+3. In a Key Issue's **Relationships**, use **Find or create a Topic** to link an existing Topic or **Create and link new Topic…**. Choose **Upload cover**, **Replace cover**, or **Remove cover** to edit a Topic or Key Issue cover.
+4. Create a second Project, then return to the first. Edit a Key Issue and choose **Link another Project…** to connect them. Open its portal to move between Projects.
+5. Open **Universe** beside Search to see your Projects and their connections. In Search, choose **All Projects** to find content across registered Projects. **Back**, **Forward**, and **History** revisit Topics, Projects, and Universe.
+6. Open **Settings → Current Project → Project settings… → Save as copy...** for an independent Project copy, or choose **Export Project file…** for a portable backup. When importing an already registered Project, **Import as a copy** assigns a new Project identity; **Import anyway** keeps the existing identity.
+
+Projects remain separate files and folders when linked. All Projects search uses existing indexes; open a Project once if it is reported as not searchable. **Save as copy...** also assigns a new Project identity. Folders copied outside Outmapper share their original identity until you choose **Give this copy its own identity** in the copy chooser.
 
 ## Develop from source
 
@@ -97,26 +109,27 @@ Canonical JSON and Project-owned assets remain authoritative. The native SQLite 
 Useful environment variables:
 
 ```text
-OUTMAPPER_PROJECT_DIR=C:\path\to\project
+OUTMAPPER_PROJECT_DIR=../my-project
 OUTMAPPER_PORT=4173
 OUTMAPPER_HOST=127.0.0.1
-OUTMAPPER_DATA_DIR=C:\path\to\outmapper-data
+OUTMAPPER_DATA_DIR=../outmapper-data
 ```
 
 Only `127.0.0.1` and `::1` are accepted as server hosts.
 
+The environment-variable block lists names and example values; set them using your shell's syntax. Keep working Projects and application data outside the source checkout or installed package.
+
 ## Features
 
-- create, open, and revisit local Projects from the application;
-- create and edit Topics and Key Issues with autosaved changes and session undo/redo;
-- add notes, articles, research papers, videos, datasets, links, and file attachments to contextual Knowledge collections;
-- preview and import supported files from a selected folder with type filters, duplicate indicators, progress, and cancellation;
-- portable `.outmapper` backup/export and staged import into a new Project directory;
-- native SQLite full-text search across Topics, Key Issues, Knowledge, metadata, and extracted PDF text;
-- streamed Project-owned assets with stable IDs, SHA-256 metadata, bounded uploads, safe response headers, and byte ranges;
-- background PDF.js extraction with explicit encrypted, malformed, limit, and cancellation outcomes;
-- autosave, bounded session undo/redo, recovery checkpoints, migration backups, and immutable publication manifests;
-- responsive Viewer and Studio interfaces in English, Arabic, and Russian, including RTL and reduced motion.
+- **Connected Projects:** Project Links and incoming/outgoing portals connect independently stored maps; Universe shows their connections, availability, and folder copies.
+- **Studio authoring:** edit Topics, Key Issues, descriptions, Knowledge, and attachments with autosave, Undo/Redo, New Topic, create-and-link Topics, Home Topic selection, reordering, and Project settings.
+- **Cover editing:** upload, replace, or remove PNG, JPEG, and still WebP covers. Key Issues inherit their Topic's cover unless given their own.
+- **Navigation:** Back, Forward, and History work across Topics, Projects, and Universe, with keyboard controls and preserved Project editing histories.
+- **Workspace search:** This Project and All Projects search cover Topics, Key Issues, Knowledge, metadata, and indexed PDF text. Results identify their source Project and flag unavailable or stale indexes.
+- **Portable backups and copies:** export `.outmapper` files, validate imports before committing, import duplicates as independent copies, or save a folder copy. Exports include referenced Assets and leave linked Projects separate.
+- **Local files:** review folder imports with type filters, duplicate handling, progress, and cancellation. Original files are preserved; managed attachments stream from the Project folder.
+- **Offline operation:** local autosave, recovery, SQLite search, and background PDF extraction run through localhost without mandatory cloud services. External source links still require internet access.
+- **Accessible views:** responsive Viewer and Studio interfaces in English, Arabic, and Russian, with RTL, light/dark themes, keyboard navigation, and reduced motion.
 
 PDF extraction is derived data under `.outmapper/extracted-text/`; it is excluded from portable exports and rebuilt independently of canonical Project content.
 
@@ -126,8 +139,12 @@ PDF extraction is derived data under `.outmapper/extracted-text/`; it is exclude
 npm run lint
 npm run typecheck
 npm test
+npm run build
 npm run check:package
 npm run test:browser
+npm run test:browser:authoring
+npm run test:browser:workspace
+npm run test:browser:features
 npm run check:pdf
 npm run check:responsive-layout
 npm run check:offline-release
@@ -158,4 +175,4 @@ Project links:
 
 Copyright 2026 Anis Aydar.
 
-Outmapper is licensed under the [Apache License 2.0](LICENSE). User-created Project content remains separately licensed by its owners; Outmapper's software license does not impose a license on Project content. The copyright notice is recorded in [NOTICE](NOTICE), and bundled third-party attribution is recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Outmapper is licensed under the [Apache License 2.0](LICENSE). The bundled AI Landscape map, original reading notes, and translations use the same license. Linked external publications and datasets retain their owners' licenses and are not bundled copies. User-created Project content remains separately licensed by its owners; Outmapper's software license does not impose a license on Project content. The copyright notice is recorded in [NOTICE](NOTICE), and third-party attribution is recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

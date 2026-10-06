@@ -1,16 +1,11 @@
-import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import {
-  easeCubicOut,
-  select,
-  zoom,
-  zoomIdentity,
-  zoomTransform,
-  type ZoomBehavior
-} from "d3";
+import { Fragment, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import type { EntityId } from "../../domain/types.js";
-import type { GraphProjection, ProjectionEmphasis } from "../../graph/projection.js";
-import { layoutRadialProjection } from "../../graph/radial-layout.js";
+import type { GraphProjection, ProjectedIncomingPortal, ProjectedOutgoingPortal, ProjectionEmphasis } from "../../graph/projection.js";
+import { layoutRadialProjection, type PositionedPortal } from "../../graph/radial-layout.js";
 import { Icon } from "./Icon.js";
+import { useMapCamera } from "./map-camera.js";
+import { arrowheadTransform, discHue, wrapLabel } from "./graph-text.js";
+import { DiscArtwork } from "./node-disc.js";
 
 interface MapViewerLabels {
   mapLabel: string;
@@ -18,8 +13,45 @@ interface MapViewerLabels {
   keyIssue: string;
   relatedTopic: string;
   connectedVia: string;
+  linkedProject: string;
+  incomingLinkFrom: string;
+  projectOverflow: string;
   zoomIn: string;
   zoomOut: string;
+}
+
+interface PortalNodeProps {
+  portal: ProjectedIncomingPortal | ProjectedOutgoingPortal;
+  position: PositionedPortal;
+  accessibleName: string;
+  emphasis: ProjectionEmphasis;
+  /** Entrance order among the related Topics, by angle, so the wave sweeps each portal in with its neighbours. */
+  ringIndex: number;
+  onSelect: () => void;
+  onPoint: (pointed: boolean) => void;
+}
+
+function PortalNode({ portal, position, accessibleName, emphasis, ringIndex, onSelect, onPoint }: PortalNodeProps) {
+  return <button
+    type="button"
+    className={`map-node map-node--portal is-${portal.direction} is-${portal.availability} is-${emphasis}`}
+    style={{ left: position.x, top: position.y, "--ring-index": ringIndex, "--enter-x": `${-.24 * position.x}px`, "--enter-y": `${-.24 * position.y}px` } as CSSProperties}
+    aria-label={accessibleName}
+    aria-pressed={emphasis === "selected"}
+    onClick={onSelect}
+    onPointerEnter={() => onPoint(true)}
+    onPointerLeave={() => onPoint(false)}
+    onFocus={() => onPoint(true)}
+    onBlur={() => onPoint(false)}
+    data-map-node="portal"
+    data-portal-direction={portal.direction}
+    data-label-placement={position.labelPlacement}
+    data-entity-id={portal.id}
+  >
+    <span className="portal-node__icon"><Icon name="package" /></span>
+    <span className="portal-node__label" dir="auto">{portal.projectTitle}</span>
+    {position.linkIds.length > 1 ? <span className="portal-node__count" aria-hidden="true">{position.linkIds.length}</span> : null}
+  </button>;
 }
 
 interface MapViewerProps {
@@ -31,40 +63,15 @@ interface MapViewerProps {
   transitioningTopicId?: EntityId;
   onSelectKeyIssue: (id: EntityId) => void;
   onSelectRelatedTopic: (id: EntityId) => void;
+  onSelectPortal: (id: EntityId) => void;
+  /** The portal link whose preview card is open; its portal and edges stay highlighted. */
+  selectedPortalId?: EntityId;
+  onShowPortalOverflow: () => void;
   onClearSelection: () => void;
 }
 
 function emphasisClass(emphasis: ProjectionEmphasis): string {
   return `is-${emphasis}`;
-}
-
-function topicHue(id: EntityId): number {
-  if (id === "topic-ai") return 0;
-  return [...id].reduce((total, character) => total + character.codePointAt(0)!, 0) % 360;
-}
-
-function wrapLabel(title: string, length: number): string[] {
-  const lines = [""];
-  for (const word of title.split(" ")) {
-    const last = lines.length - 1;
-    const next = `${lines[last]} ${word}`.trim();
-    if (next.length > length && lines[last]) lines.push(word);
-    else lines[last] = next;
-  }
-  return lines;
-}
-
-function scaleMap(surface: HTMLDivElement, behavior: ZoomBehavior<HTMLDivElement, unknown>, factor: number, animate = false) {
-  const current = zoomTransform(surface);
-  const [minimum, maximum] = behavior.scaleExtent();
-  const nextScale = Math.min(maximum, Math.max(minimum, current.k * factor));
-  const bounds = surface.getBoundingClientRect();
-  const target = zoomIdentity
-    .translate(current.x + bounds.width * (current.k - nextScale) / 2, current.y + bounds.height * (current.k - nextScale) / 2)
-    .scale(nextScale);
-  const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? true;
-  if (animate && !reduceMotion) select(surface).transition().duration(280).ease(easeCubicOut).call(behavior.transform, target);
-  else select(surface).call(behavior.transform, target);
 }
 
 export function MapViewer({
@@ -76,10 +83,13 @@ export function MapViewer({
   transitioningTopicId,
   onSelectKeyIssue,
   onSelectRelatedTopic,
+  onSelectPortal,
+  selectedPortalId,
+  onShowPortalOverflow,
   onClearSelection
 }: MapViewerProps) {
   const artworkId = useId();
-  const hue = topicHue(projection.centralTopic.id);
+  const hue = discHue(projection.centralTopic.id);
   const centralLines = wrapLabel(projection.centralTopic.title, 13);
   const surfaceRef = useRef<HTMLDivElement>(null);
   const cameraRef = useRef<HTMLDivElement>(null);
@@ -87,9 +97,6 @@ export function MapViewer({
   const edgeLayerRef = useRef<SVGSVGElement>(null);
   const edgeCameraRef = useRef<SVGGElement>(null);
   const centralNodeRef = useRef<HTMLButtonElement>(null);
-  const zoomRef = useRef<ZoomBehavior<HTMLDivElement, unknown> | null>(null);
-  const baseScaleRef = useRef(1);
-  const previousSizeRef = useRef<{ width: number; height: number } | null>(null);
   const [isEntering, setIsEntering] = useState(
     () => typeof window === "undefined" || !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
   );
@@ -97,87 +104,36 @@ export function MapViewer({
   const topicRingIndices = useMemo(() => new Map(layout.relatedTopics.map(({ id }, index) => [id, index])), [layout]);
   const issueEnterStep = 8 * 38 / Math.max(1, layout.keyIssues.length);
   const topicEnterStep = 36 * 21 / Math.max(1, layout.relatedTopics.length);
+  // Related Topic i sits at -90° + i steps and enters i-th; a portal takes the fractional place of its own angle in
+  // that sweep, so portals, their edges and their arrowheads arrive together with the Topics beside them.
+  const portalRingIndices = useMemo(() => new Map(layout.portals.map(({ id, angle }) =>
+    [id, (((angle + 90) % 360 + 360) % 360) / 360 * Math.max(1, layout.relatedTopics.length)])), [layout]);
   const issueById = useMemo(() => new Map(projection.keyIssues.map((issue) => [issue.id, issue])), [projection]);
   const topicById = useMemo(
     () => new Map(projection.relatedTopics.map((topic) => [topic.id, topic])),
     [projection]
   );
+  const portalById = useMemo(() => new Map(projection.portals.map((portal) => [portal.id, portal])), [projection.portals]);
+  const [pointedPortalId, setPointedPortalId] = useState<EntityId>();
 
-  useLayoutEffect(() => {
-    const surface = surfaceRef.current;
-    const camera = cameraRef.current;
-    if (!surface || !camera) return;
-    const selection = select(surface);
-    const behavior = zoom<HTMLDivElement, unknown>()
-      .filter((event) => {
-        if (event.type === "wheel") return false;
-        return !(event.target instanceof Element && event.target.closest("button"));
-      })
-      .on("zoom", (event) => {
-        const { width, height } = surface.getBoundingClientRect();
-        const { x, y, k } = event.transform;
-        camera.style.transform = `translate(${event.transform.x}px, ${event.transform.y}px) scale(${event.transform.k})`;
-        edgeCameraRef.current?.setAttribute("transform", `translate(${x + (width - layout.size) * k / 2} ${y + (height - layout.size) * k / 2}) scale(${k})`);
-        camera.style.setProperty("--graph-scale", String(event.transform.k));
-        camera.style.setProperty("--graph-unscale", String(1 / event.transform.k));
-        const relativeScale = event.transform.k / baseScaleRef.current;
-        surface.dataset.zoom = relativeScale < 0.7 ? "low" : relativeScale > 1.35 ? "high" : "normal";
-      });
-    zoomRef.current = behavior;
-    selection.call(behavior);
+  // Portal edges are quiet until a selection involves them: an outgoing portal lights up with its Key Issue, and any
+  // portal with its own hover, focus, or open card. Everything else dims while something is selected.
+  const selectedPortalGroupId = layout.portals.find(({ linkIds }) => selectedPortalId && linkIds.includes(selectedPortalId))?.id;
+  const activeIssueIds = new Set(projection.keyIssues.filter(({ emphasis }) => emphasis === "selected" || emphasis === "highlighted").map(({ id }) => id));
+  const hasSelection = Boolean(selectedPortalGroupId) || [...projection.keyIssues, ...projection.relatedTopics].some(({ emphasis }) => emphasis !== "default");
+  const portalEmphasis = (portal: PositionedPortal): ProjectionEmphasis =>
+    portal.id === selectedPortalGroupId ? "selected"
+      : portal.id === pointedPortalId || portal.keyIssueIds.some((id) => activeIssueIds.has(id)) ? "highlighted"
+        : hasSelection ? "dimmed" : "default";
+  const portalEdgeEmphasis = (edge: (typeof layout.portalEdges)[number]): ProjectionEmphasis =>
+    edge.portalId === selectedPortalGroupId || edge.portalId === pointedPortalId || (edge.portalDirection === "outgoing" && activeIssueIds.has(edge.keyIssueId)) ? "highlighted"
+      : hasSelection ? "dimmed" : "default";
 
-    const fit = (width: number, height: number) => {
-      if (width <= 0 || height <= 0) return;
-      const previous = previousSizeRef.current;
-      if (previous?.width === width && previous.height === height) return;
-      const previousBaseScale = baseScaleRef.current;
-      const baseScale = Math.min(width / layout.size, height / layout.size);
-      behavior.scaleExtent([baseScale * 0.5, baseScale * 2.4]);
-      if (!previous) {
-        baseScaleRef.current = baseScale;
-        const transform = zoomIdentity
-          .translate((width * (1 - baseScale)) / 2, (height * (1 - baseScale)) / 2)
-          .scale(baseScale);
-        selection.call(behavior.transform, transform);
-      } else {
-        const current = zoomTransform(surface);
-        const relativeScale = current.k / previousBaseScale;
-        const nextScale = baseScale * relativeScale;
-        const previousCenterX = (previous.width * (1 - current.k)) / 2;
-        const previousCenterY = (previous.height * (1 - current.k)) / 2;
-        const panX = (current.x - previousCenterX) / previousBaseScale;
-        const panY = (current.y - previousCenterY) / previousBaseScale;
-        baseScaleRef.current = baseScale;
-        const transform = zoomIdentity
-          .translate((width * (1 - nextScale)) / 2 + panX * baseScale, (height * (1 - nextScale)) / 2 + panY * baseScale)
-          .scale(nextScale);
-        selection.call(behavior.transform, transform);
-      }
-      previousSizeRef.current = { width, height };
-    };
-
-    const handleWheel = (event: WheelEvent) => {
-      event.preventDefault();
-      scaleMap(surface, behavior, event.deltaY < 0 ? 1.1 : 0.9);
-    };
-
-    const bounds = surface.getBoundingClientRect();
-    fit(bounds.width, bounds.height);
-    const observer =
-      typeof ResizeObserver === "undefined"
-        ? null
-        : new ResizeObserver(([entry]) => fit(entry.contentRect.width, entry.contentRect.height));
-    observer?.observe(surface);
-    surface.addEventListener("wheel", handleWheel, { passive: false });
-
-    return () => {
-      observer?.disconnect();
-      surface.removeEventListener("wheel", handleWheel);
-      selection.on(".zoom", null);
-      zoomRef.current = null;
-      previousSizeRef.current = null;
-    };
-  }, [layout.size]);
+  // Portal labels sit just outside the world square, on the side facing away from the center; the fit keeps them on screen.
+  const fitSize = Math.max(layout.size, ...layout.portals.map(({ x, y, labelPlacement }) => labelPlacement === "left" || labelPlacement === "right"
+    ? 2 * (Math.abs(x - layout.center.x) + 140)
+    : 2 * (Math.abs(y - layout.center.y) + 46)));
+  const { refit, applyZoom } = useMapCamera(layout.size, surfaceRef, cameraRef, edgeCameraRef, fitSize);
 
   useEffect(() => {
     const world = worldRef.current;
@@ -186,8 +142,18 @@ export function MapViewer({
     let timer: number | undefined;
     const finish = () => { if (active) setIsEntering(false); };
     if (typeof world.getAnimations === "function") {
-      const animations = [...world.getAnimations({ subtree: true }), ...(edgeLayerRef.current?.getAnimations({ subtree: true }) ?? [])];
-      void Promise.allSettled(animations.map((animation) => animation.finished)).then(finish);
+      // Waits for every entrance animation, including those of nodes that mount after this effect, so the entrance
+      // never ends while something is still arriving.
+      const settle = async () => {
+        for (;;) {
+          const running = [...world.getAnimations({ subtree: true }), ...(edgeLayerRef.current?.getAnimations({ subtree: true }) ?? [])]
+            .filter((animation) => animation.playState !== "finished");
+          if (!running.length || !active) break;
+          await Promise.allSettled(running.map((animation) => animation.finished));
+        }
+        finish();
+      };
+      void settle();
     } else {
       const duration = Math.max(
         400,
@@ -202,27 +168,9 @@ export function MapViewer({
 
   useLayoutEffect(() => {
     if (focusToken === 0) return;
-    const surface = surfaceRef.current;
-    const behavior = zoomRef.current;
-    if (surface && behavior) {
-      const bounds = surface.getBoundingClientRect();
-      const scale = Math.min(bounds.width / layout.size, bounds.height / layout.size);
-      baseScaleRef.current = scale;
-      behavior.scaleExtent([scale * 0.5, scale * 2.4]);
-      select(surface).call(
-        behavior.transform,
-        zoomIdentity.translate((bounds.width * (1 - scale)) / 2, (bounds.height * (1 - scale)) / 2).scale(scale)
-      );
-    }
+    refit();
     centralNodeRef.current?.focus();
-  }, [focusToken, layout.size]);
-
-  const applyZoom = (operation: "in" | "out") => {
-    const surface = surfaceRef.current;
-    const behavior = zoomRef.current;
-    if (!surface || !behavior) return;
-    scaleMap(surface, behavior, operation === "in" ? 1.25 : 0.8, true);
-  };
+  }, [focusToken, refit]);
 
   const visibleLabelStep = Math.max(1, Math.ceil(projection.relatedTopics.length / 36));
   const orderedRelationships = [...layout.relationships].sort((left, right) => {
@@ -252,6 +200,16 @@ export function MapViewer({
                 style={{ "--edge-index": projection.keyIssues.length + (topicRingIndices.get(edge.relatedTopicId) ?? index) } as CSSProperties}
               />
             ))}
+            {layout.portalEdges.map((edge) => {
+              const emphasis = portalEdgeEmphasis(edge);
+              const edgeIndex = { "--edge-index": projection.keyIssues.length + (portalRingIndices.get(edge.portalId ?? "") ?? 0) } as CSSProperties;
+              return <Fragment key={`portal:${edge.id}`}>
+                <path className={`map-edge map-edge--portal map-edge--portal-${edge.portalDirection ?? "outgoing"} ${emphasisClass(emphasis)}`} data-edge-id={edge.id} d={edge.path} pathLength={1} style={edgeIndex} />
+                <g transform={arrowheadTransform({ ...edge.end, angle: edge.arrowAngle ?? 0 })}>
+                  <path className={`edge-arrowhead ${emphasisClass(emphasis)}`} d="M-6.4 -3.7 0.8 0 -6.4 3.7z" style={edgeIndex} />
+                </g>
+              </Fragment>;
+            })}
           </g>
         </svg>
         <div className="map-camera" ref={cameraRef}>
@@ -281,25 +239,8 @@ export function MapViewer({
               data-entity-id={projection.centralTopic.id}
             >
               <svg viewBox="0 0 184 184" aria-hidden="true">
-                <defs>
-                  <clipPath id={`${artworkId}-clip`}><circle cx="92" cy="92" r="90" /></clipPath>
-                  <linearGradient id={`${artworkId}-gradient`} x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stopColor={`hsl(${hue} 62% 32%)`} />
-                    <stop offset="1" stopColor={`hsl(${(hue + 50) % 360} 55% 9%)`} />
-                  </linearGradient>
-                </defs>
                 <g className="central-disc">
-                  <g clipPath={`url(#${artworkId}-clip)`}>
-                    <g transform="translate(-18 -18) scale(1.03)">
-                      <rect width="220" height="220" fill={`url(#${artworkId}-gradient)`} />
-                      {Array.from({ length: 16 }, (_, index) => (
-                        <circle key={index} cx={(index * 131) % 220} cy={(index * 67) % 220} r={12 + index * 7} fill="none" stroke={`hsl(${hue} 80% 72%)`} strokeOpacity=".15" />
-                      ))}
-                      <rect x="121" y="44" width="39.6" height="39.6" rx="6" fill="none" stroke={`hsl(${hue} 90% 75%)`} strokeOpacity=".45" />
-                    </g>
-                    {coverImageUrl ? <image key={coverImageUrl} href={coverImageUrl} x="2" y="2" width="180" height="180" preserveAspectRatio="xMidYMid slice" onError={(event) => { event.currentTarget.style.display = "none"; }} /> : null}
-                    <circle className="central-cover-shade" cx="92" cy="92" r="92" fill={coverImageUrl ? "var(--cover-shade)" : "#0007"} />
-                  </g>
+                  <DiscArtwork id={artworkId} hue={hue} coverImageUrl={coverImageUrl} />
                   <circle className="central-ring" cx="92" cy="92" r="92" />
                   <text className="central-title" direction={direction}>
                     {centralLines.map((line, index) => (
@@ -390,9 +331,38 @@ export function MapViewer({
                 </button>
               );
             })}
+            {layout.portals.map((position) => {
+              const portal = portalById.get(position.id);
+              if (!portal) return null;
+              const issueTitles = [...new Set(position.linkIds.flatMap((id) => {
+                const link = portalById.get(id);
+                return link?.direction === "outgoing" ? [link.keyIssueTitle] : [];
+              }))];
+              const accessibleName = portal.direction === "incoming"
+                ? `${labels.incomingLinkFrom} ${portal.projectTitle}`
+                : `${labels.linkedProject}: ${portal.projectTitle}, ${labels.connectedVia} ${issueTitles.join(", ")}`;
+              return <PortalNode
+                portal={portal}
+                position={position}
+                accessibleName={accessibleName}
+                emphasis={portalEmphasis(position)}
+                ringIndex={portalRingIndices.get(position.id) ?? 0}
+                onSelect={() => onSelectPortal(portal.id)}
+                onPoint={(pointed) => setPointedPortalId((current) => pointed ? position.id : current === position.id ? undefined : current)}
+                key={portal.id}
+              />;
+            })}
           </div>
         </div>
       </div>
+      {/* Portals past the cap sit with the map controls, under Back and Home, rather than in the graph. */}
+      {layout.portalOverflow ? <button
+        type="button"
+        className="pill map-node--portal-overflow"
+        aria-label={`+${layout.portalOverflow.count} ${labels.projectOverflow}`}
+        onClick={onShowPortalOverflow}
+        data-map-node="portal-overflow"
+      ><span className="portal-node__icon"><Icon name="package" /></span><span className="portal-overflow__count">+{layout.portalOverflow.count}</span><span>{labels.projectOverflow}</span></button> : null}
       <div className="map-zoom capsule" role="toolbar">
         <button className="tool" type="button" aria-label={labels.zoomIn} onClick={() => applyZoom("in")}>
           <Icon name="plus" />

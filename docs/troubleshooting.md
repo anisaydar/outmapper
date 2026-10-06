@@ -46,7 +46,7 @@ Choose another port or stop the process you own. Outmapper does not terminate un
 Confirm that the directory exists, is writable, and contains a valid Outmapper `project.json`. Working Projects cannot be inside the application source checkout or installed package. Copy or move the Project to an ordinary user directory and retry:
 
 ```text
-npx outmapper@latest --project "/path/to/project"
+npx outmapper@latest --project "../my-project"
 ```
 
 Paths containing spaces should be quoted.
@@ -64,6 +64,18 @@ Set `OUTMAPPER_DATA_DIR` before startup to use another application-data root.
 ## Search or extracted text appears stale
 
 The `.outmapper/` directory inside a Project contains derived runtime data. With Outmapper stopped and a backup available, it can be removed and rebuilt from canonical Project files. Do not delete `project.json`, `data/`, `assets/`, `theme/`, or `snapshots/` when clearing derived state.
+
+All Projects search uses existing indexes. **Projects not searchable until opened** means a Project has no compatible runtime index; open it once, then retry. **Projects whose results may be out of date** means an index is older than the registry's cached Project revision; opening that Project updates its index. **Results are partial** and **Search remaining Projects** let you continue a longer search.
+
+## A linked Project is missing or opens the wrong folder copy
+
+Open **Universe** or **Settings → Projects** and inspect the status. **Locate...** reconnects a missing folder to the same Project identity. If several folders contain the same Project ID, choose the intended copy and optionally use **Remember my choice**. **Give this copy its own identity** turns a copy into an independent Project.
+
+**Remove from Recent** only hides the entry from the Recent list. **Forget Project** stops tracking that folder on this computer without deleting it; incoming portals, Universe resolution, and workspace search update immediately.
+
+## Incoming portals appear on the Home Topic
+
+An incoming link without a target Topic, or one whose target Topic no longer exists, is attached to the target Project's current Home Topic. Set a different Home Topic to move these derived portals, or edit the outgoing link in its source Project to target a specific Topic.
 
 ## Shutdown is taking longer than expected
 

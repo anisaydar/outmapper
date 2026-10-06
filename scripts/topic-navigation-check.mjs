@@ -27,11 +27,11 @@ function project() {
     ["df", "topic-d", "issue-d2", "topic-f"]
   ];
   return {
-    manifest: { format: "outmapper-project", formatVersion: 1, id: "topic-navigation-check", title: "Topic Navigation Check", createdAt: timestamp, updatedAt: timestamp, revision: 0, homeTopicId: "topic-a" },
+    manifest: { format: "outmapper-project", formatVersion: 2, id: "topic-navigation-check", title: "Topic Navigation Check", createdAt: timestamp, updatedAt: timestamp, revision: 0, homeTopicId: "topic-a" },
     topics,
     keyIssues,
     relationships: links.map(([id, sourceTopicId, keyIssueId, targetTopicId], order) => ({ id: `relationship-${id}`, sourceTopicId, keyIssueId, targetTopicId, order, createdAt: timestamp, updatedAt: timestamp })),
-    knowledgeItems: [], associations: [], assets: [], collections: [], snapshots: []
+    projectLinks: [], knowledgeItems: [], associations: [], assets: [], collections: [], snapshots: []
   };
 }
 

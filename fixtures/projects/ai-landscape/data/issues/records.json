@@ -1,7 +1,7 @@
 [
   {
     "createdAt": "2026-09-02T09:00:00.000Z",
-    "description": "Explore agents & autonomy through its connections to World Models, Science, Robotics. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Agents & Autonomy through its connections to World Models, Science, Robotics. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-agents",
     "order": 0,
     "title": "Agents & Autonomy",
@@ -10,7 +10,7 @@
   },
   {
     "createdAt": "2026-09-02T09:01:00.000Z",
-    "description": "Explore ethical & trustworthy ai through its connections to Digital Identity, Model Interpretability, Disinformation, Privacy & Data Protection, AI & Health. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Ethical & Trustworthy AI through its connections to Digital Identity, Model Interpretability, Disinformation, Privacy & Data Protection, AI & Health. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-trust",
     "order": 1,
     "title": "Ethical & Trustworthy AI",
@@ -19,7 +19,7 @@
   },
   {
     "createdAt": "2026-09-02T09:02:00.000Z",
-    "description": "Explore workforce transformation through its connections to Future of Work, Education & Skills. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Workforce Transformation through its connections to Future of Work, Education & Skills. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-workforce",
     "order": 2,
     "title": "Workforce Transformation",
@@ -28,7 +28,7 @@
   },
   {
     "createdAt": "2026-09-02T09:03:00.000Z",
-    "description": "Explore environmental impact through its connections to Climate Indicators, Data Centers, Semiconductors & Compute. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Environmental Impact through its connections to Climate Indicators, Data Centers, Semiconductors & Compute. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-environment",
     "order": 3,
     "title": "Environmental Impact",
@@ -37,7 +37,7 @@
   },
   {
     "createdAt": "2026-09-02T09:04:00.000Z",
-    "description": "Explore security & regulation through its connections to Security & Resilience, Regulatory Innovation, Data Centers, Geo-economics and Strategic Competition. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Security & Regulation through its connections to Security & Resilience, Regulatory Innovation, Data Centers, Geo-economics and Strategic Competition. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-security",
     "order": 4,
     "title": "Security & Regulation",
@@ -46,7 +46,7 @@
   },
   {
     "createdAt": "2026-09-02T09:05:00.000Z",
-    "description": "Explore research & evaluation through its connections to Science, Open Source, Evaluation & Benchmarks, Datasets & Data Quality, Computer Vision. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Research & Evaluation through its connections to Science, Open Source, Evaluation & Benchmarks, Datasets & Data Quality, Computer Vision. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-research",
     "order": 5,
     "title": "Research & Evaluation",
@@ -64,7 +64,7 @@
   },
   {
     "createdAt": "2026-09-30T14:44:24.703Z",
-    "description": "Explore generative ai through its connections to Language Models, Disinformation, Computer Vision. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Generative AI through its connections to Language Models, Disinformation, Computer Vision. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "f6abf51f-2420-4e17-a75e-21ab73f7820e",
     "order": 6,
     "title": "Generative AI",
@@ -73,7 +73,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore evidence & reproducibility through its connections to Datasets & Data Quality, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Evidence & Reproducibility through its connections to Datasets & Data Quality, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-science-evidence",
     "order": 1,
     "title": "Evidence & Reproducibility",
@@ -82,7 +82,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore simulation & prediction through its connections to Robotics, Computer Vision. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Simulation & Prediction through its connections to Robotics, Computer Vision. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-world-models-simulation",
     "order": 0,
     "title": "Simulation & Prediction",
@@ -91,7 +91,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore transfer & robustness through its connections to Evaluation & Benchmarks, Security & Resilience. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Transfer & Robustness through its connections to Evaluation & Benchmarks, Security & Resilience. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-world-models-transfer",
     "order": 1,
     "title": "Transfer & Robustness",
@@ -100,7 +100,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore credentials & verification through its connections to Privacy & Data Protection, Regulatory Innovation. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Credentials & Verification through its connections to Privacy & Data Protection, Regulatory Innovation. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-digital-identity-credentials",
     "order": 0,
     "title": "Credentials & Verification",
@@ -109,7 +109,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore impersonation & provenance through its connections to Disinformation, Security & Resilience. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Impersonation & Provenance through its connections to Disinformation, Security & Resilience. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-digital-identity-provenance",
     "order": 1,
     "title": "Impersonation & Provenance",
@@ -118,7 +118,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore measurement & evidence through its connections to Science, Datasets & Data Quality. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Measurement & Evidence through its connections to Science, Datasets & Data Quality. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-climate-measurement",
     "order": 0,
     "title": "Measurement & Evidence",
@@ -127,7 +127,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore energy & emissions through its connections to Data Centers, Semiconductors & Compute. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Energy & Emissions through its connections to Data Centers, Semiconductors & Compute. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-climate-energy",
     "order": 1,
     "title": "Energy & Emissions",
@@ -136,7 +136,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore task exposure & adoption through its connections to Language Models, Robotics. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Task Exposure & Adoption through its connections to Language Models, Robotics. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-work-tasks",
     "order": 0,
     "title": "Task Exposure & Adoption",
@@ -145,7 +145,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore skills & job quality through its connections to Education & Skills, Regulatory Innovation. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Skills & Job Quality through its connections to Education & Skills, Regulatory Innovation. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-work-skills",
     "order": 1,
     "title": "Skills & Job Quality",
@@ -154,7 +154,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore learning & assessment through its connections to Language Models, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Learning & Assessment through its connections to Language Models, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-education-learning",
     "order": 0,
     "title": "Learning & Assessment",
@@ -163,7 +163,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore ai literacy & practice through its connections to Future of Work, Datasets & Data Quality. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore AI Literacy & Practice through its connections to Future of Work, Datasets & Data Quality. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-education-literacy",
     "order": 1,
     "title": "AI Literacy & Practice",
@@ -172,7 +172,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore risk & accountability through its connections to Evaluation & Benchmarks, Security & Resilience. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Risk & Accountability through its connections to Evaluation & Benchmarks, Security & Resilience. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-governance-risk",
     "order": 0,
     "title": "Risk & Accountability",
@@ -181,7 +181,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore policy & public oversight through its connections to Privacy & Data Protection, Geo-economics and Strategic Competition. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Policy & Public Oversight through its connections to Privacy & Data Protection, Geo-economics and Strategic Competition. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-governance-policy",
     "order": 1,
     "title": "Policy & Public Oversight",
@@ -190,7 +190,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore attacks & mitigations through its connections to Language Models, Privacy & Data Protection. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Attacks & Mitigations through its connections to Language Models, Privacy & Data Protection. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-security-attacks",
     "order": 0,
     "title": "Attacks & Mitigations",
@@ -199,7 +199,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore operational controls through its connections to Regulatory Innovation, Robotics. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Operational Controls through its connections to Regulatory Innovation, Robotics. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-security-controls",
     "order": 1,
     "title": "Operational Controls",
@@ -208,7 +208,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore power & cooling through its connections to Climate Indicators, Semiconductors & Compute. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Power & Cooling through its connections to Climate Indicators, Semiconductors & Compute. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-data-centers-energy",
     "order": 0,
     "title": "Power & Cooling",
@@ -217,7 +217,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore capacity & resilience through its connections to Geo-economics and Strategic Competition, Security & Resilience. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Capacity & Resilience through its connections to Geo-economics and Strategic Competition, Security & Resilience. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-data-centers-capacity",
     "order": 1,
     "title": "Capacity & Resilience",
@@ -226,7 +226,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore licensing & access through its connections to Datasets & Data Quality, Geo-economics and Strategic Competition. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Licensing & Access through its connections to Datasets & Data Quality, Geo-economics and Strategic Competition. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-open-source-licensing",
     "order": 0,
     "title": "Licensing & Access",
@@ -235,7 +235,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore reproducibility & documentation through its connections to Science, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Reproducibility & Documentation through its connections to Science, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-open-source-reproduction",
     "order": 1,
     "title": "Reproducibility & Documentation",
@@ -244,7 +244,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore compute access & capacity through its connections to Semiconductors & Compute, Data Centers. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Compute Access & Capacity through its connections to Semiconductors & Compute, Data Centers. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-geopolitics-capacity",
     "order": 0,
     "title": "Compute Access & Capacity",
@@ -253,7 +253,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore cooperation & openness through its connections to Regulatory Innovation, Open Source. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Cooperation & Openness through its connections to Regulatory Innovation, Open Source. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-geopolitics-cooperation",
     "order": 1,
     "title": "Cooperation & Openness",
@@ -262,7 +262,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore provenance & verification through its connections to Digital Identity, Regulatory Innovation. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Provenance & Verification through its connections to Digital Identity, Regulatory Innovation. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-disinformation-provenance",
     "order": 0,
     "title": "Provenance & Verification",
@@ -271,7 +271,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore synthetic media through its connections to Language Models, Computer Vision. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Synthetic Media through its connections to Language Models, Computer Vision. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-disinformation-media",
     "order": 1,
     "title": "Synthetic Media",
@@ -280,7 +280,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore representations & features through its connections to Language Models, Computer Vision. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Representations & Features through its connections to Language Models, Computer Vision. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-interpretability-features",
     "order": 0,
     "title": "Representations & Features",
@@ -289,7 +289,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore explanations & validation through its connections to Evaluation & Benchmarks, Regulatory Innovation. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Explanations & Validation through its connections to Evaluation & Benchmarks, Regulatory Innovation. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-interpretability-validation",
     "order": 1,
     "title": "Explanations & Validation",
@@ -298,7 +298,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore tokens & attention through its connections to Model Interpretability, Semiconductors & Compute. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Tokens & Attention through its connections to Model Interpretability, Semiconductors & Compute. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-language-models-architecture",
     "order": 0,
     "title": "Tokens & Attention",
@@ -307,7 +307,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore retrieval & grounding through its connections to Datasets & Data Quality, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Retrieval & Grounding through its connections to Datasets & Data Quality, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-language-models-grounding",
     "order": 1,
     "title": "Retrieval & Grounding",
@@ -316,7 +316,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore perception & control through its connections to Computer Vision, World Models. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Perception & Control through its connections to Computer Vision, World Models. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-robotics-perception",
     "order": 0,
     "title": "Perception & Control",
@@ -325,7 +325,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore testing & deployment through its connections to Security & Resilience, Future of Work. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Testing & Deployment through its connections to Security & Resilience, Future of Work. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-robotics-deployment",
     "order": 1,
     "title": "Testing & Deployment",
@@ -334,7 +334,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore biomedical discovery through its connections to Science, Datasets & Data Quality. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Biomedical Discovery through its connections to Science, Datasets & Data Quality. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-health-research",
     "order": 0,
     "title": "Biomedical Discovery",
@@ -343,7 +343,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore clinical evidence & oversight through its connections to Privacy & Data Protection, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Clinical Evidence & Oversight through its connections to Privacy & Data Protection, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-health-oversight",
     "order": 1,
     "title": "Clinical Evidence & Oversight",
@@ -352,7 +352,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore recognition & architecture through its connections to Robotics, Model Interpretability. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Recognition & Architecture through its connections to Robotics, Model Interpretability. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-computer-vision-recognition",
     "order": 0,
     "title": "Recognition & Architecture",
@@ -361,7 +361,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore datasets & generalization through its connections to Datasets & Data Quality, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Datasets & Generalization through its connections to Datasets & Data Quality, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-computer-vision-data",
     "order": 1,
     "title": "Datasets & Generalization",
@@ -370,7 +370,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore provenance & documentation through its connections to Privacy & Data Protection, Open Source. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Provenance & Documentation through its connections to Privacy & Data Protection, Open Source. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-datasets-documentation",
     "order": 0,
     "title": "Provenance & Documentation",
@@ -379,7 +379,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore sampling & evaluation splits through its connections to Evaluation & Benchmarks, Computer Vision. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Sampling & Evaluation Splits through its connections to Evaluation & Benchmarks, Computer Vision. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-datasets-splits",
     "order": 1,
     "title": "Sampling & Evaluation Splits",
@@ -388,7 +388,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore hardware & performance through its connections to Data Centers, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Hardware & Performance through its connections to Data Centers, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-compute-performance",
     "order": 0,
     "title": "Hardware & Performance",
@@ -397,7 +397,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore access & energy through its connections to Geo-economics and Strategic Competition, Climate Indicators. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Access & Energy through its connections to Geo-economics and Strategic Competition, Climate Indicators. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-compute-access",
     "order": 1,
     "title": "Access & Energy",
@@ -406,7 +406,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore privacy guarantees through its connections to Datasets & Data Quality, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Privacy Guarantees through its connections to Datasets & Data Quality, Evaluation & Benchmarks. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-privacy-guarantees",
     "order": 0,
     "title": "Privacy Guarantees",
@@ -415,7 +415,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore consent & data governance through its connections to Digital Identity, AI & Health. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Consent & Data Governance through its connections to Digital Identity, AI & Health. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-privacy-governance",
     "order": 1,
     "title": "Consent & Data Governance",
@@ -424,7 +424,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore metrics & robustness through its connections to Language Models, Datasets & Data Quality. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Metrics & Robustness through its connections to Language Models, Datasets & Data Quality. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-evaluation-metrics",
     "order": 0,
     "title": "Metrics & Robustness",
@@ -433,7 +433,7 @@
   },
   {
     "createdAt": "2026-10-01T20:25:44.103Z",
-    "description": "Explore reporting & intended use through its connections to Regulatory Innovation, AI & Health. Use the sources and reading note below to examine evidence and practical limits.",
+    "description": "Explore Reporting & Intended Use through its connections to Regulatory Innovation, AI & Health. Use the sources and reading note below to examine evidence and practical limits.",
     "id": "issue-evaluation-reporting",
     "order": 1,
     "title": "Reporting & Intended Use",

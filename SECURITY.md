@@ -4,14 +4,14 @@ Outmapper handles local files, imported Project packages, documents, and links. 
 
 ## Supported versions
 
-Outmapper 0.1.x receives security fixes. Versions earlier than 0.1.0 are unsupported.
+Outmapper 0.2.x receives security fixes. Upgrade older releases to the current version.
 
 | Version | Supported |
 |---|---|
-| 0.1.x | Yes |
-| Earlier than 0.1.0 | No |
+| 0.2.x | Yes |
+| Earlier than 0.2.0 | No |
 
-The application version does not change the portable Project format version, which remains version 1.
+The application version and portable Project format are separate. Outmapper 0.2.0 uses Project format version 2 and can open version 1 Projects.
 
 ## Reporting a vulnerability
 

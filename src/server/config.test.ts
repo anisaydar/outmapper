@@ -3,9 +3,10 @@ import { defaultStateDirectory, loadServerConfig } from "./config.js";
 
 describe("server configuration", () => {
   it("uses platform application-data locations for managed Projects", () => {
-    expect(defaultStateDirectory({}, "win32", "C:\\Users\\Ada")).toBe(path.join("C:\\Users\\Ada", "AppData", "Local", "Outmapper"));
-    expect(defaultStateDirectory({}, "darwin", "/Users/ada")).toBe(path.join("/Users/ada", "Library", "Application Support", "Outmapper"));
-    expect(defaultStateDirectory({}, "linux", "/home/ada")).toBe(path.join("/home/ada", ".local", "share", "Outmapper"));
+    const exampleHome = path.resolve("example-home");
+    expect(defaultStateDirectory({}, "win32", exampleHome)).toBe(path.join(exampleHome, "AppData", "Local", "Outmapper"));
+    expect(defaultStateDirectory({}, "darwin", exampleHome)).toBe(path.join(exampleHome, "Library", "Application Support", "Outmapper"));
+    expect(defaultStateDirectory({}, "linux", exampleHome)).toBe(path.join(exampleHome, ".local", "share", "Outmapper"));
   });
 
   it("keeps caller-relative Project paths separate from packaged application assets", () => {

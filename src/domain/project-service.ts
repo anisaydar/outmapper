@@ -11,6 +11,7 @@ import type {
   KnowledgeAssociation,
   KnowledgeItem,
   PublishedSnapshot,
+  ProjectLink,
   Theme,
   Topic,
   TopicRelationship
@@ -24,12 +25,14 @@ export interface DomainDependencies {
 export interface TopicDeletionImpact {
   keyIssueIds: EntityId[];
   relationshipIds: EntityId[];
+  projectLinkIds: EntityId[];
   associationIds: EntityId[];
   isHomeTopic: boolean;
 }
 
 export interface KeyIssueDeletionImpact {
   relationshipIds: EntityId[];
+  projectLinkIds: EntityId[];
   associationIds: EntityId[];
 }
 
@@ -187,7 +190,7 @@ export class ProjectService {
         sourceTopicId: input.sourceTopicId,
         keyIssueId: input.keyIssueId,
         targetTopicId: input.targetTopicId,
-        ...(input.order !== undefined ? { order: input.order } : {}),
+        order: input.order ?? nextTargetOrder(project, input.keyIssueId),
         ...(input.relationType ? { relationType: input.relationType } : {}),
         ...(input.note ? { note: input.note } : {}),
         createdAt: timestamp,
@@ -198,10 +201,161 @@ export class ProjectService {
     });
   }
 
+  /** Creates a Topic and links it from a Key Issue in one mutation, so it is one Undo step and never orphaned. */
+  async createAndConnectTopic(input: {
+    sourceTopicId: EntityId;
+    keyIssueId: EntityId;
+    title: string;
+  }): Promise<{ topic: Topic; relationship: TopicRelationship }> {
+    return this.mutate((project, timestamp) => {
+      requireRecord(project.topics, input.sourceTopicId, "Source Topic");
+      const issue = requireRecord(project.keyIssues, input.keyIssueId, "Key Issue");
+      if (issue.topicId !== input.sourceTopicId) {
+        throw new DomainError("invalid-reference", "Key Issue must belong to the source Topic", {
+          path: "/relationship/keyIssueId"
+        });
+      }
+      const topic: Topic = {
+        id: this.dependencies.createId(),
+        title: requireTitle(input.title, "/topic/title"),
+        createdAt: timestamp,
+        updatedAt: timestamp
+      };
+      const relationship: TopicRelationship = {
+        id: this.dependencies.createId(),
+        sourceTopicId: input.sourceTopicId,
+        keyIssueId: input.keyIssueId,
+        targetTopicId: topic.id,
+        order: nextTargetOrder(project, input.keyIssueId),
+        createdAt: timestamp,
+        updatedAt: timestamp
+      };
+      project.topics.push(topic);
+      project.relationships.push(relationship);
+      return { topic, relationship };
+    });
+  }
+
+  async setHomeTopic(topicId: EntityId): Promise<void> {
+    return this.mutate((project) => {
+      requireRecord(project.topics, topicId, "Topic");
+      project.manifest.homeTopicId = topicId;
+    });
+  }
+
+  async updateProjectMetadata(patch: { title?: string; description?: string }): Promise<void> {
+    return this.mutate((project) => {
+      if (patch.title !== undefined) project.manifest.title = requireTitle(patch.title, "/manifest/title");
+      if (patch.description !== undefined) {
+        if (patch.description) project.manifest.description = patch.description;
+        else delete project.manifest.description;
+      }
+    });
+  }
+
+  /** Sets or clears a Topic or Key Issue cover. A new cover Asset record is added in the same mutation. */
+  async setVisualAsset(target: { kind: "topic" | "keyIssue"; id: EntityId }, asset: Asset | null): Promise<void> {
+    return this.mutate((project, timestamp) => {
+      const entity: Topic | KeyIssue = target.kind === "topic"
+        ? requireRecord(project.topics, target.id, "Topic")
+        : requireRecord(project.keyIssues, target.id, "Key Issue");
+      if (asset) {
+        if (project.assets.some(({ id }) => id === asset.id)) {
+          throw new DomainError("invalid-command", `Asset ${asset.id} already exists`);
+        }
+        project.assets.push(structuredClone(asset));
+        entity.visualAssetId = asset.id;
+      } else {
+        delete entity.visualAssetId;
+      }
+      entity.updatedAt = timestamp;
+    });
+  }
+
   async disconnectRelationship(relationshipId: EntityId): Promise<void> {
     return this.mutate((project) => {
       requireRecord(project.relationships, relationshipId, "Relationship");
       project.relationships = project.relationships.filter(({ id }) => id !== relationshipId);
+    });
+  }
+
+  async linkProject(input: {
+    sourceTopicId: EntityId;
+    keyIssueId: EntityId;
+    targetProjectId: EntityId;
+    targetTopicId?: EntityId;
+    cachedProjectTitle: string;
+    cachedTopicTitle?: string;
+    order?: number;
+    note?: string;
+    metadata?: JsonObject;
+  }): Promise<ProjectLink> {
+    return this.mutate((project, timestamp) => {
+      requireRecord(project.topics, input.sourceTopicId, "Source Topic");
+      const issue = requireRecord(project.keyIssues, input.keyIssueId, "Key Issue");
+      if (issue.topicId !== input.sourceTopicId) {
+        throw new DomainError("invalid-reference", "Key Issue must belong to the source Topic", { path: "/projectLink/keyIssueId" });
+      }
+      const link: ProjectLink = {
+        id: this.dependencies.createId(),
+        sourceTopicId: input.sourceTopicId,
+        keyIssueId: input.keyIssueId,
+        targetProjectId: input.targetProjectId,
+        ...(input.targetTopicId ? { targetTopicId: input.targetTopicId } : {}),
+        cachedProjectTitle: requireTitle(input.cachedProjectTitle, "/projectLink/cachedProjectTitle"),
+        ...(input.cachedTopicTitle ? { cachedTopicTitle: input.cachedTopicTitle.trim() } : {}),
+        order: input.order ?? nextTargetOrder(project, input.keyIssueId),
+        ...(input.note ? { note: input.note } : {}),
+        ...(input.metadata ? { metadata: structuredClone(input.metadata) } : {}),
+        createdAt: timestamp,
+        updatedAt: timestamp
+      };
+      project.projectLinks.push(link);
+      return link;
+    });
+  }
+
+  async updateProjectLink(
+    projectLinkId: EntityId,
+    patch: {
+      targetProjectId?: EntityId;
+      targetTopicId?: EntityId | null;
+      cachedProjectTitle?: string;
+      cachedTopicTitle?: string | null;
+      order?: number;
+      note?: string | null;
+      metadata?: JsonObject | null;
+    }
+  ): Promise<ProjectLink> {
+    return this.mutate((project, timestamp) => {
+      const link = requireRecord(project.projectLinks, projectLinkId, "Project Link");
+      if (patch.targetProjectId !== undefined) link.targetProjectId = patch.targetProjectId;
+      if (patch.targetTopicId === null) delete link.targetTopicId;
+      else if (patch.targetTopicId !== undefined) link.targetTopicId = patch.targetTopicId;
+      if (patch.cachedProjectTitle !== undefined) link.cachedProjectTitle = requireTitle(patch.cachedProjectTitle, `/projectLinks/${projectLinkId}/cachedProjectTitle`);
+      if (patch.cachedTopicTitle === null) delete link.cachedTopicTitle;
+      else if (patch.cachedTopicTitle !== undefined) link.cachedTopicTitle = requireTitle(patch.cachedTopicTitle, `/projectLinks/${projectLinkId}/cachedTopicTitle`);
+      if (patch.order !== undefined) link.order = patch.order;
+      if (patch.note === null) delete link.note;
+      else if (patch.note !== undefined) link.note = patch.note;
+      if (patch.metadata === null) delete link.metadata;
+      else if (patch.metadata !== undefined) link.metadata = structuredClone(patch.metadata);
+      link.updatedAt = timestamp;
+      return link;
+    });
+  }
+
+  async unlinkProject(projectLinkId: EntityId): Promise<void> {
+    return this.mutate((project) => {
+      requireRecord(project.projectLinks, projectLinkId, "Project Link");
+      project.projectLinks = project.projectLinks.filter(({ id }) => id !== projectLinkId);
+    });
+  }
+
+  async reorderKeyIssueTargets(keyIssueId: EntityId, orderedIds: EntityId[]): Promise<void> {
+    return this.mutate((project, timestamp) => {
+      requireRecord(project.keyIssues, keyIssueId, "Key Issue");
+      reorderTargets(project, keyIssueId, orderedIds, timestamp);
     });
   }
 
@@ -214,11 +368,11 @@ export class ProjectService {
       if (expected.length !== provided.length || expected.some((id, index) => id !== provided[index])) {
         throw new DomainError("invalid-command", "Relationship order must contain every relationship exactly once");
       }
-      const positions = new Map(orderedIds.map((id, index) => [id, index]));
-      for (const relationship of relationships) {
-        relationship.order = positions.get(relationship.id)!;
-        relationship.updatedAt = timestamp;
-      }
+      const relationshipIds = new Set(relationships.map(({ id }) => id));
+      const combined = targetsForIssue(project, keyIssueId);
+      let relationshipIndex = 0;
+      const merged = combined.map(({ id }) => relationshipIds.has(id) ? orderedIds[relationshipIndex++]! : id);
+      reorderTargets(project, keyIssueId, merged, timestamp);
     });
   }
 
@@ -501,6 +655,9 @@ export class ProjectService {
             sourceTopicId === topicId || targetTopicId === topicId || keyIssueSet.has(keyIssueId)
         )
         .map(({ id }) => id),
+      projectLinkIds: project.projectLinks
+        .filter(({ sourceTopicId, keyIssueId }) => sourceTopicId === topicId || keyIssueSet.has(keyIssueId))
+        .map(({ id }) => id),
       associationIds: project.associations
         .filter(
           ({ targetKind, targetId }) =>
@@ -513,7 +670,7 @@ export class ProjectService {
 
   async deleteTopic(topicId: EntityId, options: { removeReferences?: boolean } = {}): Promise<void> {
     const impact = await this.getTopicDeletionImpact(topicId);
-    const references = [...impact.keyIssueIds, ...impact.relationshipIds, ...impact.associationIds];
+    const references = [...impact.keyIssueIds, ...impact.relationshipIds, ...impact.projectLinkIds, ...impact.associationIds];
     if (impact.isHomeTopic) references.push("manifest.homeTopicId");
     if (references.length > 0 && !options.removeReferences) {
       throw new DomainError("dependent-references", "Topic has dependent references", { references });
@@ -523,9 +680,11 @@ export class ProjectService {
       if (options.removeReferences) {
         const issueIds = new Set(impact.keyIssueIds);
         const relationshipIds = new Set(impact.relationshipIds);
+        const projectLinkIds = new Set(impact.projectLinkIds);
         const associationIds = new Set(impact.associationIds);
         project.keyIssues = project.keyIssues.filter(({ id }) => !issueIds.has(id));
         project.relationships = project.relationships.filter(({ id }) => !relationshipIds.has(id));
+        project.projectLinks = project.projectLinks.filter(({ id }) => !projectLinkIds.has(id));
         project.associations = project.associations.filter(({ id }) => !associationIds.has(id));
         if (impact.isHomeTopic) {
           if (project.topics[0]) project.manifest.homeTopicId = project.topics[0].id;
@@ -540,6 +699,7 @@ export class ProjectService {
     requireRecord(project.keyIssues, keyIssueId, "Key Issue");
     return {
       relationshipIds: project.relationships.filter(({ keyIssueId: id }) => id === keyIssueId).map(({ id }) => id),
+      projectLinkIds: project.projectLinks.filter(({ keyIssueId: id }) => id === keyIssueId).map(({ id }) => id),
       associationIds: project.associations
         .filter(({ targetKind, targetId }) => targetKind === "keyIssue" && targetId === keyIssueId)
         .map(({ id }) => id)
@@ -548,7 +708,7 @@ export class ProjectService {
 
   async deleteKeyIssue(keyIssueId: EntityId, options: { removeReferences?: boolean } = {}): Promise<void> {
     const impact = await this.getKeyIssueDeletionImpact(keyIssueId);
-    const references = [...impact.relationshipIds, ...impact.associationIds];
+    const references = [...impact.relationshipIds, ...impact.projectLinkIds, ...impact.associationIds];
     if (references.length > 0 && !options.removeReferences) {
       throw new DomainError("dependent-references", "Key Issue has dependent references", { references });
     }
@@ -556,10 +716,43 @@ export class ProjectService {
       project.keyIssues = project.keyIssues.filter(({ id }) => id !== keyIssueId);
       if (options.removeReferences) {
         const relationshipIds = new Set(impact.relationshipIds);
+        const projectLinkIds = new Set(impact.projectLinkIds);
         const associationIds = new Set(impact.associationIds);
         project.relationships = project.relationships.filter(({ id }) => !relationshipIds.has(id));
+        project.projectLinks = project.projectLinks.filter(({ id }) => !projectLinkIds.has(id));
         project.associations = project.associations.filter(({ id }) => !associationIds.has(id));
       }
     });
+  }
+}
+
+function targetsForIssue(project: CanonicalProject, keyIssueId: EntityId): Array<{ id: EntityId; order?: number }> {
+  return [
+    ...project.relationships.filter(({ keyIssueId: id }) => id === keyIssueId),
+    ...project.projectLinks.filter(({ keyIssueId: id }) => id === keyIssueId)
+  ].sort((left, right) => (left.order ?? Number.MAX_SAFE_INTEGER) - (right.order ?? Number.MAX_SAFE_INTEGER) || left.id.localeCompare(right.id));
+}
+
+function nextTargetOrder(project: CanonicalProject, keyIssueId: EntityId): number {
+  const targets = targetsForIssue(project, keyIssueId);
+  const orders = targets.map(({ order }) => order ?? -1);
+  return targets.length ? Math.max(targets.length - 1, ...orders) + 1 : 0;
+}
+
+function reorderTargets(project: CanonicalProject, keyIssueId: EntityId, orderedIds: EntityId[], timestamp: string): void {
+  const targets = targetsForIssue(project, keyIssueId);
+  const expected = targets.map(({ id }) => id).sort();
+  const provided = [...orderedIds].sort();
+  if (expected.length !== provided.length || expected.some((id, index) => id !== provided[index])) {
+    throw new DomainError("invalid-command", "Target order must contain every relationship and Project Link exactly once");
+  }
+  const positions = new Map(orderedIds.map((id, index) => [id, index]));
+  for (const relationship of project.relationships.filter(({ keyIssueId: id }) => id === keyIssueId)) {
+    relationship.order = positions.get(relationship.id)!;
+    relationship.updatedAt = timestamp;
+  }
+  for (const link of project.projectLinks.filter(({ keyIssueId: id }) => id === keyIssueId)) {
+    link.order = positions.get(link.id)!;
+    link.updatedAt = timestamp;
   }
 }

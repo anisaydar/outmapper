@@ -10,8 +10,9 @@ The canonical model expresses knowledge and authorship, not rendering implementa
 
 **Responsibility:** portability and isolation boundary for one knowledge universe.
 
-Required conceptual fields:
+Required fields:
 
+- `format`
 - `id`
 - `formatVersion`
 - `title`
@@ -19,15 +20,18 @@ Required conceptual fields:
 - `updatedAt`
 - `revision`
 
-Optional fields may include description, default content locale, theme reference, published snapshot reference, and Project/content-license metadata.
+Optional fields are `description`, `defaultLocale`, `defaultDirection`, `homeTopicId`, `themeId`, `publishedSnapshotId`, and `contentLicense`.
 
 Invariants:
 
-- graph relationships do not cross Project boundaries in format version 1;
+- Topic Relationships remain inside one Project;
+- connections to another Project use Project Links and never merge the Projects;
 - all canonical references resolve within the Project or are explicitly external references;
 - mutation advances the canonical revision.
 
-Lifecycle: created, edited, exported/imported, migrated, archived/backed up, optionally published.
+Projects are created, edited, exported, imported, copied, and migrated. Retained snapshot metadata remains compatible with the portable format.
+
+The portable format is version 2. Workspace registration, folder locations, preferred instances, incoming backlinks, navigation history, and Universe layout are deliberately outside this boundary.
 
 ## Topic
 
@@ -37,14 +41,15 @@ Required:
 
 - `id`
 - `title`
+- `createdAt`
+- `updatedAt`
 
 Common optional fields:
 
-- description/body reference;
-- visual/asset reference;
-- metadata;
-- tags;
-- created/updated timestamps.
+- `description`;
+- `visualAssetId`;
+- `metadata`;
+- `tags`.
 
 Invariants:
 
@@ -52,7 +57,7 @@ Invariants:
 - a Topic may be central in one projection and related in another;
 - cycles are valid.
 
-Deletion must surface dependent Key Issues, relationships, Knowledge Associations, and publication consequences before permanent removal.
+Topic deletion confirms removal of its dependent Key Issues, local relationships, Project Links, and Knowledge Associations. Other Projects and shared Knowledge Items are preserved.
 
 ## KeyIssue
 
@@ -64,20 +69,21 @@ Required:
 - `topicId`
 - `title`
 - `order`
+- `createdAt`
+- `updatedAt`
 
 Optional:
 
-- description/body reference;
-- visual/asset reference;
-- metadata;
-- timestamps.
+- `description`;
+- `visualAssetId`;
+- `metadata`.
 
 Invariants:
 
-- a KeyIssue belongs to exactly one parent Topic in format version 1;
+- a KeyIssue belongs to exactly one parent Topic;
 - it does not become the central Topic;
 - it may connect its parent Topic to many target Topics;
-- orphaned Key Issues should be treated as invalid or recoverable authoring errors rather than normal published data.
+- orphaned Key Issues fail validation.
 
 ## TopicRelationship
 
@@ -89,14 +95,15 @@ Required:
 - `sourceTopicId`
 - `keyIssueId`
 - `targetTopicId`
+- `createdAt`
+- `updatedAt`
 
 Optional:
 
-- authored order or tie-break hint;
-- relation type;
-- note/label;
-- provenance metadata;
-- timestamps.
+- `order`;
+- `relationType`;
+- `note`;
+- `metadata`.
 
 Invariants:
 
@@ -104,6 +111,40 @@ Invariants:
 - target and source Topics exist in the same Project;
 - multiple relationship records may target the same Topic through different Key Issues;
 - the relationship does not persist renderer coordinates.
+
+## ProjectLink
+
+**Responsibility:** authored outgoing portal from a Topic's Key Issue to another independently stored Project.
+
+Required:
+
+- `id`
+- `sourceTopicId`
+- `keyIssueId`
+- `targetProjectId`
+- `cachedProjectTitle`
+- `createdAt`
+- `updatedAt`
+
+Optional:
+
+- `targetTopicId` (absent means the target's Home Topic at open time);
+- `cachedTopicTitle`;
+- shared target `order`;
+- note;
+- metadata.
+
+Invariants:
+
+- the source Topic and Key Issue exist, and the Key Issue belongs to that Topic;
+- the target Project ID differs from the source Project ID;
+- a Key Issue cannot contain duplicate links to the same Project and target Topic;
+- cached titles change only when the link is edited;
+- target folders and other machine paths are never canonical Project data.
+
+Topic Relationships and Project Links use one authored order under each Key Issue. Deletion never cascades into a linked external Project.
+
+An incoming Project portal is not canonical data. It is a derived reversal of a registered source Project's cached outgoing `ProjectLink`. If `targetTopicId` is absent or no longer resolves, the portal belongs to the target's current Home Topic.
 
 ## KnowledgeItem
 
@@ -114,6 +155,7 @@ Minimum stable fields:
 - `id`
 - `type`
 - `title`
+- `availability` (`local` or `external`)
 - `createdAt`
 - `updatedAt`
 
@@ -130,7 +172,7 @@ Common optional fields:
 - language metadata;
 - type-specific/custom metadata.
 
-Supported Knowledge families include articles, links, Markdown/text, PDFs, local files, images, video, audio, datasets, research papers, notes, books, attachments, and explicitly supported structured/interactive references.
+Knowledge records describe notes, articles, research papers, links, videos, datasets, books, and managed file attachments. Folder import recognizes supported documents and creates corresponding Knowledge records. Attachments remain files; imported content cannot execute application code.
 
 A KnowledgeItem may represent either locally contained content or an external reference. The state must be explicit so the UI never implies an external item is available offline.
 
@@ -167,16 +209,18 @@ Required:
 - original filename
 - MIME type
 - byte size
-- SHA-256 integrity metadata.
+- SHA-256 integrity metadata;
+- `createdAt`.
 
 Optional:
 
 - width/height;
 - duration;
-- imported/created metadata;
-- source metadata.
+- `metadata`.
 
 Assets are copied into the Project by default. Absolute machine paths are not normal Project references.
+
+An exported package includes only Assets referenced by a Topic or Key Issue visual, a Knowledge Item attachment, Theme branding, or a Published Snapshot. The local Project retains unused Asset records and files; export hygiene does not delete them.
 
 Published Snapshots refer to immutable asset identities. Replacing bytes that matter to a published state creates a new asset identity/version rather than mutating published history in place.
 
@@ -193,8 +237,7 @@ Optional:
 
 - description;
 - order;
-- metadata;
-- visual treatment.
+- metadata.
 
 System presentation sections such as Pinned, Publications, Videos, Data, and Notes are derived from association state and KnowledgeItem type; they do not require each section to be persisted as a Collection.
 
@@ -202,7 +245,7 @@ System presentation sections such as Pinned, Publications, Videos, Data, and Not
 
 **Responsibility:** declarative Project presentation configuration.
 
-May define constrained tokens such as colors, typography references, spacing/density, node treatments, edge treatments, panel appearance, logos/branding assets, and light/dark preferences.
+Required fields are `id`, `name`, and a JSON `tokens` object. The optional `brandingAssetIds` list references managed Assets.
 
 Theme data must not contain executable JavaScript or arbitrary trusted CSS.
 
@@ -213,16 +256,15 @@ Theme data must not contain executable JavaScript or arbitrary trusted CSS.
 Required:
 
 - `id`
-- Project revision
-- created/published timestamp
-- manifest or snapshot state reference
-- referenced immutable asset identities.
+- `revision`
+- `publishedAt`
+- `manifestPath`
+- `assetIds`.
 
 Optional:
 
 - title/note;
-- publication metadata;
-- deployment/export metadata.
+- `metadata`.
 
 The default retention policy is the current Published Snapshot plus the 10 most recent prior Published Snapshots.
 
@@ -232,6 +274,21 @@ Project content is Unicode and independent of the selected interface locale. Con
 
 The interface locales are English (`en`), Arabic (`ar`), and Russian (`ru`). Arabic is RTL; English and Russian are LTR.
 
+## Workspace registry (noncanonical)
+
+The machine-local registry stores one entry per known folder instance:
+
+- `instanceId`, canonical directory, and Project ID;
+- cached title, description, Home Topic, Home cover path/MIME type, format version, and revision;
+- canonical file fingerprints and availability status;
+- first-seen, last-seen, and last-opened timestamps;
+- Recent-list visibility;
+- cached outgoing Project Links with source Topic and Key Issue titles.
+
+`preferredInstance` resolves duplicate folders that carry the same Project ID. The Universe aggregates entries by Project ID. Incoming portals are rebuilt in memory from all registered entries. Neither is written to a Project folder.
+
+Federated search results add `sourceInstanceId`, `sourceProjectId`, `sourceProjectTitle`, and an optional `mayBeOutOfDate` flag. Page metadata can mark totals as capped, results as incomplete, supply a continuation, and count stale or not-yet-searchable Projects.
+
 ## Timestamps
 
 Keep source chronology separate from Project chronology:
@@ -239,16 +296,11 @@ Keep source chronology separate from Project chronology:
 - `publishedAt`: when the source says material was published;
 - `createdAt`: when the Outmapper entity was created;
 - `updatedAt`: when the entity was materially updated;
-- import-related timestamps may be added when useful.
 
 No dedicated chronological Knowledge UI mode is implied by these fields.
 
 ## Deletion semantics
 
-Normal deletion should be protective:
+Topic and Key Issue deletion requires confirmation. It removes dependent local relationships, outgoing Project Links, and contextual Knowledge Associations, without deleting another Project or unrelated shared Knowledge Items. Session Undo can restore an authored deletion while the corresponding history remains available.
 
-- show dependent references;
-- prefer recoverable archive/trash semantics for authoring mistakes;
-- require explicit confirmation for permanent destructive deletion;
-- never silently cascade through unrelated Topic/Knowledge content;
-- preserve published snapshot integrity.
+Removing a Knowledge Item from one context removes its association. Removing it everywhere removes its associations and record. Managed Assets are retained locally; portable export selects only referenced Assets, including those retained by snapshots.

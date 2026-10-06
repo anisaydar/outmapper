@@ -12,9 +12,9 @@ const projectDirectory = path.join(directory, "project");
 
 function project() {
   return {
-    manifest: { format: "outmapper-project", formatVersion: 1, id: "runtime-index-check", title: "Runtime Index Check", createdAt: timestamp, updatedAt: timestamp, revision: 0, homeTopicId: "topic-home" },
+    manifest: { format: "outmapper-project", formatVersion: 2, id: "runtime-index-check", title: "Runtime Index Check", createdAt: timestamp, updatedAt: timestamp, revision: 0, homeTopicId: "topic-home" },
     topics: [{ id: "topic-home", title: "Canonical Runtime", createdAt: timestamp, updatedAt: timestamp }, { id: "topic-delete", title: "Delete Me", createdAt: timestamp, updatedAt: timestamp }],
-    keyIssues: [], relationships: [],
+    keyIssues: [], relationships: [], projectLinks: [],
     knowledgeItems: Array.from({ length: 250 }, (_, index) => ({ id: `knowledge-${index}`, type: "note", title: `Runtime record ${index}`, availability: "local", body: `Canonical rebuild evidence ${index}`, createdAt: timestamp, updatedAt: timestamp })),
     associations: Array.from({ length: 250 }, (_, index) => ({ id: `association-${index}`, knowledgeItemId: `knowledge-${index}`, targetKind: "topic", targetId: "topic-home" })),
     assets: [], collections: [], snapshots: []

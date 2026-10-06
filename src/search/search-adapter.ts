@@ -13,9 +13,11 @@ export interface SearchFilters {
 
 export interface SearchQuery {
   text: string;
+  scope?: "project" | "workspace";
   match?: "all" | "phrase" | "prefix";
   filters?: SearchFilters;
   cursor?: string;
+  continuation?: string;
   limit?: number;
 }
 
@@ -33,12 +35,21 @@ export interface SearchHit {
   availability?: "local" | "external";
   contexts: SearchContext[];
   score: number;
+  sourceInstanceId?: string;
+  sourceProjectId?: EntityId;
+  sourceProjectTitle?: string;
+  mayBeOutOfDate?: boolean;
 }
 
 export interface SearchPage {
   items: SearchHit[];
   total: number;
   nextCursor?: string;
+  totalCapped?: boolean;
+  incomplete?: boolean;
+  continuation?: string;
+  notSearchableCount?: number;
+  staleProjectCount?: number;
 }
 
 export interface SearchAdapter {

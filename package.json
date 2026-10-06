@@ -1,7 +1,7 @@
 {
   "name": "outmapper",
-  "version": "0.1.0",
-  "description": "A local-first workspace for building and exploring interconnected knowledge maps.",
+  "version": "0.2.0",
+  "description": "A local-first workspace for interconnected knowledge maps, linked Projects, and workspace search.",
   "author": {
     "name": "Anis Aydar",
     "email": "130869669+anisaydar@users.noreply.github.com",
@@ -21,19 +21,28 @@
     "outmapper": "dist/server/src/server/cli-entry.js"
   },
   "files": [
+    ".github/assets/outmapper-cover.webp",
     "dist/",
+    "schemas/v1/",
+    "schemas/v2/",
+    "docs/",
     "fixtures/projects/ai-landscape/",
     "!fixtures/projects/ai-landscape/.outmapper/",
     "CHANGELOG.md",
+    "CONTRIBUTING.md",
     "LICENSE",
     "NOTICE",
     "README.md",
+    "SECURITY.md",
     "THIRD_PARTY_NOTICES.md"
   ],
   "keywords": [
     "knowledge-graph",
     "knowledge-management",
+    "data-visualization",
     "local-first",
+    "offline-first",
+    "osint",
     "research"
   ],
   "engines": {
@@ -62,9 +71,13 @@
     "check:responsive-layout": "node scripts/responsive-layout-check.mjs",
     "check:pdf": "npm run build && node scripts/pdf-integration.mjs",
     "check:offline-release": "npm run build && node scripts/offline-release-check.mjs",
+    "check:windows-folder-picker": "node scripts/windows-folder-picker-check.mjs",
     "test": "vitest run",
     "test:browser": "node scripts/browser-smoke.mjs",
     "test:browser:authoring": "node scripts/browser-authoring-check.mjs",
+    "test:browser:workspace": "node scripts/workspace-portal-check.mjs",
+    "test:browser:features": "node scripts/workspace-features-browser-check.mjs",
+    "benchmark:workspace-search": "node scripts/workspace-search-benchmark.mjs",
     "check:package": "npm run build && node scripts/package-check.mjs",
     "prepack": "npm run build",
     "prepublishOnly": "npm run lint && npm test && npm run check:package",

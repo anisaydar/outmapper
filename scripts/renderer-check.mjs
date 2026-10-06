@@ -81,7 +81,7 @@ function createProject(totalNodes) {
   return {
     manifest: {
       format: "outmapper-project",
-      formatVersion: 1,
+      formatVersion: 2,
       id: `renderer-${totalNodes}`,
       title: `Renderer ${totalNodes}`,
       createdAt: timestamp(0),
@@ -92,6 +92,7 @@ function createProject(totalNodes) {
     topics,
     keyIssues,
     relationships,
+    projectLinks: [],
     knowledgeItems: [],
     associations: [],
     assets: [],

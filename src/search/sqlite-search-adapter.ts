@@ -14,7 +14,7 @@ import type {
 } from "./search-adapter.js";
 
 export const RUNTIME_DATABASE_PATH = ".outmapper/runtime.sqlite";
-const SEARCH_SCHEMA_VERSION = "2";
+export const SEARCH_SCHEMA_VERSION = "2";
 
 export interface RuntimeReconciliation {
   action: "current" | "rebuilt";

@@ -33,6 +33,7 @@ function sha256(value: Uint8Array): string {
 
 async function createProject(projectDirectory: string, withAsset = true): Promise<void> {
   const project = createValidProject();
+  project.projectLinks.push({ id: "portal-1", sourceTopicId: "topic-1", keyIssueId: "issue-1", targetProjectId: "external-project", cachedProjectTitle: "External Project", createdAt: timestamp, updatedAt: timestamp });
   if (withAsset) {
     const bytes = Buffer.from("portable evidence");
     project.assets.push({
@@ -148,10 +149,62 @@ describe("Project packages", () => {
     const committed = await importer.commitImport(plan.id, "moved-project");
     const reopened = await new FileSystemProjectStore(committed.projectDirectory).open();
     expect(reopened).toEqual(await new FileSystemProjectStore(source).open());
+    expect(reopened.projectLinks).toEqual([expect.objectContaining({ id: "portal-1", targetProjectId: "external-project" })]);
     expect(await readFile(path.join(committed.projectDirectory, "assets", "evidence.txt"), "utf8")).toBe(
       "portable evidence"
     );
     expect((await stat(path.join(committed.projectDirectory, ".outmapper", "runtime.sqlite"))).isFile()).toBe(true);
+  });
+
+  it("omits unused Asset records and files without deleting the local originals", async () => {
+    const root = await temporaryDirectory();
+    const source = path.join(root, "source-with-unused-asset");
+    const archive = path.join(root, "hygienic.outmapper");
+    await createProject(source);
+    const store = new FileSystemProjectStore(source);
+    const project = await store.open();
+    const unusedBytes = Buffer.from("unused local asset");
+    project.assets.push({
+      id: "asset-unused",
+      path: "assets/unused.txt",
+      originalFilename: "unused.txt",
+      mimeType: "text/plain",
+      byteSize: unusedBytes.length,
+      sha256: sha256(unusedBytes),
+      createdAt: timestamp
+    });
+    await writeFile(path.join(source, "assets", "unused.txt"), unusedBytes);
+    await store.save(project);
+
+    const service = new ProjectPackageService({ projectDirectory: source, projectsDirectory: root });
+    const manifest = await service.exportTo(archive);
+
+    expect(manifest.entries.map(({ path: value }) => value)).not.toContain("assets/unused.txt");
+    expect(await zipEntries(archive)).not.toContain("assets/unused.txt");
+    expect(await readFile(path.join(source, "assets", "unused.txt"), "utf8")).toBe("unused local asset");
+    const plan = await service.stageImport(archive);
+    expect(plan).toMatchObject({ assetCount: 1, missingAssets: [], warnings: [] });
+  });
+
+  it("imports a v1 package and applies the v2 Project migration", async () => {
+    const root = await temporaryDirectory();
+    const source = path.join(root, "legacy-source");
+    const archive = path.join(root, "legacy.outmapper");
+    await createProject(source, false);
+    await rm(path.join(source, "data", "project-links"), { recursive: true, force: true });
+    const manifestPath = path.join(source, "project.json");
+    const manifest = JSON.parse(await readFile(manifestPath, "utf8")) as Record<string, unknown>;
+    manifest.formatVersion = 1;
+    await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+    await writeProjectArchive(source, archive);
+    const service = new ProjectPackageService({ projectDirectory: source, projectsDirectory: root });
+
+    const plan = await service.stageImport(archive);
+    expect(plan.formatVersion).toBe(2);
+    const committed = await service.commitImport(plan.id, "legacy-import");
+    const imported = await new FileSystemProjectStore(committed.projectDirectory).open();
+    expect(imported.manifest.formatVersion).toBe(2);
+    expect(imported.projectLinks).toEqual([]);
   });
 
   it.each([

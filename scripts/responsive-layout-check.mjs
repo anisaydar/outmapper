@@ -43,10 +43,11 @@ function responsiveProject(totalNodes = 100) {
     updatedAt: timestamp
   }));
   return {
-    manifest: { format: "outmapper-project", formatVersion: 1, id: "responsive-layout-check", title: "Responsive Layout Check", createdAt: timestamp, updatedAt: timestamp, revision: 0, homeTopicId: "topic-center" },
+    manifest: { format: "outmapper-project", formatVersion: 2, id: "responsive-layout-check", title: "Responsive Layout Check", createdAt: timestamp, updatedAt: timestamp, revision: 0, homeTopicId: "topic-center" },
     topics,
     keyIssues,
     relationships,
+    projectLinks: [],
     knowledgeItems: [],
     associations: [],
     assets: [],
@@ -153,17 +154,27 @@ try {
   const touchDiagnostics = await page.evaluate(({ before, after }) => ({ maxTouchPoints: globalThis.navigator.maxTouchPoints, zoom: document.querySelector(".map-surface")?.dataset.zoom, before, after }), { before: beforePinch, after: afterPinch });
   assert(afterPinch !== beforePinch, `Pinch did not change the map camera: ${JSON.stringify(touchDiagnostics)}`);
 
-  const related = page.locator("[data-map-node='topic']").first();
-  const relatedId = await related.getAttribute("data-entity-id");
-  const relatedBox = await related.boundingBox();
-  assert(relatedBox, "Related Topic has no touch target");
-  await page.touchscreen.tap(relatedBox.x + relatedBox.width / 2, relatedBox.y + relatedBox.height / 2);
+  const touchTarget = await page.locator("[data-map-node='topic']").evaluateAll((nodes) => {
+    for (const node of nodes) {
+      const bounds = node.getBoundingClientRect();
+      const x = bounds.left + bounds.width / 2;
+      const y = bounds.top + bounds.height / 2;
+      if (document.elementFromPoint(x, y)?.closest("[data-map-node='topic']") === node) {
+        return { id: node.getAttribute("data-entity-id"), x, y, width: bounds.width, height: bounds.height };
+      }
+    }
+    return null;
+  });
+  assert(touchTarget?.id, "Dense mobile map has no unobstructed Related Topic touch target");
+  const relatedId = touchTarget.id;
+  const relatedBox = { width: touchTarget.width, height: touchTarget.height };
+  await page.touchscreen.tap(touchTarget.x, touchTarget.y);
   await page.locator(`[data-map-node='central'][data-entity-id='${relatedId}']`).waitFor();
   assert((await page.locator(".topic-preview").count()) === 0, "Related Topic touch opened an intermediate preview");
   assert(relatedBox.width >= 44 && relatedBox.height >= 44, `Related Topic touch target is below 44px: ${JSON.stringify(relatedBox)}`);
 
   await page.getByRole("button", { name: "Back" }).click();
-  await page.locator("[data-map-node='central'][data-entity-id='topic-ai']").waitFor();
+  await page.locator("[data-map-node='central'][data-entity-id='topic-center']").waitFor();
   const restoredRelated = page.locator(`[data-map-node='topic'][data-entity-id='${relatedId}']`);
   const geometryBefore = await restoredRelated.getAttribute("style");
   await page.getByRole("button", { name: "Settings" }).click();

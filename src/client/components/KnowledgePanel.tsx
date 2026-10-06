@@ -38,13 +38,15 @@ interface KnowledgePanelProps {
   preview?: boolean;
   assets: Asset[];
   coverImageUrl?: string;
+  /** Shown next to the title, for example "Home Topic". */
+  badge?: string;
   onEdit: () => void;
   onTogglePin: (associationId: string, pinned: boolean) => Promise<void>;
   onEditKnowledge: (associationId: string) => void;
   onRemoveKnowledge: (associationId: string) => void;
 }
 
-export function KnowledgePanel({ context, labels, locale, preview = false, assets, coverImageUrl, onEdit, onTogglePin, onEditKnowledge, onRemoveKnowledge }: KnowledgePanelProps) {
+export function KnowledgePanel({ context, labels, locale, preview = false, assets, coverImageUrl, badge, onEdit, onTogglePin, onEditKnowledge, onRemoveKnowledge }: KnowledgePanelProps) {
   const [expandedItemIds, setExpandedItemIds] = useState<Set<string>>(() => new Set());
   const [pendingPinIds, setPendingPinIds] = useState<Set<string>>(() => new Set());
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
@@ -71,8 +73,9 @@ export function KnowledgePanel({ context, labels, locale, preview = false, asset
         <div className="panel-hero panel-hero--loading" />
         <div className="panel-card"><span className="skeleton skeleton--line" /><span className="skeleton skeleton--line skeleton--short" /></div>
         <span className="skeleton skeleton--heading" />
-        <span className="skeleton skeleton--card" />
-        <span className="skeleton skeleton--card" />
+        <span className="skeleton skeleton--label" />
+        {/* More cards than any panel can show; the container clips them at the bottom edge. */}
+        {Array.from({ length: 12 }, (_, index) => <span className="skeleton skeleton--card" key={index} />)}
       </div>
     );
   }
@@ -89,6 +92,7 @@ export function KnowledgePanel({ context, labels, locale, preview = false, asset
           </button>
         ) : null}
         <div>
+          {badge ? <span className="home-badge home-badge--hero"><Icon name="home" />{badge}</span> : null}
           <h1 dir="auto" tabIndex={-1}>{context.entity.title}</h1>
           <p>{context.target.kind === "keyIssue" ? labels.keyIssue : labels.topic} · {labels.updated} {updatedAt}</p>
         </div>
@@ -101,7 +105,8 @@ export function KnowledgePanel({ context, labels, locale, preview = false, asset
       </section>
       <section className="knowledge-sections" aria-label={labels.knowledge} ref={sectionsRef}>
         <h2>{labels.knowledge}</h2>
-        {context.sections.map((section) => (
+        {/* An empty Pinned group has nothing to show readers; pinning happens from each item. */}
+        {context.sections.filter((section) => section.kind !== "pinned" || section.items.length > 0).map((section) => (
           <section className="knowledge-section" data-section-kind={section.kind} key={section.id}>
             <h3>{section.kind === "pinned" ? <Icon name="pin" /> : null}{sectionTitle(section.kind, section.title)}</h3>
             {section.items.length === 0 ? (

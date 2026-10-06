@@ -31,9 +31,9 @@ export function KnowledgeEditor({ project, associationId, removing, t, onClose, 
   return <AuthoringDialog title={t(removing ? "removeKnowledge" : "editKnowledge")} onClose={() => { if (!busy) onClose(); }}>
     <form onSubmit={(event) => { event.preventDefault(); void submit(); }}>
       {removing ? <><p dir="auto"><strong>{item.title}</strong></p><p>{t("removeKnowledgeBody")}</p></> : <>
-        <label className="field"><span>{t("knowledgeTitle")}</span><input autoFocus required dir="auto" value={title} disabled={busy} onChange={(event) => setTitle(event.target.value)} /></label>
-        <label className="field"><span>{t("knowledgeBody")}</span><textarea rows={6} dir="auto" value={body} disabled={busy} onChange={(event) => setBody(event.target.value)} /></label>
-        {item.summary !== undefined ? <label className="field"><span>{t("knowledgeDescription")}</span><textarea rows={3} dir="auto" value={summary} disabled={busy} onChange={(event) => setSummary(event.target.value)} /></label> : null}
+        <label className="field"><span>{t("knowledgeTitle")}</span><input autoFocus required value={title} disabled={busy} onChange={(event) => setTitle(event.target.value)} /></label>
+        <label className="field"><span>{t("knowledgeBody")}</span><textarea rows={6} value={body} disabled={busy} onChange={(event) => setBody(event.target.value)} /></label>
+        {item.summary !== undefined ? <label className="field"><span>{t("knowledgeDescription")}</span><textarea rows={3} value={summary} disabled={busy} onChange={(event) => setSummary(event.target.value)} /></label> : null}
         {item.availability === "external" ? <label className="field"><span>{t("knowledgeUrl")}</span><input type="url" required dir="ltr" value={url} disabled={busy} onChange={(event) => setUrl(event.target.value)} /></label> : null}
       </>}
       {shared ? <><p>{t("sharedKnowledge")}</p><label className="field"><span>{t("knowledgeScope")}</span><select value={scope} disabled={busy} onChange={(event) => setScope(event.target.value as "context" | "all")}><option value="context">{t("thisContext")}</option><option value="all">{t(removing ? "removeEverywhere" : "allContexts")}</option></select></label></> : null}

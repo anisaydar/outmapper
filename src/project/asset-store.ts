@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { createReadStream, createWriteStream } from "node:fs";
-import { lstat, mkdir, rename, rm } from "node:fs/promises";
+import { lstat, mkdir, open, rename, rm } from "node:fs/promises";
 import path from "node:path";
 import { Readable, Transform } from "node:stream";
 import { pipeline } from "node:stream/promises";
@@ -31,6 +31,65 @@ export function sniffAssetMime(header: Buffer): string | undefined {
   if (text.startsWith("<svg") || text.startsWith("<?xml") && text.includes("<svg")) return "image/svg+xml";
   if (text.startsWith("<!doctype html") || text.startsWith("<html")) return "text/html";
   return undefined;
+}
+
+export const COVER_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"] as const;
+export const COVER_HEADER_BYTES = 256 * 1024;
+
+/**
+ * Validates a Topic or Key Issue cover by its bytes. Only PNG, JPEG, and static WebP are accepted;
+ * animated WebP, GIF, SVG, and anything else are rejected. Dimensions are read from the header when present.
+ */
+export function inspectCoverImage(header: Buffer): { mimeType: (typeof COVER_IMAGE_TYPES)[number]; width?: number; height?: number } {
+  const mimeType = sniffAssetMime(header);
+  if (mimeType === "image/png") {
+    return header.length >= 24 && header.subarray(12, 16).toString("ascii") === "IHDR"
+      ? { mimeType, width: header.readUInt32BE(16), height: header.readUInt32BE(20) }
+      : { mimeType };
+  }
+  if (mimeType === "image/jpeg") return { mimeType, ...jpegDimensions(header) };
+  if (mimeType === "image/webp") {
+    const chunk = header.subarray(12, 16).toString("ascii");
+    if (chunk === "VP8X") {
+      const animated = header.length > 20 && (header[20]! & 0x02) !== 0;
+      if (animated || header.includes("ANMF", 30, "ascii")) {
+        throw new AssetStoreError("unsupported-cover", "Animated WebP images cannot be used as covers. Choose a PNG, JPEG, or still WebP image.");
+      }
+      return header.length >= 30
+        ? { mimeType, width: header.readUIntLE(24, 3) + 1, height: header.readUIntLE(27, 3) + 1 }
+        : { mimeType };
+    }
+    if (chunk === "VP8 " && header.length >= 30 && header[23] === 0x9d && header[24] === 0x01 && header[25] === 0x2a) {
+      return { mimeType, width: header.readUInt16LE(26) & 0x3fff, height: header.readUInt16LE(28) & 0x3fff };
+    }
+    if (chunk === "VP8L" && header.length >= 25 && header[20] === 0x2f) {
+      const bits = header.readUInt32LE(21);
+      return { mimeType, width: (bits & 0x3fff) + 1, height: ((bits >>> 14) & 0x3fff) + 1 };
+    }
+    return { mimeType };
+  }
+  throw new AssetStoreError("unsupported-cover", "Covers must be PNG, JPEG, or still WebP images.");
+}
+
+function jpegDimensions(header: Buffer): { width?: number; height?: number } {
+  let offset = 2;
+  while (offset + 9 < header.length) {
+    if (header[offset] !== 0xff) return {};
+    const marker = header[offset + 1]!;
+    if (marker === 0xff) {
+      offset += 1;
+      continue;
+    }
+    if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) {
+      offset += 2;
+      continue;
+    }
+    if (marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc) {
+      return { height: header.readUInt16BE(offset + 5), width: header.readUInt16BE(offset + 7) };
+    }
+    offset += 2 + header.readUInt16BE(offset + 2);
+  }
+  return {};
 }
 
 export function assertMimeMatches(declaredMime: string, detectedMime: string | undefined, filename: string): void {
@@ -137,6 +196,17 @@ export class FileSystemAssetStore {
 
   createReadStream(asset: Asset, range?: { start: number; end: number }): Readable {
     return createReadStream(resolveProjectPath(this.projectDirectory, asset.path), range);
+  }
+
+  async readHeader(asset: Asset, bytes: number): Promise<Buffer> {
+    const handle = await open(resolveProjectPath(this.projectDirectory, asset.path), "r");
+    try {
+      const buffer = Buffer.alloc(Math.min(bytes, asset.byteSize));
+      const { bytesRead } = await handle.read(buffer, 0, buffer.length, 0);
+      return buffer.subarray(0, bytesRead);
+    } finally {
+      await handle.close();
+    }
   }
 
   async remove(asset: Asset): Promise<void> {

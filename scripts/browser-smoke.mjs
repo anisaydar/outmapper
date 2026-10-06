@@ -10,6 +10,21 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+async function checkLanguageDismissal(page) {
+  const settings = page.locator(".settings-popover");
+  const trigger = settings.locator(".language-trigger");
+  await trigger.click();
+  await settings.getByRole("listbox").waitFor();
+  await settings.locator(".settings-section--language h2").click();
+  assert((await trigger.getAttribute("aria-expanded")) === "false", "Language picker stayed expanded after clicking its heading");
+  assert((await settings.getByRole("listbox").count()) === 0, "Language options stayed visible after an outside click");
+  assert(await settings.isVisible(), "Dismissing the language picker also dismissed Settings");
+  await trigger.click();
+  await settings.getByRole("listbox").waitFor();
+  await settings.click({ position: { x: 4, y: 4 } });
+  assert((await trigger.getAttribute("aria-expanded")) === "false", "Language picker stayed expanded after clicking Settings padding");
+}
+
 async function waitForServer() {
   for (let attempt = 0; attempt < 50; attempt += 1) {
     try {
@@ -52,7 +67,7 @@ try {
   assert((await page.locator("[data-map-node='central']").count()) === 1, "Central Topic did not render");
   assert((await page.locator("[data-map-node='issue']").count()) === homeIssues.length, "Key Issue ring did not render");
   assert((await page.locator("[data-map-node='topic']").count()) === homeRelatedTopicIds.size, "Related Topic ring did not deduplicate");
-  assert((await page.locator("[data-edge-id]").count()) === homeRelationships.length, "Relationship layer did not render every edge");
+  assert((await page.locator(".map-edge[data-edge-id]:not(.map-edge--portal)").count()) === homeRelationships.length, "Relationship layer did not render every edge");
   assert((await page.locator(".map-zoom button").count()) === 2, "Zoom controls do not match the approved two-control composition");
   const actionBox = await page.locator(".map-actions").boundingBox();
   const historyBox = await page.locator(".history-control").boundingBox();
@@ -81,6 +96,7 @@ try {
   await page.getByRole("button", { name: "Semantic relationships" }).click();
 
   await page.getByRole("button", { name: "Settings" }).click();
+  await checkLanguageDismissal(page);
   await page.getByRole("button", { name: "Language: English" }).click();
   await page.getByRole("option", { name: "العربية" }).click();
   await page.getByRole("button", { name: "فاتح" }).click();
@@ -117,6 +133,9 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload({ waitUntil: "domcontentloaded" });
   await page.locator("[data-map-ready='true']").waitFor();
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  await checkLanguageDismissal(page);
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
   await page.locator("[data-entity-id='topic-science']").click();
   await page.getByRole("button", { name: "Central Topic: Science" }).waitFor();
   assert((await page.locator(".topic-preview").count()) === 0, "Mobile Related Topic click opened an intermediate preview");
@@ -148,6 +167,7 @@ try {
       rtlShell: "passed",
       localizedDemo: "passed",
       transientSurfaces: "passed",
+      languageDismissal: "passed",
       progressiveMotion: "passed",
       directTopicNavigation: "passed",
       topicPromotion: "passed"

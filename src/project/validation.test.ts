@@ -50,4 +50,25 @@ describe("canonical Project validation", () => {
       ])
     );
   });
+
+  it("reports invalid and duplicate Project Links", () => {
+    const project = createValidProject();
+    const link = {
+      id: "link-1",
+      sourceTopicId: "topic-2",
+      keyIssueId: "issue-1",
+      targetProjectId: project.manifest.id,
+      cachedProjectTitle: "Copy",
+      createdAt: "2026-09-30T00:00:00.000Z",
+      updatedAt: "2026-09-30T00:00:00.000Z"
+    };
+    project.projectLinks.push(link, { ...link, id: "link-2" });
+
+    const paths = validateProject(project).issues.map(({ path }) => path);
+    expect(paths).toEqual(expect.arrayContaining([
+      "/projectLinks/link-1/keyIssueId",
+      "/projectLinks/link-1/targetProjectId",
+      "/projectLinks/link-2"
+    ]));
+  });
 });

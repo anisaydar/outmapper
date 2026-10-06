@@ -263,6 +263,35 @@ describe("domain commands", () => {
     ]);
   });
 
+  it("authors, edits, reorders, and cascades Project Links", async () => {
+    const { repository, service } = createService();
+    const link = await service.linkProject({
+      sourceTopicId: "topic-1",
+      keyIssueId: "issue-1",
+      targetProjectId: "project-2",
+      targetTopicId: "topic-remote",
+      cachedProjectTitle: "Remote",
+      cachedTopicTitle: "Remote Topic",
+      note: "Compare evidence"
+    });
+    expect(link.order).toBe(1);
+    await service.updateProjectLink(link.id, { cachedProjectTitle: "Renamed Remote", targetTopicId: null });
+    await service.reorderKeyIssueTargets("issue-1", [link.id, "relationship-1"]);
+    expect(repository.project.projectLinks[0]).toMatchObject({ cachedProjectTitle: "Renamed Remote", order: 0 });
+    expect(repository.project.projectLinks[0].targetTopicId).toBeUndefined();
+    expect(repository.project.relationships[0].order).toBe(1);
+
+    await expect(service.linkProject({
+      sourceTopicId: "topic-1",
+      keyIssueId: "issue-1",
+      targetProjectId: "project-2",
+      cachedProjectTitle: "Duplicate"
+    })).rejects.toMatchObject({ code: "duplicate-id" });
+    expect((await service.getKeyIssueDeletionImpact("issue-1")).projectLinkIds).toEqual([link.id]);
+    await service.deleteKeyIssue("issue-1", { removeReferences: true });
+    expect(repository.project.projectLinks).toEqual([]);
+  });
+
   it("keeps replacement Asset identity separate while preserving Published Snapshot references", async () => {
     const project = createValidProject();
     project.assets.push({
@@ -305,5 +334,52 @@ describe("domain commands", () => {
     expect(repository.project.assets.map(({ id }) => id)).toEqual(["asset-original", "asset-replacement"]);
     expect(repository.project.knowledgeItems[0].attachmentAssetIds).toEqual(["asset-replacement"]);
     expect(repository.project.snapshots[0].assetIds).toEqual(["asset-original"]);
+  });
+});
+
+describe("authoring commands for v0.2", () => {
+  it("creates and links a new Topic in one mutation and rejects a foreign Key Issue without an orphan", async () => {
+    const { repository, service } = createService();
+    const { topic, relationship } = await service.createAndConnectTopic({ sourceTopicId: "topic-1", keyIssueId: "issue-1", title: "  Policy  " });
+
+    expect(repository.project.manifest.revision).toBe(1);
+    expect(topic.title).toBe("Policy");
+    expect(relationship).toMatchObject({ sourceTopicId: "topic-1", keyIssueId: "issue-1", targetTopicId: topic.id, order: 1 });
+    expect(repository.project.topics.map(({ id }) => id)).toContain(topic.id);
+
+    await expect(service.createAndConnectTopic({ sourceTopicId: "topic-2", keyIssueId: "issue-1", title: "Orphan" }))
+      .rejects.toMatchObject({ code: "invalid-reference" });
+    await expect(service.createAndConnectTopic({ sourceTopicId: "topic-1", keyIssueId: "issue-1", title: " " }))
+      .rejects.toMatchObject({ code: "invalid-command" });
+    expect(repository.project.topics.some(({ title }) => title === "Orphan")).toBe(false);
+    expect(repository.project.manifest.revision).toBe(1);
+  });
+
+  it("sets the Home Topic and edits Project metadata", async () => {
+    const { repository, service } = createService();
+    await service.setHomeTopic("topic-2");
+    expect(repository.project.manifest.homeTopicId).toBe("topic-2");
+    await expect(service.setHomeTopic("missing")).rejects.toMatchObject({ code: "not-found" });
+
+    await service.updateProjectMetadata({ title: " Atlas ", description: "A research map" });
+    expect(repository.project.manifest).toMatchObject({ title: "Atlas", description: "A research map" });
+    await service.updateProjectMetadata({ description: "" });
+    expect(repository.project.manifest.description).toBeUndefined();
+    await expect(service.updateProjectMetadata({ title: "" })).rejects.toMatchObject({ code: "invalid-command" });
+  });
+
+  it("sets and clears a cover with its Asset record in one mutation and creates no Knowledge Item", async () => {
+    const { repository, service } = createService();
+    const asset = { id: "asset-cover", path: "assets/asset-cover/cover.png", originalFilename: "cover.png", mimeType: "image/png", byteSize: 10, sha256: "c".repeat(64), width: 4, height: 3, createdAt: timestamp };
+
+    await service.setVisualAsset({ kind: "keyIssue", id: "issue-1" }, asset);
+    expect(repository.project.manifest.revision).toBe(1);
+    expect(repository.project.keyIssues[0].visualAssetId).toBe("asset-cover");
+    expect(repository.project.assets).toEqual([asset]);
+    expect(repository.project.knowledgeItems).toEqual([]);
+
+    await service.setVisualAsset({ kind: "keyIssue", id: "issue-1" }, null);
+    expect(repository.project.keyIssues[0].visualAssetId).toBeUndefined();
+    expect(repository.project.assets).toHaveLength(1);
   });
 });

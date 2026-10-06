@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-type IconName =
+export type IconName =
   | "search"
   | "settings"
   | "map"
@@ -33,7 +33,9 @@ type IconName =
   | "success"
   | "open"
   | "undo"
-  | "redo";
+  | "redo"
+  | "more"
+  | "universe";
 
 const paths: Record<IconName, React.ReactNode> = {
   search: (
@@ -168,6 +170,18 @@ const paths: Record<IconName, React.ReactNode> = {
     <>
       <path d="M15 5l4 4-4 4" />
       <path d="M19 9H9.5a5 5 0 0 0 0 10H13" />
+    </>
+  ),
+  more: (
+    <>
+      <path d="M6.5 12h.01M12 12h.01M17.5 12h.01" strokeWidth="2.6" />
+    </>
+  ),
+  // A planet with a tilted ring; the back of the ring passes behind the planet.
+  universe: (
+    <>
+      <circle cx="12" cy="12" r="5.5" />
+      <path d="M2 12a10 3.6 0 0 0 20 0M2 12a10 3.6 0 0 1 5.54-3.22M16.46 8.78A10 3.6 0 0 1 22 12" transform="rotate(-24 12 12)" />
     </>
   ),
   success: (

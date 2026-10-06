@@ -27,8 +27,6 @@ flowchart TD
     Q --> FS
 ```
 
-The diagram describes the current implementation.
-
 ## Architectural principles
 
 1. **Canonical state is portable.** Structured Project files and ordinary assets are authoritative.
@@ -38,11 +36,11 @@ The diagram describes the current implementation.
 5. **Storage implementations preserve the same domain semantics.**
 6. **Security boundaries treat Project content as untrusted data.**
 7. **Accessibility and international text are architectural requirements.**
-8. **Renderer changes require measured evidence.** HTML and SVG are the current rendering baseline.
+8. **Interactive graphs use HTML and SVG.** Layout and visual geometry remain separate from canonical Project data.
 
-## Technology baseline
+## Technology stack
 
-The current Outmapper implementation baseline uses:
+Outmapper uses:
 
 - TypeScript in strict mode;
 - React for the application UI;
@@ -51,15 +49,15 @@ The current Outmapper implementation baseline uses:
 - ordinary Project folders on the real filesystem;
 - native SQLite as derived runtime persistence and FTS;
 - a custom HTML + SVG graph renderer;
-- D3 Zoom as a low-level pan/zoom interaction primitive;
+- D3 Zoom for pan/zoom and D3 Force for the Universe layout;
 - a custom deterministic radial layout;
 - JSON Schema 2020-12 with Ajv for the portable Project contract;
 - PDF.js in a Worker for supported PDF parsing and text extraction;
 - zip.js for streaming ZIP/Zip64 transport.
 
-The current release is a local CLI/browser application. Hosted deployment, browser-owned Project storage, desktop wrappers, and executable plugins are outside its implementation boundary.
+Outmapper runs as a local CLI/browser application and stores Projects in ordinary filesystem folders.
 
-Framework and dependency versions belong in implementation manifests, not this durable architecture document.
+Dependency versions are recorded in `package.json` and `package-lock.json`.
 
 ## Domain core
 
@@ -75,7 +73,7 @@ The environment-independent core owns:
 - search query semantics;
 - schema migrations.
 
-UI code must not directly mutate renderer arrays or runtime database tables.
+UI edits pass through the domain commands and local API before canonical Project data is saved.
 
 ## Commands and repositories
 
@@ -93,7 +91,7 @@ UI action
 
 Representative commands include creating/updating Topics and Key Issues, connecting Topics through Key Issues, associating Knowledge Items, attaching assets, reordering authored content, and publishing a snapshot.
 
-Repository interfaces must describe domain behavior rather than expose database-specific queries.
+Repository interfaces expose domain operations; database queries remain within the storage adapters.
 
 ## GraphProjection
 
@@ -153,13 +151,15 @@ The Knowledge Panel queries the same selected Topic or Key Issue state as the ma
 
 There is one unified Knowledge experience. Timestamps remain metadata; the application does not provide a separate chronological panel mode.
 
-Long content lists should be paged or virtualized independently of graph rendering.
+Knowledge sections expand in the independently scrolling panel.
 
 ## Search abstraction
 
-`SearchAdapter` exposes product semantics instead of engine syntax. The application should support queries across Topics, Key Issues, Knowledge Item metadata/body text, supported extracted document text, tags, authors, sources, and provided transcripts/captions.
+`SearchAdapter` exposes product semantics instead of engine syntax. The application searches Topics, Key Issues, Knowledge Item metadata/body text, supported extracted document text, tags, authors, and sources.
 
-The local implementation uses SQLite FTS5. SearchAdapter keeps filters and user-facing query semantics independent from SQLite query syntax. Arabic and Russian normalization are covered by multilingual search fixtures.
+The local implementation uses SQLite FTS5. SearchAdapter keeps filters and user-facing query semantics independent from SQLite query syntax. Arabic and Russian normalization are verified by multilingual search checks.
+
+All Projects search is federated rather than centralized. One long-lived worker visits the active Project first and then one selected registry instance per remaining Project in `lastOpenedAt` order. Every database is opened read-only, capped by an LRU of 32 connections, and accepted only when its search schema and Project ID match the registry. An older canonical revision remains searchable with a stale flag. Missing or incompatible runtimes are counted as unavailable until their Project is opened. Ranking uses title-match tiers and reciprocal rank within each tier, so SQLite BM25 values are never compared across databases. A 400 ms pass can return partial results plus a continuation; starting a newer query cancels the prior worker job through shared cancellation state.
 
 ## Storage adapters
 
@@ -175,7 +175,7 @@ Resolves stable asset IDs to Project-owned files and streams bytes without requi
 
 Indexes canonical content and returns normalized search results.
 
-These interfaces are extension seams, not a downloadable executable plugin system.
+The interfaces separate domain behavior from filesystem, asset, and search implementations.
 
 ## Current local runtime
 
@@ -195,32 +195,65 @@ The local server binds to loopback and exposes only the Project locations explic
 
 Canonical files/assets live in ordinary Outmapper-managed Project directories. Native SQLite accelerates queries/search but remains rebuildable and noncanonical.
 
-The local runtime must continue to provide all core functionality when external internet access is unavailable. Localhost communication is part of the application runtime and is not considered an external network dependency.
+Core functionality runs without external internet access once the application is installed. The browser communicates with the local loopback server; external source links require internet access.
 
 This architecture gives ordinary filesystem semantics for large Projects while reusing the browser UI.
 
-## Publication
+## Workspace registry and ProjectReader
 
-Authoring follows:
+`<stateDirectory>/workspace/registry.json` is a machine-local registry, not part of any portable Project. Each folder instance has a stable `instanceId` and cached Project metadata, fingerprint, availability, recent/open timestamps, Home Topic/cover path and MIME information, and outgoing Project Links. Multiple folder instances can carry the same Project ID; a preferred instance or the most recently opened instance represents that Project in aggregate views.
+
+`ProjectReader` refreshes non-active registry entries without acquiring their write lock, recovering files, creating runtime state, or rebuilding search. A stat/fingerprint sweep rereads only changed entries. Outmapper writes only the active Project; registry cache updates are the sole workspace-level mutation associated with other folders.
+
+The incoming-link index is held in server memory and rebuilt after every registry write, including registration, refresh, location changes, copies, preference changes, and forget operations. It reverses cached outgoing links without writing backlinks to their targets. A missing or absent target Topic resolves to the target Project's current Home Topic when the endpoint is read.
+
+The Universe is also derived entirely from registry cache. It selects one node per Project ID, retains unavailable nodes, reports duplicate instance counts, and aggregates directed link counts between Project pairs. Home covers are exposed only through a guarded route that resolves the cached Project-relative path, rejects symbolic links, sniffs PNG/JPEG/WebP bytes, and never serves SVG.
+
+## Workspace APIs
+
+All failures use `{ "error": string, "code": string }`; clients translate the stable `code` and retain the English `error` as fallback.
 
 ```text
-Working State -> Preview -> Published Snapshot
+GET /api/workspace/projects
+-> { activeInstanceId, formatVersion, projects: { [instanceId]: WorkspaceProjectEntry }, preferredInstance }
+
+POST /api/workspace/refresh
+-> same shape after a stat sweep
+
+GET /api/workspace/incoming
+-> { projectId, total, groups: [{ topicId, links: [{
+     linkId, sourceInstanceId, sourceProjectId, sourceProjectTitle,
+     sourceTopicId, sourceTopicTitle, keyIssueId, keyIssueTitle, availability
+   }] }] }
+
+GET /api/workspace/universe
+-> { nodes: [{ instanceId, projectId, title, description?, status,
+     duplicateCount, homeTopicId?, homeTopicTitle?, coverUrl?, lastOpenedAt? }],
+     edges: [{ id, sourceProjectId, targetProjectId, count }] }
+
+GET /api/workspace/projects/:instanceId/home-cover
+-> sniffed image bytes, or a coded 404/415 response
+
+GET /api/search?q=...&scope=workspace&continuation=...
+-> { items: SearchHit[], total, totalCapped?, incomplete?, continuation?,
+     notSearchableCount?, staleProjectCount? }
 ```
 
-A Published Snapshot identifies an immutable canonical revision and immutable asset identities. Snapshots do not duplicate multi-GB asset bytes when the same immutable asset can be referenced safely.
+Workspace navigation endpoints activate, locate, prefer, hide from Recent, forget, copy, or assign a new identity to a folder instance. Activation responses carry the canonical Project, per-instance history state, runtime reconciliation result, and active `instanceId`.
 
-The default retention target is the current Published Snapshot plus the 10 most recent previous Published Snapshots.
+## Snapshot compatibility
+
+The Project format and publication service retain Published Snapshot records and manifests for compatibility. A snapshot identifies a canonical revision and referenced Asset identities. The service retains the current snapshot plus the 10 most recent previous snapshots.
+
+Viewer shows the current autosaved Working State. Studio edits that same state, and portable Project export backs it up together with retained snapshot manifests.
 
 ## Workers and background work
 
-CPU-heavy or blocking tasks should leave the interactive main thread where platform support allows, especially:
-
-- index rebuilds;
-- PDF extraction;
-- archive processing;
-- expensive document parsing.
+PDF extraction and All Projects search run in separate workers. Archive import and export stream files through the local server with bounded limits.
 
 PDF extraction uses one long-lived Node Worker around PDF.js. Work is queued, bounded by byte/page/text/time limits, and written only to derived extraction records. Extraction failures never mutate canonical Knowledge or Asset records.
+
+Federated workspace search uses a separate single worker and read-only SQLite connections. It never creates, migrates, reindexes, or writes runtime files in non-active Projects.
 
 ## Reliability and recovery
 
@@ -234,6 +267,6 @@ Outmapper uses:
 - Published Snapshots;
 - revision markers to detect canonical/runtime divergence.
 
-Runtime corruption should be recoverable by rebuilding from canonical data.
+Runtime databases and extracted text are rebuilt from canonical data when missing or incompatible.
 
-The local filesystem adapter checkpoints an in-progress canonical save under the Project's derived `.outmapper/` directory. Reopening the Project completes a valid pending checkpoint before reading canonical records. The native SQLite/FTS database also lives under `.outmapper/`; its Project ID and canonical revision markers determine whether it is current or must be rebuilt.
+The local filesystem adapter checkpoints an in-progress canonical save under the Project's derived `.outmapper/` directory. Reopening the Project completes a valid pending checkpoint before reading canonical records. Saves and recovery take the folder's write lock; plain reads do not. A read waits for any save in flight in the same process, hashes exactly the bytes it parsed and compares them with the files on disk, and re-checks for a checkpoint afterwards, so a read can never collide with a save or a Project switch, and a read that overlaps another process's write (including one paused part-way) falls back to the locked recovery path. The native SQLite/FTS database also lives under `.outmapper/`; its Project ID and canonical revision markers determine whether it is current or must be rebuilt.

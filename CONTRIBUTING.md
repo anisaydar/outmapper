@@ -46,6 +46,9 @@ npm run typecheck
 npm test
 npm run check:package
 npm run test:browser
+npm run test:browser:authoring
+npm run test:browser:workspace
+npm run test:browser:features
 ```
 
 `npm run check:package` builds the production artifacts, confirms CLI help/version behavior, and audits `npm pack --dry-run` output against the explicit `files` allowlist. It never publishes the package. If a change affects import/export, Project migrations, graph projection, search, security validation, or offline behavior, run the associated focused checks as well.
@@ -58,7 +61,7 @@ Browser checks require Chrome or Chromium. Set `OUTMAPPER_BROWSER_PATH` to an ab
 - Do not change the Project `formatVersion` for an application-only release. Project format changes require their own migration and compatibility review.
 - Update `CHANGELOG.md` for user-visible changes.
 - Do not create tags or publish npm/GitHub releases from an ordinary pull request.
-- Inspect the package with `npm run check:package` before any authorized release.
+- Inspect the package with `npm run check:package` before a release.
 
 ## Private and local files
 

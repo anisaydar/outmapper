@@ -97,6 +97,11 @@ body {
   font-family: "Cairo", "Noto Sans Arabic", "Noto Sans", "Segoe UI", Arial, sans-serif;
 }
 
+/* In RTL, user content such as a Latin Project or Topic title still aligns to the right, like the interface. */
+:root[dir="rtl"] [dir="auto"] {
+  text-align: right;
+}
+
 ::selection {
   background: var(--accent);
   color: #ffffff;
@@ -143,6 +148,14 @@ a:focus-visible {
   direction: ltr;
 }
 
+.app-bar__start {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  justify-self: start;
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -151,6 +164,7 @@ a:focus-visible {
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.01em;
+  transition: transform 360ms var(--spring);
 }
 
 .brand-mark-frame {
@@ -160,47 +174,77 @@ a:focus-visible {
   place-items: center;
 }
 
+/*
+ * Brand glow: a soft accent halo on the mark (filter) and the wordmark (text-shadow), shared by the header lockup and
+ * the map's loading mark. Entrances use backwards fill only, so hover can still change the settled values.
+ */
+.brand,
+.empty-region {
+  --brand-shadow: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.3));
+  --brand-glow-off: drop-shadow(0 0 0 color-mix(in srgb, var(--accent) 0%, transparent));
+  --brand-glow-faint: drop-shadow(0 0 4px color-mix(in srgb, var(--accent) 24%, transparent));
+  --brand-glow-on: drop-shadow(0 0 7px color-mix(in srgb, var(--accent) 42%, transparent));
+  --brand-text-glow-off: 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent);
+  --brand-text-glow-on: 0 0 12px color-mix(in srgb, var(--accent) 36%, transparent);
+}
+
+:root[data-theme="light"] .brand,
+:root[data-theme="light"] .empty-region {
+  --brand-shadow: drop-shadow(0 1px 1.5px rgba(30, 40, 60, 0.18));
+  --brand-glow-faint: drop-shadow(0 0 4px color-mix(in srgb, var(--accent) 18%, transparent));
+  --brand-glow-on: drop-shadow(0 0 7px color-mix(in srgb, var(--accent) 32%, transparent));
+  --brand-text-glow-on: 0 0 12px color-mix(in srgb, var(--accent) 26%, transparent);
+}
+
 .brand-mark,
 .empty-orbit__mark {
   display: block;
-  transform-origin: 50% 56.3%;
+  filter: var(--brand-shadow) var(--brand-glow-off);
 }
 
 .brand-mark {
   width: 22px;
   height: 22px;
-  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.3));
-  animation: brand-mark-enter 760ms var(--spring) both;
-  transition: transform 720ms var(--spring);
-}
-
-:root[data-theme="light"] .brand-mark {
-  filter: drop-shadow(0 1px 1.5px rgba(30, 40, 60, 0.18));
+  animation: brand-mark-enter 1100ms ease-out backwards;
+  transition: filter 360ms ease;
 }
 
 .brand-name {
-  animation: brand-name-enter 520ms ease-out 140ms both;
+  text-shadow: var(--brand-text-glow-off);
+  animation: brand-name-enter 1100ms ease-out 80ms backwards;
+  transition: text-shadow 360ms ease;
+}
+
+.brand:hover {
+  transform: translateY(-1px);
 }
 
 .brand:hover .brand-mark {
-  transform: rotate(120deg);
+  filter: var(--brand-shadow) var(--brand-glow-on);
+}
+
+.brand:hover .brand-name {
+  text-shadow: var(--brand-text-glow-on);
 }
 
 .brand[data-loading="true"] .brand-mark {
-  animation: brand-mark-enter 760ms var(--spring) both, brand-mark-orbit 2.4s 760ms infinite;
+  animation: brand-mark-enter 1100ms ease-out backwards, brand-mark-glow 2.4s ease-in-out 1100ms infinite;
 }
 
 @keyframes brand-mark-enter {
-  from { opacity: 0; transform: scale(0.6) rotate(-120deg); }
+  0% { opacity: 0; filter: var(--brand-shadow) var(--brand-glow-off); }
+  45% { opacity: 1; filter: var(--brand-shadow) var(--brand-glow-on); }
+  100% { filter: var(--brand-shadow) var(--brand-glow-off); }
 }
 
 @keyframes brand-name-enter {
-  from { opacity: 0; transform: translateX(-4px); }
+  0% { opacity: 0; text-shadow: var(--brand-text-glow-off); }
+  45% { opacity: 1; text-shadow: var(--brand-text-glow-on); }
+  100% { text-shadow: var(--brand-text-glow-off); }
 }
 
-@keyframes brand-mark-orbit {
-  0%, 42% { transform: rotate(0deg); animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1); }
-  100% { transform: rotate(120deg); }
+@keyframes brand-mark-glow {
+  50% { filter: var(--brand-shadow) var(--brand-glow-on); }
 }
 
 .spinner {
@@ -242,7 +286,8 @@ a:focus-visible {
 }
 
 .tool:hover,
-.tool[aria-expanded="true"] {
+.tool[aria-expanded="true"],
+.app-bar .tool[aria-pressed="true"] {
   color: var(--accent);
   background: var(--accent-soft);
 }
@@ -282,7 +327,7 @@ a:focus-visible {
   width: min(320px, calc(100vw - 24px));
   max-height: calc(100dvh - 60px);
   grid-template-columns: minmax(0, 1fr);
-  grid-template-areas: "language" "appearance" "project" "recent" "version";
+  grid-template-areas: "project" "recent" "current" "preferences" "version";
   align-content: start;
   gap: 14px;
   overflow-y: auto;
@@ -300,10 +345,43 @@ a:focus-visible {
   --ui-direction: rtl;
 }
 
-.settings-section--language { grid-area: language; }
-.settings-section--appearance { grid-area: appearance; }
 .settings-section--project { grid-area: project; }
 .settings-section--recent { grid-area: recent; }
+.settings-section--current { grid-area: current; }
+.settings-preferences { grid-area: preferences; }
+
+.settings-preferences {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+/* Settings dividers: each group after the first in its column opens with the same hairline. */
+.settings-section--current,
+.settings-preferences {
+  padding-block-start: 14px;
+  border-block-start: 0.5px solid var(--line);
+}
+
+.settings-current__label {
+  margin: 0 2px 2px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.settings-popover .settings-current__title {
+  overflow: hidden;
+  margin: 0 2px 8px;
+  color: var(--text);
+  font-size: 16px;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  text-transform: none;
+  white-space: nowrap;
+}
 
 .settings-section {
   min-width: 0;
@@ -530,15 +608,149 @@ a:focus-visible {
   gap: 2px;
 }
 
-.recent-project {
+/* One row style: the Project button (or static current/unavailable row) and a fixed trailing column for ✓ or "…". */
+.recent-project-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 32px;
+  align-items: center;
+  column-gap: 2px;
+}
+
+.recent-project__menu,
+.recent-project__check {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 9px;
+}
+
+.recent-project__menu {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.recent-project__menu .icon,
+.recent-project__check .icon {
+  width: 17px;
+  height: 17px;
+}
+
+.recent-project__check {
+  color: var(--accent);
+}
+
+.recent-project__menu:hover,
+.recent-project__menu:focus-visible,
+.recent-project__menu[aria-expanded="true"] {
+  background: var(--panel-raised);
+  color: var(--text);
+}
+
+.recent-project-menu {
+  position: absolute;
+  z-index: 20;
+  inset-block-start: calc(100% + 2px);
+  inset-inline-end: 0;
+  display: grid;
+  min-width: 190px;
+  max-width: calc(100% - 8px);
+  gap: 2px;
+  padding: 5px;
+  border: 0.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.recent-project-menu[data-placement="above"] {
+  inset-block-start: auto;
+  inset-block-end: calc(100% + 2px);
+}
+
+.recent-project-menu button {
   min-height: 36px;
+  padding-inline: 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: start;
+  cursor: pointer;
+}
+
+.recent-project-menu button:hover,
+.recent-project-menu button:focus-visible {
+  background: var(--panel-raised);
+}
+
+.recent-project-menu button:disabled {
+  cursor: default;
+  opacity: 0.42;
+}
+
+/* A quiet status label: muted text in a hairline capsule, only shown when a Project is not simply available. */
+.status-badge {
+  flex: 0 0 auto;
+  padding: 1px 7px;
+  border: 0.5px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.recent-project {
+  min-height: 40px;
+  gap: 8px;
   font-weight: 500;
 }
 
-.recent-project > span {
+.recent-project__copy {
+  display: grid;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.recent-project__copy > span,
+.recent-project__copy > small {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.recent-project__copy > small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.recent-project--current,
+.recent-project--unavailable {
+  cursor: default;
+}
+
+.recent-project--current {
+  font-weight: 650;
+}
+
+.recent-project--current:hover,
+.recent-project--unavailable:hover {
+  background: transparent;
+}
+
+.recent-project--unavailable .recent-project__copy > span {
+  color: var(--muted);
 }
 
 .recent-toggle {
@@ -614,6 +826,35 @@ a:focus-visible {
   color: #ffffff;
 }
 
+/* Dialog actions share one size: primary and secondary pills get the same minimum width and centered labels. */
+.dialog-actions .pill {
+  min-width: 104px;
+  justify-content: center;
+}
+
+/* Dialog buttons sit flat on the dialog surface: no floating-toolbar shadow or blur, which made Cancel look raised. */
+.dialog-actions .pill:not(.pill--danger) {
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.dialog-actions .pill:not(.pill--accent):not(.pill--danger) {
+  background: var(--panel-raised);
+}
+
+.dialog-actions .pill:not(.pill--accent):not(.pill--danger):hover {
+  background: var(--line);
+}
+
+/* Language names always use their own script's face, e.g. العربية stays in Cairo inside English or Russian. */
+.language-select [lang="ar"] {
+  font-family: "Cairo", "Noto Sans Arabic", "Noto Sans", "Segoe UI", Arial, sans-serif;
+}
+
+.pill--accent:hover {
+  background: color-mix(in srgb, var(--accent) 86%, #000000);
+}
+
 .pill--danger {
   color: var(--danger);
   background: transparent;
@@ -684,35 +925,32 @@ a:focus-visible {
 }
 
 .map-world.is-entering .central-disc {
-  animation: topic-center-enter 400ms var(--spring) both;
+  animation: topic-center-enter 400ms var(--spring) backwards;
 }
 
 .map-world.is-entering .map-node--issue {
-  animation: topic-issue-fade 340ms ease-out both;
+  animation: topic-issue-fade 340ms ease-out backwards;
   animation-delay: calc(210ms + var(--ring-index, 0) * var(--issue-enter-step, 38ms));
-  will-change: opacity;
 }
 
 .map-world.is-entering .map-node--issue .node-core {
-  animation: topic-issue-core 400ms var(--spring) both;
+  animation: topic-issue-core 400ms var(--spring) backwards;
   animation-delay: calc(210ms + var(--ring-index, 0) * var(--issue-enter-step, 38ms));
 }
 
 .map-world.is-entering .map-node--issue .node-label {
-  animation: topic-issue-label 300ms ease-out both;
+  animation: topic-issue-label 300ms ease-out backwards;
   animation-delay: calc(245ms + var(--ring-index, 0) * var(--issue-enter-step, 38ms));
-  will-change: transform, opacity;
 }
 
-.map-world.is-entering .map-node--topic {
-  animation: topic-related-enter 340ms var(--spring) both;
+.map-world.is-entering .map-node--topic,
+.map-world.is-entering .map-node--portal {
+  animation: topic-related-enter 340ms var(--spring) backwards;
   animation-delay: calc(490ms + var(--ring-index, 0) * var(--topic-enter-step, 21ms));
-  will-change: transform, opacity;
 }
 
 .relationship-layer.is-entering .map-edge {
-  stroke-dasharray: 1;
-  animation: relationship-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: relationship-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
   animation-delay: calc(85ms + var(--edge-index, 0) * 3ms);
 }
 
@@ -740,6 +978,9 @@ a:focus-visible {
   opacity: 0;
 }
 
+/* Entrance animations fill only backwards and promote no layers of their own: a finished animation that kept
+ * holding its end value kept its node on a compositor layer, and dropping it with .is-entering snapped nodes,
+ * labels and edges by a pixel just after the entrance. Every keyframe ends at the resting style. */
 @keyframes topic-center-enter {
   from { transform: scale(0.62); opacity: 0; }
 }
@@ -774,7 +1015,10 @@ a:focus-visible {
   pointer-events: none;
 }
 
+/* One dash the length of the path (pathLength="1") draws the edge in from its offset; at rest it is a solid line, so
+ * nothing about the stroke changes when the entrance ends. */
 .map-edge {
+  stroke-dasharray: 1;
   fill: none;
   stroke: var(--edge);
   stroke-opacity: 0.34;
@@ -791,6 +1035,46 @@ a:focus-visible {
 
 .map-edge.is-dimmed {
   stroke-opacity: 0.06;
+}
+
+/* Portal edges read like Topic edges until a selection involves them. They stay solid like every edge: a dash pattern
+ * would be measured in path lengths (pathLength="1") and would change between the entrance and rest. */
+.map-edge--portal {
+  stroke-opacity: 0.5;
+  stroke-width: 1;
+}
+
+.edge-arrowhead {
+  fill: var(--edge);
+  fill-opacity: 0.75;
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transition: fill 280ms, fill-opacity 340ms var(--spring);
+}
+
+.edge-arrowhead.is-highlighted,
+.edge-arrowhead.is-selected {
+  fill: var(--accent);
+  fill-opacity: 1;
+}
+
+.edge-arrowhead.is-dimmed {
+  fill-opacity: 0.08;
+}
+
+/* An arrowhead grows from its tip once its own edge has drawn in. */
+.relationship-layer.is-entering .edge-arrowhead {
+  animation: edge-arrowhead-enter 200ms var(--spring) backwards;
+  animation-delay: calc(385ms + var(--edge-index, 0) * 3ms);
+}
+
+.relationship-layer.is-topic-leaving .edge-arrowhead {
+  opacity: 0;
+  transition: opacity 280ms;
+}
+
+@keyframes edge-arrowhead-enter {
+  from { opacity: 0; transform: scale(0.3); }
 }
 
 .central-node {
@@ -967,6 +1251,199 @@ a:focus-visible {
   opacity: 0.8;
 }
 
+/*
+ * Portal frames: a dashed accent border on the panel surface. Every state keeps that border and adds an outer ring
+ * drawn with box-shadow, which follows the rounded corners exactly; the border style never changes, so no dash
+ * pattern or outline is redrawn on hover, focus, press or selection. The overflow control below shares these rules.
+ */
+.map-node--portal,
+.map-node--portal-overflow {
+  --portal-ring: 0 0 0 0 transparent, 0 0 0 0 transparent;
+  border: 1px dashed color-mix(in srgb, var(--accent) 72%, var(--line));
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: var(--portal-ring), 0 4px 14px #0003;
+  transition: opacity 360ms var(--spring), transform 420ms var(--spring), border-color 220ms, box-shadow 220ms;
+}
+
+.map-node--portal {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+}
+
+.map-node--portal:hover,
+.map-node--portal:focus-visible {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.map-node--portal:active {
+  transform: translate(-50%, -50%) scale(1.02);
+}
+
+.map-node--portal:hover,
+.map-node--portal:focus-visible,
+.map-node--portal.is-highlighted,
+.map-node--portal.is-selected,
+.map-node--portal-overflow:hover,
+.map-node--portal-overflow:focus-visible {
+  border-color: var(--accent);
+}
+
+.map-node--portal.is-highlighted {
+  --portal-ring: 0 0 0 2px var(--background), 0 0 0 3.5px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.map-node--portal:hover,
+.map-node--portal:focus-visible,
+.map-node--portal.is-selected,
+.map-node--portal-overflow:hover,
+.map-node--portal-overflow:focus-visible {
+  --portal-ring: 0 0 0 2px var(--background), 0 0 0 4px var(--accent);
+}
+
+.map-node--portal:focus-visible,
+.map-node--portal-overflow:focus-visible {
+  outline: none;
+}
+
+/* Box-shadow rings disappear in forced colors, so focus falls back to a system outline there. */
+@media (forced-colors: active) {
+  .map-node--portal:focus-visible,
+  .map-node--portal-overflow:focus-visible {
+    outline: 2px solid CanvasText;
+    outline-offset: 3px;
+  }
+}
+
+/* Several links to one Project share a portal; the badge counts them. */
+.portal-node__count {
+  position: absolute;
+  inset-block-start: -7px;
+  inset-inline-end: -7px;
+  display: grid;
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 4px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-raised);
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.map-node--portal.is-unavailable {
+  filter: grayscale(0.75);
+  opacity: 0.68;
+}
+
+.portal-node__icon {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.portal-node__icon .icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* The label sits on the side facing away from the map center, so it never runs back into Topic labels. */
+.portal-node__label {
+  position: absolute;
+  max-width: 112px;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 14px;
+  text-overflow: ellipsis;
+  text-shadow: 0 0 3px var(--background), 0 0 3px var(--background), 0 1px 5px var(--background);
+  white-space: nowrap;
+}
+
+.map-node--portal[data-label-placement="top"] .portal-node__label,
+.map-node--portal[data-label-placement="bottom"] .portal-node__label {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.map-node--portal[data-label-placement="top"] .portal-node__label {
+  bottom: calc(100% + 6px);
+}
+
+.map-node--portal[data-label-placement="bottom"] .portal-node__label {
+  top: calc(100% + 6px);
+}
+
+.map-node--portal[data-label-placement="left"] .portal-node__label,
+.map-node--portal[data-label-placement="right"] .portal-node__label {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.map-node--portal[data-label-placement="left"] .portal-node__label {
+  right: calc(100% + 8px);
+  text-align: right;
+}
+
+.map-node--portal[data-label-placement="right"] .portal-node__label {
+  left: calc(100% + 8px);
+  text-align: left;
+}
+
+/* Portals past the cap: a portal frame with the map controls, under Back and Home, sized to its text. */
+.map-node--portal-overflow.pill {
+  position: absolute;
+  z-index: 5;
+  inset-block-start: 76px;
+  inset-inline-start: 20px;
+  width: max-content;
+  max-width: calc(100% - 40px);
+  min-height: 40px;
+  gap: 8px;
+  padding-block: 0;
+  padding-inline: 6px 14px;
+  border-radius: 12px;
+  background: var(--panel);
+  white-space: nowrap;
+  backdrop-filter: none;
+  animation: preview-fade 260ms ease-out both;
+}
+
+.map-node--portal-overflow:hover {
+  transform: scale(1.04);
+}
+
+.map-node--portal-overflow:active {
+  transform: scale(1.01);
+}
+
+.map-node--portal-overflow .portal-node__icon {
+  flex: none;
+}
+
+.map-node--portal-overflow > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes preview-fade {
+  from { opacity: 0; }
+}
+
+.map-node--portal-overflow .portal-overflow__count {
+  font-weight: 700;
+}
+
 .map-node:active .node-core {
   transform: scale(0.94);
 }
@@ -1065,36 +1542,70 @@ a:focus-visible {
   right: 0;
   left: auto;
   display: grid;
-  width: 240px;
+  width: 260px;
   max-height: 280px;
+  gap: 2px;
   overflow-y: auto;
-  padding: 6px;
+  padding: 5px;
   border: 0.5px solid var(--line);
   border-radius: 14px;
   background: var(--panel);
   box-shadow: var(--shadow);
 }
 
-.history-popover button,
-.history-popover span {
-  padding: 10px 12px;
+/* One line per place: the Topic title, then a muted Project name only for places in another Project. */
+.history-popover button {
+  display: flex;
+  min-width: 0;
+  min-height: 36px;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 10px;
   border: 0;
   border-radius: 9px;
   background: transparent;
   color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
   text-align: start;
-}
-
-.history-popover button {
+  white-space: nowrap;
   cursor: pointer;
 }
 
-.history-popover button:hover {
+.history-popover button:hover,
+.history-popover button:focus-visible {
   background: var(--panel-raised);
 }
 
-.history-popover span {
+.history-popover button[aria-current] {
+  color: var(--accent);
+  font-weight: 650;
+}
+
+.history-entry__title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-popover small {
+  min-width: 0;
+  max-width: 45%;
+  flex: 0 1 auto;
+  overflow: hidden;
+  margin-inline-start: auto;
   color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+}
+
+.history-empty {
+  margin: 0;
+  padding: 8px 10px;
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .map-zoom {
@@ -1206,6 +1717,458 @@ a:focus-visible {
   margin-block-start: 14px;
 }
 
+/* A portal card: direction, Project, one route line, and a note only when the link has one. */
+.portal-preview {
+  width: min(420px, calc(100% - 40px));
+}
+
+.portal-preview__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.portal-preview__eyebrow .icon {
+  width: 14px;
+  height: 14px;
+  color: var(--accent);
+}
+
+.portal-preview h2 {
+  margin: 2px 0 6px;
+  padding-inline-end: 28px;
+  overflow-wrap: anywhere;
+}
+
+.portal-preview__route {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.portal-preview__route bdi {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.portal-preview__note {
+  display: -webkit-box;
+  margin: 10px 0 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* The linked Topic, when there is one, reads as a quiet line under the route. */
+.portal-preview__topic {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.portal-preview__topic .icon {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+}
+
+.portal-preview__topic span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topic-preview > .pill > .icon {
+  width: 16px;
+  height: 16px;
+}
+
+/*
+ * Universe: the Topic graph's camera, edges and entrance, with Projects as disc nodes. The current Project is the
+ * central disc; other Projects are smaller discs whose labels sit on the side facing away from the center.
+ */
+.universe-workspace,
+.universe-stage,
+.universe-view,
+.universe-surface {
+  width: 100%;
+}
+
+.map-node.universe-node {
+  width: 56px;
+  height: 56px;
+}
+
+.universe-node__disc {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  transition: transform 320ms var(--spring), opacity 260ms, filter 260ms;
+}
+
+.universe-node__ring,
+.universe-node__copy,
+.universe-node__halo {
+  transition: stroke 260ms, stroke-width 260ms, stroke-opacity 260ms, opacity 260ms, transform 320ms var(--spring);
+}
+
+.universe-node__ring {
+  fill: none;
+  stroke: var(--node-stroke);
+  stroke-opacity: 0.5;
+  stroke-width: 4;
+}
+
+.universe-node__copy {
+  fill: var(--panel-raised);
+  stroke: var(--node-stroke);
+  stroke-opacity: 0.4;
+  stroke-width: 4;
+}
+
+.universe-node__halo {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 5;
+  opacity: 0;
+  transform: scale(0.84);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.universe-node:hover .universe-node__disc,
+.universe-node:focus-visible .universe-node__disc {
+  transform: scale(1.06);
+}
+
+.universe-node:active .universe-node__disc {
+  transform: scale(0.96);
+}
+
+.universe-node:hover .universe-node__ring,
+.universe-node:focus-visible .universe-node__ring {
+  stroke: var(--accent);
+  stroke-opacity: 1;
+  stroke-width: 6;
+}
+
+.universe-node:focus-visible .universe-node__halo {
+  opacity: 0.3;
+  transform: scale(1);
+}
+
+.universe-node.is-selected .universe-node__ring {
+  stroke: var(--accent);
+  stroke-opacity: 1;
+  stroke-width: 9;
+}
+
+.universe-node.is-selected .universe-node__halo {
+  opacity: 0.55;
+  transform: scale(1.04);
+}
+
+.universe-node--center {
+  transition: opacity 360ms var(--spring);
+}
+
+.universe-node--center:hover .central-ring,
+.universe-node--center:focus-visible .central-ring {
+  stroke-width: 3.5;
+}
+
+.universe-node--center.is-selected .central-ring {
+  stroke-width: 5;
+}
+
+.universe-node--center.is-dimmed {
+  opacity: 0.28;
+}
+
+.universe-node.is-unavailable .universe-node__disc,
+.universe-node--center.is-unavailable > svg {
+  filter: grayscale(0.85);
+  opacity: 0.55;
+}
+
+/* A small status mark on the disc edge for Projects whose folder cannot be read; the card names the status. */
+.universe-node__status {
+  position: absolute;
+  z-index: 1;
+  right: -3px;
+  bottom: -3px;
+  display: grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--panel);
+  box-shadow: 0 0 0 1.5px var(--line);
+  color: var(--warning);
+  pointer-events: none;
+}
+
+.universe-node--center .universe-node__status {
+  right: 10px;
+  bottom: 10px;
+  width: 24px;
+  height: 24px;
+}
+
+.universe-node__status .icon {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+}
+
+/* Labels use the Topic graph's label type and background halo, and never wrap past two lines. */
+.universe-node__label {
+  position: absolute;
+  display: grid;
+  width: max-content;
+  max-width: 120px;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  text-shadow: 0 0 3px var(--background), 0 0 3px var(--background), 0 1px 5px var(--background);
+  pointer-events: none;
+  transition: color 260ms;
+}
+
+.universe-node__title {
+  display: -webkit-box;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.universe-node__copies {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.universe-node.is-unavailable .universe-node__title {
+  color: var(--muted);
+}
+
+.universe-node[data-label-placement="top"] .universe-node__label,
+.universe-node[data-label-placement="bottom"] .universe-node__label {
+  left: 50%;
+  justify-items: center;
+  text-align: center;
+  transform: translateX(-50%) scale(var(--universe-label-scale, 1));
+}
+
+.universe-node[data-label-placement="top"] .universe-node__label {
+  bottom: calc(100% + 8px);
+  transform-origin: 50% 100%;
+}
+
+.universe-node[data-label-placement="bottom"] .universe-node__label {
+  top: calc(100% + 8px);
+  transform-origin: 50% 0;
+}
+
+.universe-node[data-label-placement="left"] .universe-node__label,
+.universe-node[data-label-placement="right"] .universe-node__label {
+  top: 50%;
+  transform: translateY(-50%) scale(var(--universe-label-scale, 1));
+}
+
+.universe-node[data-label-placement="left"] .universe-node__label {
+  right: calc(100% + 8px);
+  justify-items: end;
+  text-align: right;
+  transform-origin: 100% 50%;
+}
+
+.universe-node[data-label-placement="right"] .universe-node__label {
+  left: calc(100% + 8px);
+  justify-items: start;
+  text-align: left;
+  transform-origin: 0 50%;
+}
+
+/* A label that would reach another Project at this zoom hides; hovering, focusing or selecting its Project shows it. */
+.universe-node__label[data-hidden="true"] {
+  display: none;
+}
+
+.universe-node:hover .universe-node__label[data-hidden="true"],
+.universe-node:focus-visible .universe-node__label[data-hidden="true"] {
+  display: grid;
+}
+
+.map-world.is-entering .universe-node:not(.universe-node--center) {
+  animation: topic-related-enter 340ms var(--spring) backwards;
+  animation-delay: calc(300ms + var(--ring-index, 0) * var(--topic-enter-step, 21ms));
+}
+
+.universe-edge {
+  stroke-opacity: 0.42;
+  stroke-width: 1.1;
+}
+
+.universe-edge.is-highlighted {
+  stroke-width: 1.6;
+}
+
+/* Each edge draws once both of its Projects are in place (--edge-delay), and its arrowhead lands as the line ends. */
+.universe-edges.is-entering .universe-edge {
+  animation-duration: 340ms;
+  animation-delay: var(--edge-delay, 0ms);
+}
+
+.universe-edges.is-entering .universe-arrowhead {
+  animation-delay: calc(var(--edge-delay, 0ms) + 260ms);
+}
+
+.universe-empty .empty-region__copy {
+  max-width: min(360px, calc(100% - 32px));
+  text-align: center;
+}
+
+.universe-empty p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.empty-orbit__icon.icon {
+  width: 46px;
+  height: 46px;
+  color: var(--muted);
+  stroke-width: 1.25;
+}
+
+.universe-empty[data-loading="true"] .empty-orbit {
+  animation: orbit-breathe 2.4s ease-in-out infinite;
+}
+
+/* Universe side panel: the Knowledge panel's hero and card, then the Projects this one links with. */
+.universe-panel__card {
+  padding-block-end: 20px;
+}
+
+.universe-details__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-block-start: 16px;
+}
+
+.universe-links {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.universe-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-inline-end: 6px;
+  border-radius: 16px;
+  background: var(--panel);
+}
+
+.universe-link__main {
+  display: flex;
+  min-width: 0;
+  min-height: var(--tap);
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.universe-link__main:hover,
+.universe-link__main:focus-visible {
+  background: var(--panel-raised);
+}
+
+.universe-link__main:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.universe-link__disc {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  overflow: visible;
+}
+
+.universe-link__text {
+  display: grid;
+  min-width: 0;
+  gap: 1px;
+}
+
+.universe-link__text > span {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.universe-link__text small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.universe-link.is-unavailable .universe-link__disc {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
+.universe-details__more {
+  position: relative;
+}
+
+.universe-details__more > .tool[aria-expanded="true"] {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* Opens toward the panel's end from the trigger, so it stays inside the panel. */
+.universe-details__menu {
+  inset-inline: 0 auto;
+  min-width: 200px;
+  max-width: none;
+}
+
+.recent-project-menu button.is-danger {
+  color: var(--danger);
+}
+
 @keyframes preview-in {
   from {
     opacity: 0;
@@ -1257,7 +2220,7 @@ a:focus-visible {
 }
 
 .empty-region[data-loading="true"] .empty-orbit__mark {
-  animation: brand-mark-orbit 2.4s infinite;
+  animation: brand-mark-glow 2.4s ease-in-out infinite;
 }
 
 .empty-region[data-loading="true"] .empty-orbit {
@@ -1272,14 +2235,58 @@ a:focus-visible {
   margin-block-start: 82px;
 }
 
+/* Positioned so absolutely placed descendants (such as visually hidden labels) stay inside its scroll clip. */
 .knowledge-panel {
+  position: relative;
   width: var(--panel-width);
   min-height: 0;
   flex: 0 0 var(--panel-width);
   overflow-y: auto;
   padding: 20px 20px 20px 0;
   direction: ltr;
-  transition: margin 440ms var(--spring), opacity 280ms;
+  transition: margin 440ms var(--spring), opacity 280ms, --scroll-fade-start 180ms, --scroll-fade-end 180ms;
+}
+
+/*
+ * Scroll-edge fades: App marks the edges with content scrolled past them. The top fade starts below the sticky Studio
+ * bar (--scroll-fade-offset), and no mask is applied at all while nothing is scrolled past either edge.
+ */
+@property --scroll-fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --scroll-fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+.knowledge-panel {
+  --scroll-fade-offset: 0px;
+  --scroll-fade-bottom: 0px;
+  --scroll-fade-start: 0px;
+  --scroll-fade-end: 0px;
+}
+
+.knowledge-panel[data-scroll-start="true"] {
+  --scroll-fade-start: 28px;
+}
+
+.knowledge-panel[data-scroll-end="true"] {
+  --scroll-fade-end: 28px;
+}
+
+.knowledge-panel:is([data-scroll-start="true"], [data-scroll-end="true"]) {
+  mask-image: linear-gradient(
+    to bottom,
+    #000 var(--scroll-fade-offset),
+    transparent var(--scroll-fade-offset),
+    #000 calc(var(--scroll-fade-offset) + var(--scroll-fade-start)),
+    #000 calc(100% - var(--scroll-fade-bottom) - var(--scroll-fade-end)),
+    transparent calc(100% - var(--scroll-fade-bottom))
+  );
 }
 
 .workspace.is-panel-closed .knowledge-panel {
@@ -1403,9 +2410,24 @@ a:focus-visible {
   padding: 8px 0 30px;
 }
 
+/* The loading skeleton fills the panel exactly and clips, so the panel never scrolls while loading. */
+.knowledge-panel__content:has(> .knowledge-loading) {
+  height: 100%;
+}
+
 .knowledge-loading {
-  display: grid;
-  gap: 10px;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.knowledge-loading > * {
+  flex: 0 0 auto;
+}
+
+.knowledge-loading .panel-card {
+  padding-block-end: 20px;
 }
 
 .panel-hero--loading,
@@ -1430,14 +2452,24 @@ a:focus-visible {
   width: 68%;
 }
 
+/* Sizes follow the real panel: the "Knowledge" heading, a group label, then 80px knowledge cards 8px apart. */
 .skeleton--heading {
   width: 42%;
   height: 30px;
-  margin-block: 20px 4px;
+  margin-block: 28px 16px;
+}
+
+.skeleton--label {
+  width: 28%;
+  height: 14px;
+  margin-block: 28px 14px;
+  border-radius: 7px;
 }
 
 .skeleton--card {
   height: 80px;
+  margin-block-end: 8px;
+  border-radius: 16px;
 }
 
 @keyframes skeleton-shift {
@@ -1693,9 +2725,13 @@ a:focus-visible {
   background: color-mix(in srgb, var(--danger) 14%, transparent);
 }
 
-.icon-action[data-tooltip]::after {
+:where([data-tooltip]) {
+  position: relative;
+}
+
+[data-tooltip]::after {
   position: absolute;
-  z-index: 2;
+  z-index: 40;
   inset-block-end: calc(100% + 6px);
   inset-inline-end: 0;
   padding: 4px 8px;
@@ -1713,14 +2749,36 @@ a:focus-visible {
   transition: opacity 140ms, transform 140ms;
 }
 
-.icon-action[data-tooltip]:hover::after,
-.icon-action[data-tooltip]:focus-visible::after {
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after {
   opacity: 1;
   transform: none;
 }
 
-.icon-action[data-tooltip]:hover::after {
+[data-tooltip]:hover::after {
   transition-delay: 300ms;
+}
+
+[data-tooltip][aria-expanded="true"]::after,
+[data-tooltip]:disabled::after {
+  display: none;
+}
+
+[data-tooltip-side="bottom"]::after {
+  inset-block-start: calc(100% + 6px);
+  inset-block-end: auto;
+  transform: translateY(-2px);
+}
+
+[data-tooltip-align="start"]::after {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+}
+
+@media (hover: none) {
+  [data-tooltip]:hover:not(:focus-visible)::after {
+    opacity: 0;
+  }
 }
 
 .attachment-list {
@@ -1769,6 +2827,7 @@ a:focus-visible {
 
 .app[data-mode="studio"] .knowledge-panel {
   padding-block-start: 0;
+  scroll-padding-block-start: 64px;
 }
 
 .studio-bar {
@@ -1785,7 +2844,6 @@ a:focus-visible {
 
 .studio-form,
 .studio-section,
-.inline-form,
 .knowledge-form,
 .order-list,
 .order-row {
@@ -1802,6 +2860,18 @@ a:focus-visible {
   flex: 0 0 auto;
   align-items: center;
   gap: 6px;
+  margin-inline-start: auto;
+}
+
+/*
+ * Undo/Redo and the save status are one group, so the status can never wrap away from them. The group keeps room for
+ * the status icon; when the bar is too narrow, the actions wrap to their own row instead.
+ */
+.studio-bar__status {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  gap: inherit;
 }
 
 .studio-bar__history {
@@ -1843,22 +2913,39 @@ a:focus-visible {
   border-radius: 999px;
 }
 
+/* Save status follows Undo/Redo as one group; the slot absorbs free space so the label never shifts its neighbors. */
+.save-state-slot {
+  display: flex;
+  min-width: 20px;
+  flex: 1 1 0;
+  justify-content: flex-start;
+}
+
 .save-state {
   display: inline-flex;
   min-width: 0;
-  flex: 1 1 0;
+  max-width: 100%;
   align-items: center;
   gap: 6px;
   margin-inline: 4px 0;
   color: var(--muted);
   font-size: 12px;
   font-weight: 700;
+  transition: color 240ms;
 }
 
-.save-state > span:last-child {
+.save-state__label {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  opacity: 0;
+  transition: opacity 420ms ease-out;
+}
+
+.save-state__label[data-visible="true"] {
+  opacity: 1;
+  transition-duration: 160ms;
 }
 
 .save-state .icon,
@@ -1868,12 +2955,17 @@ a:focus-visible {
   flex: 0 0 auto;
 }
 
-.save-state--saved .icon {
-  color: var(--success);
+.save-state--idle .icon {
+  opacity: 0.7;
 }
 
 .save-state--error {
   color: var(--danger);
+}
+
+.save-state--saving,
+.save-state--flash {
+  color: var(--text);
 }
 
 .field-error {
@@ -1881,9 +2973,154 @@ a:focus-visible {
 }
 
 .studio-heading {
-  padding: 20px 22px;
+  position: relative;
+  display: flex;
+  min-height: 168px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  overflow: hidden;
+  padding: 14px 22px 20px;
   border-radius: 22px 22px 0 0;
   background: linear-gradient(135deg, #80211e, #291008 78%);
+  color: #ffffff;
+}
+
+.studio-heading--cover::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(var(--cover-shade), rgba(0, 0, 0, 0.82));
+  content: "";
+  pointer-events: none;
+}
+
+.studio-heading__copy,
+.studio-cover-actions {
+  position: relative;
+  z-index: 1;
+}
+
+.studio-cover-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.cover-upload-slot {
+  position: relative;
+  display: block;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+}
+
+.cover-upload {
+  --cover-collapsed: inset(0 0 0 calc(100% - 38px) round 19px);
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  display: flex;
+  height: 38px;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10.5px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bar);
+  box-shadow: inset 0 0 0 0.5px var(--line);
+  color: var(--text);
+  backdrop-filter: blur(20px);
+  cursor: pointer;
+  white-space: nowrap;
+  /* The pill is always laid out at full size; clipping reveals it, so neither it nor its neighbours re-layout. */
+  clip-path: var(--cover-collapsed);
+  transition: clip-path 260ms var(--spring), background 180ms;
+}
+
+:root[dir="rtl"] .cover-upload {
+  --cover-collapsed: inset(0 calc(100% - 38px) 0 0 round 19px);
+}
+
+.cover-upload .icon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+}
+
+.cover-upload__label {
+  font-size: 13px;
+  font-weight: 650;
+  opacity: 0;
+  transition: opacity 180ms;
+}
+
+.cover-upload:focus-visible {
+  clip-path: inset(-6px round 25px);
+}
+
+.cover-upload:focus-visible .cover-upload__label {
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .cover-upload:hover {
+    clip-path: inset(0 round 19px);
+  }
+
+  .cover-upload:hover .cover-upload__label {
+    opacity: 1;
+  }
+}
+
+.cover-upload:hover,
+.cover-upload:focus-visible {
+  background: var(--line);
+}
+
+.cover-upload:focus-visible {
+  border-radius: 999px;
+}
+
+.cover-upload:disabled {
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.cover-badge,
+.home-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cover-badge {
+  margin-inline-end: auto;
+  background: rgba(0, 0, 0, 0.38);
+  color: rgba(255, 255, 255, 0.78);
+  font-weight: 650;
+  backdrop-filter: blur(12px);
+}
+
+.home-badge {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.home-badge .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.home-badge--hero {
+  margin-block-end: 8px;
+  background: rgba(0, 0, 0, 0.45);
   color: #ffffff;
 }
 
@@ -1900,10 +3137,15 @@ a:focus-visible {
 
 .studio-form {
   display: grid;
-  gap: 16px;
-  padding: 20px 22px 32px;
+  padding: 20px 22px 0;
   border-radius: 0 0 22px 22px;
   background: var(--panel);
+}
+
+.studio-fields {
+  display: grid;
+  gap: 16px;
+  padding-block-end: var(--studio-section-space);
 }
 
 .studio-form label,
@@ -1912,6 +3154,20 @@ a:focus-visible {
   gap: 7px;
 }
 
+.studio-field {
+  display: grid;
+  gap: 7px;
+}
+
+.studio-field__label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 10px;
+}
+
+.studio-field__label > label,
 .studio-form label > span {
   color: var(--muted);
   font-size: 13px;
@@ -1944,10 +3200,6 @@ a:focus-visible {
   justify-self: start;
 }
 
-.inline-form .pill {
-  min-height: 44px;
-}
-
 .studio-form input,
 .studio-form textarea,
 .studio-form select {
@@ -1974,96 +3226,459 @@ a:focus-visible {
   border-color: var(--danger);
 }
 
+/* Grows with its text from 5 to 16 lines (StudioPanel sets the height), then scrolls. 23px is padding plus border. */
+.studio-form textarea.studio-description {
+  min-height: calc(5lh + 23px);
+  max-height: calc(16lh + 23px);
+  overflow-y: auto;
+  resize: none;
+}
+
+/*
+ * One section rule: every Studio section owns its separator (border-block-start) and has equal padding-block, and its
+ * children are spaced only by the grid gap, so each section's content sits centred between its separators. The last
+ * section closes against the card's bottom edge.
+ */
+.studio-panel {
+  --studio-section-space: 20px;
+}
+
 .studio-section {
-  padding-block-start: 4px;
+  display: grid;
+  gap: 12px;
+  padding-block: var(--studio-section-space);
   border-block-start: 0.5px solid var(--line);
 }
 
 .studio-section h2 {
-  margin: 16px 0 10px;
+  margin: 0;
   font-size: 16px;
+  line-height: 1.3;
 }
 
-.studio-delete {
+.studio-field__label .text-action {
+  min-height: 32px;
+  font-size: 13px;
+}
+
+.studio-section__header {
   display: flex;
-  justify-content: center;
-  padding-block: 24px 4px;
+  min-height: 36px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
 }
 
-.studio-delete > .pill {
-  max-width: 100%;
-  justify-content: center;
-  padding-block: 8px;
-  text-align: center;
+.studio-secondary {
+  min-height: 36px;
+  padding-inline: 12px;
 }
 
-.inline-form {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
-}
-
-.relationship-chips {
+.studio-folder-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
-  margin-block-end: 10px;
-}
-
-.relationship-chip {
-  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 7px 5px 11px;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 700;
+  justify-content: space-between;
+  gap: 8px 12px;
 }
 
-.relationship-chip button {
-  width: 26px;
-  height: 26px;
+.studio-folder-row > span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.upload-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
   padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
+  list-style: none;
 }
 
-.relationship-chip button .icon {
-  width: 15px;
-  height: 15px;
-}
-
-.order-list {
+.upload-list li {
   display: grid;
-  gap: 6px;
-  margin-block-end: 10px;
-}
-
-.order-row {
-  display: grid;
-  grid-template-columns: 20px minmax(0, 1fr) 34px 34px;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 4px;
-  min-height: 42px;
-  padding: 5px 7px 5px 12px;
+  gap: 4px 8px;
+  padding: 8px 11px;
   border-radius: 11px;
+  background: var(--panel-raised);
+  font-size: 13px;
+}
+
+.upload-list .icon {
+  width: 17px;
+  height: 17px;
+  color: var(--accent);
+}
+
+.upload-list li[data-status="done"] .icon {
+  color: var(--success);
+}
+
+.upload-list li[data-status="error"] .icon {
+  color: var(--danger);
+}
+
+.upload-list__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload-list small {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.upload-list .field-error {
+  grid-column: 2 / -1;
+  overflow-wrap: anywhere;
+}
+
+.upload-list li[data-status="error"] .upload-list__name {
+  grid-column: 2 / -1;
+}
+
+.upload-list progress {
+  grid-column: 2 / -1;
+  width: 100%;
+  height: 4px;
+  accent-color: var(--accent);
+}
+
+.studio-delete h2 {
+  color: var(--danger);
+  white-space: nowrap;
+}
+
+.studio-delete .pill {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  white-space: nowrap;
+}
+
+.pill--danger:hover,
+.pill--danger:focus-visible {
+  background: var(--danger);
+  color: #ffffff;
+}
+
+/* Matches the Topic combobox field: one 44px raised field with the Add action inside its inline end. */
+.inline-add {
+  display: grid;
+  min-width: 0;
+  min-height: 44px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  padding-inline-end: 4px;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
   background: var(--panel-raised);
 }
 
-.order-row > .icon {
-  width: 18px;
-  height: 18px;
+.inline-add:focus-within {
+  border-color: var(--accent);
+}
+
+.inline-add:has(input:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.studio-form .inline-add input {
+  min-height: 41px;
+  border: 0;
+  background: transparent;
+}
+
+.studio-form .inline-add input:focus-visible {
+  outline: 0;
+}
+
+.studio-form .inline-add input::placeholder,
+.studio-form .topic-combobox input::placeholder {
   color: var(--muted);
+  opacity: 1;
+}
+
+.inline-add__action {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 5px;
+  padding-inline: 9px 11px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 180ms, color 180ms;
+}
+
+.inline-add__action:hover,
+.inline-add__action:focus-visible {
+  background: var(--accent-soft);
+}
+
+.inline-add__action:focus-visible {
+  outline-offset: 0;
+}
+
+.inline-add__action:disabled {
+  background: transparent;
+  color: var(--muted);
+  cursor: default;
+  opacity: 0.6;
+}
+
+.inline-add__action[aria-busy="true"]:disabled {
+  cursor: progress;
+}
+
+.inline-add__action .icon,
+.inline-add__action .spinner {
+  width: 16px;
+  height: 16px;
+}
+
+.topic-combobox {
+  position: relative;
+}
+
+.topic-combobox__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.topic-combobox__field > .icon,
+.topic-combobox__field > .spinner {
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.topic-combobox__field > .icon {
+  inset-inline-start: 12px;
+}
+
+.topic-combobox__field > .spinner {
+  inset-inline-end: 12px;
+}
+
+.studio-form .topic-combobox input {
+  padding-inline: 38px;
+}
+
+.topic-combobox__list {
+  position: absolute;
+  z-index: 12;
+  inset-block-start: calc(100% + 6px);
+  inset-inline: 0;
+  display: grid;
+  max-height: 260px;
+  gap: 2px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 5px;
+  border: 0.5px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  list-style: none;
+}
+
+.topic-combobox__list[data-placement="above"] {
+  inset-block-start: auto;
+  inset-block-end: calc(100% + 6px);
+}
+
+.topic-combobox__list[hidden] {
+  display: none;
+}
+
+.topic-combobox__option {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.topic-combobox__option[aria-selected="true"] {
+  background: var(--accent-soft);
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* "Create and link new Topic…" and trailing actions such as "Link another Project…" share one option style. */
+.topic-combobox__option[data-kind="create"],
+.topic-combobox__option[data-kind="action"] {
+  position: relative;
+  margin-block-start: 5px;
+  color: var(--accent);
+  font-weight: 650;
+}
+
+.topic-combobox__option[data-kind="create"]:not(:first-child)::before,
+.topic-combobox__option[data-kind="action"]::before {
+  position: absolute;
+  inset-block-start: -3px;
+  inset-inline: 10px;
+  border-block-start: 0.5px solid var(--line);
+  content: "";
+}
+
+.topic-combobox__option[aria-disabled="true"] {
+  color: var(--muted);
+  cursor: default;
+}
+
+.topic-combobox__option .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.topic-combobox__option > span {
+  flex: 0 0 auto;
+}
+
+.topic-combobox__option[data-kind="topic"] > span {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topic-combobox__option small {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.order-list {
+  position: relative;
+  display: grid;
+  gap: 6px;
+}
+
+.order-list:empty {
+  display: none;
+}
+
+.order-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 34px 34px;
+  align-items: center;
+  gap: 4px;
+  min-height: 42px;
+  padding-block: 5px;
+  padding-inline: 4px 7px;
+  border-radius: 11px;
+  background: var(--panel-raised);
+  transition: box-shadow 160ms, scale 160ms;
+}
+
+.order-row--removable {
+  grid-template-columns: 24px minmax(0, 1fr) 34px 34px 34px;
+}
+
+.order-row > span[dir] {
+  overflow-wrap: anywhere;
+}
+
+.order-row__title {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 7px;
+}
+
+.order-row__title .icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  color: var(--accent);
+}
+
+.order-grip {
+  display: grid;
+  width: 24px;
+  height: 32px;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.order-grip:hover {
+  background: var(--line);
+  color: var(--text);
+}
+
+.order-grip .icon {
+  width: 17px;
+  height: 17px;
+}
+
+.order-list[data-dragging] {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.order-list[data-dragging] .order-grip {
+  cursor: grabbing;
+}
+
+.order-row.is-dragging {
+  z-index: 2;
+  box-shadow: 0 0 0 1px var(--accent), var(--shadow);
+  scale: 1.01;
+}
+
+/* While dragging, the other rows slide aside to open the drop slot. The settle frame after a drop has no
+   transitions, so rows appear in their new order without sliding again. */
+.order-list[data-dragging] .order-row:not(.is-dragging) {
+  transition: transform 180ms cubic-bezier(0.2, 0, 0, 1), box-shadow 160ms, scale 160ms;
+}
+
+.order-list[data-settling] .order-row {
+  transition: none;
+}
+
+.order-row button.order-row__remove {
+  color: var(--danger);
+}
+
+.order-row button.order-row__remove:hover,
+.order-row button.order-row__remove:focus-visible {
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
 }
 
 .order-row button {
+  display: grid;
   width: 34px;
   height: 32px;
+  place-items: center;
   padding: 0;
   border: 0;
   border-radius: 9px;
@@ -2075,7 +3690,11 @@ a:focus-visible {
 .order-row button .icon {
   width: 17px;
   height: 17px;
-  margin: auto;
+}
+
+.order-row button:hover,
+.order-row button:focus-visible {
+  background: var(--accent-soft);
 }
 
 .order-row button:disabled {
@@ -2305,9 +3924,44 @@ a:focus-visible {
   width: min(760px, calc(100% - 36px));
 }
 
-.transfer-dialog h2 {
+/* Every dialog form stacks its fields, notes and errors on one 16px rhythm; an error sits closer to its field, and
+   the actions keep the standard 20px separation. */
+.authoring-dialog > form {
+  display: grid;
+  gap: 16px;
+}
+
+.authoring-dialog > form > p {
   margin: 0;
+}
+
+.authoring-dialog > form > .field-error {
+  margin-block-start: -8px;
+  font-size: 13px;
+}
+
+.authoring-dialog > form > .dialog-actions {
+  margin-block-start: 4px;
+}
+
+.field__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field__label .spinner {
+  width: 13px;
+  height: 13px;
+}
+
+.transfer-dialog h2 {
+  margin: 0 0 16px;
   font-size: 24px;
+}
+
+.transfer-dialog h2 + .dialog-intro {
+  margin-block-start: -6px;
 }
 
 .import-summary {
@@ -2649,11 +4303,34 @@ a:focus-visible {
   font-size: 20px;
 }
 
-.search-filters {
+/* Scope and kind filters share one row; on narrow screens the filters wrap below the scope. */
+.search-controls {
   display: flex;
   flex-shrink: 0;
-  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
   padding: 10px 16px 4px;
+}
+
+.search-scope {
+  flex: 0 0 auto;
+  grid-template-columns: repeat(2, auto);
+}
+
+.search-scope button {
+  min-height: 28px;
+  padding-inline: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.search-filters {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  gap: 6px;
   overflow-x: auto;
 }
 
@@ -2685,6 +4362,52 @@ a:focus-visible {
   white-space: nowrap;
   color: var(--muted);
   font-size: 12px;
+}
+
+/* Partial-index notes read like the result count above them: small, muted, one line each. */
+.search-notes {
+  display: grid;
+  flex: 0 0 auto;
+  gap: 2px;
+  padding: 0 18px 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.search-notes p {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.search-notes .icon {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 auto;
+}
+
+.search-result__source {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.search-result__source .icon {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 auto;
+}
+
+.search-result__source > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .search-results {
@@ -2731,7 +4454,6 @@ a:focus-visible {
   align-items: center;
   column-gap: 14px;
   padding: 10px 18px;
-  direction: ltr;
   border: 0;
   background: transparent;
   color: var(--text);
@@ -2769,11 +4491,6 @@ a:focus-visible {
   min-width: 0;
   gap: 4px;
   text-align: start;
-}
-
-:root[dir="rtl"] .search-result__copy,
-:root[dir="rtl"] .search-result__type {
-  direction: rtl;
 }
 
 .search-result__copy strong {
@@ -2831,30 +4548,198 @@ a:focus-visible {
   display: none;
 }
 
-@media (min-width: 640px) and (max-height: 820px) {
+/* Two columns: Projects and Recent on one side, the current Project and preferences on the other, split by one rule. */
+@media (min-width: 768px) {
   .settings-popover {
     width: min(620px, calc(100vw - 24px));
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-    grid-template-rows: auto auto 1fr auto;
-    grid-template-areas: "language project" "appearance project" "recent project" "version version";
+    grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1.15fr);
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas: "project rule current" "recent rule preferences" "version version version";
     column-gap: 18px;
   }
 
-  .settings-section--project {
-    padding-inline-start: 18px;
+  .settings-popover::before {
+    width: 0;
+    grid-area: rule;
+    justify-self: center;
     border-inline-start: 0.5px solid var(--line);
+    content: "";
+  }
+
+  .settings-section--current {
+    padding-block-start: 0;
+    border-block-start: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  /* One full-width column that stops above the fixed mobile tab bar. */
+  .settings-popover {
+    width: calc(100vw - 24px);
+    max-height: calc(100dvh - 132px - env(safe-area-inset-bottom));
+  }
+
+}
+
+.duplicate-choices,
+.portal-overflow-list {
+  display: grid;
+  gap: 2px;
+}
+
+.portal-overflow-section + .portal-overflow-section {
+  margin-block-start: 12px;
+}
+
+.portal-overflow-section__title {
+  margin: 0 10px 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Copy choices read like the Recent list: one row per folder, with the identity action as a quiet secondary line. */
+.duplicate-choice {
+  display: grid;
+  gap: 2px;
+  padding-block: 4px;
+  border-block-end: 0.5px solid var(--line);
+}
+
+.duplicate-choice:last-child {
+  border-block-end: 0;
+}
+
+.duplicate-choice__main,
+.portal-overflow-list button {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.portal-overflow-list button {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+}
+
+.portal-overflow-list button .icon {
+  width: 17px;
+  height: 17px;
+  grid-row: span 2;
+  color: var(--accent);
+}
+
+.duplicate-choice__main:hover,
+.duplicate-choice__main:focus-visible,
+.portal-overflow-list button:hover,
+.portal-overflow-list button:focus-visible {
+  background: var(--panel-raised);
+}
+
+.duplicate-choice__main strong {
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.duplicate-choice__main span,
+.duplicate-choice__main small,
+.portal-overflow-list small {
+  color: var(--muted);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.duplicate-choice__main small {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.duplicate-choice .text-action {
+  justify-self: start;
+  margin-inline: 10px;
+  padding-block: 4px 8px;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.duplicate-remember {
+  margin-block-start: 12px;
+}
+
+.import-body {
+  display: grid;
+  gap: 18px;
+  margin-block-start: 18px;
+}
+
+.import-body .import-summary {
+  margin: 0;
+}
+
+/* A plain labelled group: the legend matches field labels and each option is a full-height check row. */
+.import-mode {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.import-mode legend {
+  margin-block-end: 5px;
+  padding: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.check-field input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+@media (max-width: 420px) {
+  .studio-bar {
+    gap: 4px;
+  }
+
+  .studio-bar .pill {
+    gap: 5px;
+    padding-inline: 9px;
+    font-size: 13px;
+  }
+
+  .studio-bar .pill > .icon,
+  .studio-bar .pill > .spinner {
+    width: 15px;
+    height: 15px;
+  }
+
+  .studio-bar__close {
+    width: 36px;
+    height: 36px;
+    margin-inline-start: 0;
+  }
+
+  .studio-bar__history .tool {
+    width: 30px;
   }
 }
 
 @media (max-width: 639px) {
-  .settings-action-group {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .settings-action-group .popover-action {
-    font-size: 13px;
-  }
-
   .search-dialog {
     --search-type-column: 6.25rem;
   }
@@ -2892,6 +4777,18 @@ a:focus-visible {
     height: 98px;
   }
 
+  /* Portals keep their compact frame; 44px still meets the touch target size. */
+  .map-node--portal {
+    width: 44px;
+    height: 44px;
+  }
+
+  .map-node--portal-overflow.pill {
+    inset-block-start: 66px;
+    inset-inline-start: 12px;
+    max-width: calc(100% - 24px);
+  }
+
   .knowledge-panel {
     position: absolute;
     z-index: 10;
@@ -2899,6 +4796,9 @@ a:focus-visible {
     width: auto;
     padding: 16px 16px 92px;
     background: var(--background);
+    /* The fixed mobile tab bar covers the bottom of the panel, so the bottom fade ends above it. */
+    --scroll-fade-bottom: calc(64px + env(safe-area-inset-bottom));
+    scroll-padding-block-end: calc(64px + env(safe-area-inset-bottom));
   }
 
   .workspace.is-panel-closed .knowledge-panel {
@@ -2921,8 +4821,36 @@ a:focus-visible {
     inset-inline-start: 12px;
   }
 
+  /* History collapses to a circular icon button the height of the map toolbar, aligned with it. */
   .history-control {
+    inset-block-start: 10px;
+    right: 12px;
+  }
+
+  .history-trigger {
+    width: 46px;
+    min-height: 46px;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .history-trigger > span,
+  .history-trigger .icon:last-child {
     display: none;
+  }
+
+  .history-trigger .icon:first-child {
+    width: 20px;
+    height: 20px;
+  }
+
+  .history-popover {
+    width: min(300px, calc(100vw - 24px));
+    max-height: min(340px, calc(100dvh - 220px - env(safe-area-inset-bottom)));
+  }
+
+  .history-popover button {
+    min-height: 44px;
   }
 
   .map-zoom {
@@ -2937,6 +4865,11 @@ a:focus-visible {
     width: auto;
     transform: none;
     border-radius: 22px 22px 0 0;
+  }
+
+  .universe-details__actions .pill {
+    flex: 1 1 auto;
+    justify-content: center;
   }
 
   .relationship-navigator {
@@ -2985,9 +4918,21 @@ a:focus-visible {
     transition: none !important;
   }
 
-  .spinner,
+  .spinner {
+    animation: spinner-pulse 1.6s ease-in-out infinite !important;
+  }
+
+  .brand:hover {
+    transform: none;
+  }
+
+  .brand:hover .brand-mark,
   .brand[data-loading="true"] .brand-mark,
   .empty-region[data-loading="true"] .empty-orbit__mark {
-    animation: spinner-pulse 1.6s ease-in-out infinite !important;
+    filter: var(--brand-shadow) var(--brand-glow-faint);
+  }
+
+  .brand:hover .brand-name {
+    text-shadow: var(--brand-text-glow-off);
   }
 }

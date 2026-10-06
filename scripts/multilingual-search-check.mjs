@@ -14,7 +14,7 @@ const topics = [
 const project = {
   manifest: {
     format: "outmapper-project",
-    formatVersion: 1,
+    formatVersion: 2,
     id: "multilingual-search-check",
     title: "Multilingual Search Check",
     createdAt: timestamp,
@@ -25,6 +25,7 @@ const project = {
   topics,
   keyIssues: [],
   relationships: [],
+  projectLinks: [],
   knowledgeItems: [
     {
       id: "knowledge-filter",

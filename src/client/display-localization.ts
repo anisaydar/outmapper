@@ -1257,7 +1257,7 @@ export function localizeDisplayProject(project: CanonicalProject, locale: Locale
 }
 
 export function localizeSearchHit(hit: SearchHit, locale: Locale, projectId?: string): SearchHit {
-  if (projectId !== "project-ai-landscape") return hit;
+  if (projectId !== "project-ai-landscape" || hit.sourceProjectId && hit.sourceProjectId !== projectId) return hit;
   const dictionary = dictionaries[locale];
   const copy = hit.kind === "topic" ? dictionary.topics[hit.id] : hit.kind === "keyIssue" ? dictionary.keyIssues[hit.id] : dictionary.knowledge[hit.id];
   if (!copy) return hit;

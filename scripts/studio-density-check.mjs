@@ -12,7 +12,7 @@ function denseProject() {
   for (let index = 0; index < 60; index += 1) topics.push({ id: `topic-${index}`, title: `Related ${index + 1}`, createdAt: timestamp, updatedAt: timestamp });
   const keyIssues = Array.from({ length: 24 }, (_, index) => ({ id: `issue-${index}`, topicId: "topic-center", title: `Key Issue ${index + 1}`, order: index, createdAt: timestamp, updatedAt: timestamp }));
   const relationships = Array.from({ length: 240 }, (_, index) => ({ id: `relationship-${index}`, sourceTopicId: "topic-center", keyIssueId: index < 120 ? "issue-0" : `issue-${1 + (index % 23)}`, targetTopicId: `topic-${index % 60}`, order: index < 120 ? index : Math.floor(index / 23), createdAt: timestamp, updatedAt: timestamp }));
-  return { manifest: { format: "outmapper-project", formatVersion: 1, id: "studio-density-check", title: "Dense Studio", createdAt: timestamp, updatedAt: timestamp, revision: 0, homeTopicId: "topic-center" }, topics, keyIssues, relationships, knowledgeItems: [], associations: [], assets: [], collections: [], snapshots: [] };
+  return { manifest: { format: "outmapper-project", formatVersion: 2, id: "studio-density-check", title: "Dense Studio", createdAt: timestamp, updatedAt: timestamp, revision: 0, homeTopicId: "topic-center" }, topics, keyIssues, relationships, projectLinks: [], knowledgeItems: [], associations: [], assets: [], collections: [], snapshots: [] };
 }
 
 async function waitForServer() {
@@ -56,7 +56,7 @@ try {
   const title = page.getByLabel("Title", { exact: true });
   await title.fill("Edited dense issue");
   await page.waitForTimeout(550);
-  await page.getByRole("button", { name: /Move later: topic-/ }).first().click();
+  await page.getByRole("button", { name: /Move later: Related/ }).first().click();
   await page.waitForTimeout(50);
   const metrics = await page.evaluate(() => {
     const panel = document.querySelector(".knowledge-panel");
@@ -64,7 +64,7 @@ try {
       scrollable: Boolean(panel && panel.scrollHeight > panel.clientHeight),
       panelScrollHeight: panel?.scrollHeight ?? 0,
       panelClientHeight: panel?.clientHeight ?? 0,
-      relationshipChips: document.querySelectorAll(".relationship-chip").length,
+      relationshipRows: document.querySelectorAll(".studio-section .order-row").length,
       focusableControls: document.querySelectorAll(".studio-panel button:not(:disabled), .studio-panel input, .studio-panel textarea, .studio-panel select").length,
       title: document.querySelector(".studio-heading h1")?.textContent
     };
@@ -72,7 +72,7 @@ try {
   await page.setViewportSize({ width: 920, height: 800 });
   const panelVisibleAtTablet = await page.locator(".knowledge-panel").isVisible();
   const result = { studioReadyMs: Number(studioReadyMs.toFixed(1)), mutationCount, panelVisibleAtTablet, ...metrics };
-  result.accepted = studioReadyMs < 2000 && mutationCount >= 2 && metrics.scrollable && metrics.relationshipChips === 120 && metrics.focusableControls >= 10 && metrics.title === "Edited dense issue" && panelVisibleAtTablet;
+  result.accepted = studioReadyMs < 2000 && mutationCount >= 2 && metrics.scrollable && metrics.relationshipRows === 120 && metrics.focusableControls >= 10 && metrics.title === "Edited dense issue" && panelVisibleAtTablet;
   console.log(JSON.stringify(result));
   if (!result.accepted) process.exitCode = 1;
   await context.close();

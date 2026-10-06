@@ -6,7 +6,7 @@ export type JsonObject = { [key: string]: JsonValue };
 
 export interface ProjectManifest {
   format: "outmapper-project";
-  formatVersion: 1;
+  formatVersion: 2;
   id: EntityId;
   title: string;
   description?: string;
@@ -51,6 +51,21 @@ export interface TopicRelationship {
   targetTopicId: EntityId;
   order?: number;
   relationType?: string;
+  note?: string;
+  metadata?: JsonObject;
+  createdAt: IsoTimestamp;
+  updatedAt: IsoTimestamp;
+}
+
+export interface ProjectLink {
+  id: EntityId;
+  sourceTopicId: EntityId;
+  keyIssueId: EntityId;
+  targetProjectId: EntityId;
+  targetTopicId?: EntityId;
+  cachedProjectTitle: string;
+  cachedTopicTitle?: string;
+  order?: number;
   note?: string;
   metadata?: JsonObject;
   createdAt: IsoTimestamp;
@@ -134,6 +149,7 @@ export interface CanonicalProject {
   topics: Topic[];
   keyIssues: KeyIssue[];
   relationships: TopicRelationship[];
+  projectLinks: ProjectLink[];
   knowledgeItems: KnowledgeItem[];
   associations: KnowledgeAssociation[];
   assets: Asset[];

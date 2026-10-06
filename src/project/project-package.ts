@@ -23,7 +23,7 @@ import {
 import type { CanonicalProject } from "../domain/types.js";
 import { SqliteSearchAdapter } from "../search/sqlite-search-adapter.js";
 import { AssetStoreError, assertMimeMatches, sniffAssetMime } from "./asset-store.js";
-import { FileSystemProjectStore } from "./filesystem-project-store.js";
+import { CANONICAL_PROJECT_FILES, FileSystemProjectStore } from "./filesystem-project-store.js";
 import { normalizeProjectPath, resolveProjectPath } from "./paths.js";
 import { serializeCanonicalJson } from "./serialization.js";
 
@@ -154,6 +154,25 @@ async function sha256File(filePath: string, signal?: AbortSignal): Promise<strin
   const hash = createHash("sha256");
   for await (const chunk of createReadStream(filePath, { signal })) hash.update(chunk as Buffer);
   return hash.digest("hex");
+}
+
+function sha256Text(content: string): string {
+  return createHash("sha256").update(content).digest("hex");
+}
+
+export function referencedAssetIds(project: CanonicalProject): Set<string> {
+  const ids = new Set<string>();
+  for (const topic of project.topics) if (topic.visualAssetId) ids.add(topic.visualAssetId);
+  for (const issue of project.keyIssues) if (issue.visualAssetId) ids.add(issue.visualAssetId);
+  for (const item of project.knowledgeItems) for (const assetId of item.attachmentAssetIds ?? []) ids.add(assetId);
+  for (const assetId of project.theme?.brandingAssetIds ?? []) ids.add(assetId);
+  for (const snapshot of project.snapshots) for (const assetId of snapshot.assetIds) ids.add(assetId);
+  return ids;
+}
+
+export function projectForExport(project: CanonicalProject): CanonicalProject {
+  const used = referencedAssetIds(project);
+  return { ...project, assets: project.assets.filter(({ id }) => used.has(id)) };
 }
 
 async function projectFiles(projectDirectory: string): Promise<string[]> {
@@ -326,14 +345,22 @@ export class ProjectPackageService {
   async exportTo(outputPath: string, signal?: AbortSignal): Promise<ProjectPackageManifest> {
     abortIfNeeded(signal);
     const project = await new FileSystemProjectStore(this.projectDirectory).open();
-    await validateManagedFiles(this.projectDirectory, project, signal);
-    const logicalPaths = await projectFiles(this.projectDirectory);
+    const exportedProject = projectForExport(project);
+    await validateManagedFiles(this.projectDirectory, exportedProject, signal);
+    const usedAssetPaths = new Set(exportedProject.assets.map(({ path: assetPath }) => assetPath));
+    const logicalPaths = (await projectFiles(this.projectDirectory)).filter((logicalPath) =>
+      !logicalPath.startsWith("assets/") || usedAssetPaths.has(logicalPath));
+    const assetRecords = serializeCanonicalJson(exportedProject.assets);
     const entries: ProjectPackageEntry[] = [];
     for (const logicalPath of logicalPaths) {
       abortIfNeeded(signal);
-      const filePath = resolveProjectPath(this.projectDirectory, logicalPath);
-      const fileStats = await stat(filePath);
-      entries.push({ path: logicalPath, byteSize: fileStats.size, sha256: await sha256File(filePath, signal) });
+      if (logicalPath === CANONICAL_PROJECT_FILES.assets) {
+        entries.push({ path: logicalPath, byteSize: Buffer.byteLength(assetRecords), sha256: sha256Text(assetRecords) });
+      } else {
+        const filePath = resolveProjectPath(this.projectDirectory, logicalPath);
+        const fileStats = await stat(filePath);
+        entries.push({ path: logicalPath, byteSize: fileStats.size, sha256: await sha256File(filePath, signal) });
+      }
     }
     const manifest: ProjectPackageManifest = {
       format: "outmapper-package",
@@ -352,7 +379,10 @@ export class ProjectPackageService {
       });
       for (const entry of entries) {
         abortIfNeeded(signal);
-        await writer.add(entry.path, new BlobReader(await openAsBlob(resolveProjectPath(this.projectDirectory, entry.path))), {
+        const reader = entry.path === CANONICAL_PROJECT_FILES.assets
+          ? new TextReader(assetRecords)
+          : new BlobReader(await openAsBlob(resolveProjectPath(this.projectDirectory, entry.path)));
+        await writer.add(entry.path, reader, {
           level: 6,
           lastModDate: new Date("1980-01-01T00:00:00.000Z"),
           signal,

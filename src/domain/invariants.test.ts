@@ -38,4 +38,23 @@ describe("domain invariants", () => {
 
     expect(() => assertDomainInvariants(project)).toThrow("requires an HTTP(S) URL");
   });
+
+  it("enforces Project Link ownership, external targets, and uniqueness", () => {
+    const project = createValidProject();
+    const link = {
+      id: "link-1",
+      sourceTopicId: "topic-1",
+      keyIssueId: "issue-1",
+      targetProjectId: "project-2",
+      cachedProjectTitle: "Second Project",
+      createdAt: "2026-09-30T00:00:00.000Z",
+      updatedAt: "2026-09-30T00:00:00.000Z"
+    };
+    project.projectLinks.push(link);
+    expect(() => assertDomainInvariants(project)).not.toThrow();
+    project.projectLinks.push({ ...link, id: "link-2" });
+    expect(() => assertDomainInvariants(project)).toThrow("same Project target");
+    project.projectLinks = [{ ...link, targetProjectId: project.manifest.id }];
+    expect(() => assertDomainInvariants(project)).toThrow("different Project");
+  });
 });

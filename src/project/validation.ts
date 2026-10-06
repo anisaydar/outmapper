@@ -1,5 +1,5 @@
 import { Ajv2020, type ErrorObject } from "ajv/dist/2020.js";
-import canonicalProjectSchema from "../../schemas/v1/canonical-project.schema.json" with { type: "json" };
+import canonicalProjectSchema from "../../schemas/v2/canonical-project.schema.json" with { type: "json" };
 import type { CanonicalProject } from "../domain/types.js";
 import { normalizeProjectPath } from "./paths.js";
 
@@ -104,6 +104,27 @@ function referenceIssues(project: CanonicalProject): ValidationIssue[] {
     }
   }
 
+  const linkTargets = new Set<string>();
+  for (const link of project.projectLinks) {
+    const issue = keyIssues.get(link.keyIssueId);
+    if (!topics.has(link.sourceTopicId)) {
+      issues.push({ path: `/projectLinks/${link.id}/sourceTopicId`, message: "does not reference a Topic" });
+    }
+    if (!issue) {
+      issues.push({ path: `/projectLinks/${link.id}/keyIssueId`, message: "does not reference a Key Issue" });
+    } else if (issue.topicId !== link.sourceTopicId) {
+      issues.push({ path: `/projectLinks/${link.id}/keyIssueId`, message: "belongs to a different source Topic" });
+    }
+    if (link.targetProjectId === project.manifest.id) {
+      issues.push({ path: `/projectLinks/${link.id}/targetProjectId`, message: "must reference a different Project" });
+    }
+    const key = `${link.keyIssueId}\u0000${link.targetProjectId}\u0000${link.targetTopicId ?? ""}`;
+    if (linkTargets.has(key)) {
+      issues.push({ path: `/projectLinks/${link.id}`, message: "duplicates a Project Link target under this Key Issue" });
+    }
+    linkTargets.add(key);
+  }
+
   for (const item of project.knowledgeItems) {
     if (item.availability === "external" && (!item.externalUrl || !isSafeExternalUrl(item.externalUrl))) {
       issues.push({ path: `/knowledgeItems/${item.id}/externalUrl`, message: "must be an HTTP(S) URL" });
@@ -175,6 +196,7 @@ export function validateProject(value: unknown): ProjectValidationResult {
     ...duplicateIssues("topics", project.topics),
     ...duplicateIssues("keyIssues", project.keyIssues),
     ...duplicateIssues("relationships", project.relationships),
+    ...duplicateIssues("projectLinks", project.projectLinks),
     ...duplicateIssues("knowledgeItems", project.knowledgeItems),
     ...duplicateIssues("associations", project.associations),
     ...duplicateIssues("assets", project.assets),

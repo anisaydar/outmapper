@@ -58,7 +58,7 @@ Do not trust filename extensions or user-supplied MIME values alone.
 
 The localhost runtime serves ordinary inert assets with their validated MIME metadata and range support. HTML and SVG attachments are forced to download as `application/octet-stream` with a sandboxing policy rather than executing as same-origin application content. Application responses set a restrictive CSP, `nosniff`, no-referrer, and same-origin opener policy.
 
-Large files should be streamed with explicit size/error handling rather than loaded into memory by default.
+Large files stream with bounded limits, byte-range support, and explicit size/error handling.
 
 ## Markdown and rich text
 
@@ -70,9 +70,7 @@ Arbitrary HTML documents are not trusted executable Knowledge Items. HTML files 
 
 ## SVG
 
-Untrusted SVG can contain active or surprising content. Do not inline arbitrary imported SVG markup into the privileged application DOM.
-
-Prefer safe image treatment or rigorously constrained/sanitized rendering paths.
+SVG attachments are served as downloads instead of being inserted into the application DOM. Cover uploads reject SVG.
 
 ## Iframes and external embeds
 
@@ -80,7 +78,7 @@ Outmapper does not render arbitrary active iframes or external embeds.
 
 ## URL schemes
 
-Parse and allowlist supported schemes. Ordinary knowledge links should not permit script-capable or privileged schemes such as `javascript:`.
+Project validation accepts HTTP and HTTPS knowledge links and rejects script-capable or privileged schemes such as `javascript:`.
 
 External links remain external references and must not be misrepresented as locally available content.
 

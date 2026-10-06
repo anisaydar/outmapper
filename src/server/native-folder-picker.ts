@@ -45,6 +45,15 @@ export const WINDOWS_FOLDER_PICKER_SCRIPT = [
   "if ($selected) { [Console]::Write($selected) }"
 ].join("\n");
 
+// Compiles the same C# dialog definition without showing UI, so CI can catch a broken Add-Type
+// that the picker script would otherwise hide behind its FolderBrowserDialog fallback.
+export const WINDOWS_FOLDER_PICKER_COMPILE_CHECK_SCRIPT = [
+  "$ProgressPreference = 'SilentlyContinue'",
+  "$ErrorActionPreference = 'Stop'",
+  `Add-Type -TypeDefinition @'${WINDOWS_FOLDER_DIALOG}\n'@ -Language CSharp`,
+  "[Console]::Write([OutmapperFolderDialog].GetMethod('Pick').Name)"
+].join("\n");
+
 export async function selectNativeFolder(): Promise<string | null> {
   if (process.platform === "win32") {
     const { stdout } = await execute("powershell.exe", ["-NoProfile", "-STA", "-EncodedCommand", Buffer.from(WINDOWS_FOLDER_PICKER_SCRIPT, "utf16le").toString("base64")], { windowsHide: true, maxBuffer: 64 * 1024 });

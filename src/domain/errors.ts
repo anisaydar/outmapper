@@ -4,7 +4,8 @@ export type DomainErrorCode =
   | "invalid-reference"
   | "not-found"
   | "conflicting-save"
-  | "dependent-references";
+  | "dependent-references"
+  | "checkpoint-unavailable";
 
 export class DomainError extends Error {
   readonly code: DomainErrorCode;

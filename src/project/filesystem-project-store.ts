@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { copyFile, mkdir, mkdtemp, open, readFile, readdir, rename, rm, stat, unlink, writeFile } from "node:fs/promises";
+import { mkdir, open, readFile, readdir, rename, stat, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type {
   Asset,
@@ -12,20 +12,22 @@ import type {
   PublishedSnapshot,
   Theme,
   Topic,
-  TopicRelationship
+  TopicRelationship,
+  ProjectLink
 } from "../domain/types.js";
 import type { ProjectRepository } from "../domain/repository.js";
 import { DomainError } from "../domain/errors.js";
-import { CURRENT_FORMAT_VERSION, migrateProjectData } from "./migrations.js";
+import { migrateProjectData } from "./migrations.js";
 import { resolveProjectPath } from "./paths.js";
 import { serializeCanonicalJson } from "./serialization.js";
 import { assertValidProject } from "./validation.js";
 
-const files = {
+export const CANONICAL_PROJECT_FILES = {
   manifest: "project.json",
   topics: "data/topics/records.json",
   keyIssues: "data/issues/records.json",
   relationships: "data/relationships/records.json",
+  projectLinks: "data/project-links/records.json",
   knowledgeItems: "data/knowledge/records.json",
   associations: "data/associations/records.json",
   assets: "data/assets/records.json",
@@ -34,7 +36,18 @@ const files = {
   snapshots: "snapshots/records.json"
 } as const;
 
+const files = CANONICAL_PROJECT_FILES;
+
 const recoveryCheckpoint = ".outmapper/runtime/canonical-recovery.json";
+
+/** Writes in flight in this process, by folder, so a read in this process waits for one instead of reading it half-way. */
+const pendingWrites = new Map<string, Promise<void>>();
+
+/** One key per folder however it was spelled: resolved, and case-folded on Windows, whose paths ignore case. */
+export function pendingWriteKey(projectDirectory: string): string {
+  const resolved = path.resolve(projectDirectory);
+  return process.platform === "win32" ? resolved.toLowerCase() : resolved;
+}
 
 async function readJson(projectDirectory: string, logicalPath: string): Promise<unknown> {
   const content = await readFile(resolveProjectPath(projectDirectory, logicalPath), "utf8");
@@ -58,6 +71,7 @@ export interface CreateProjectInput {
   topics?: Topic[];
   keyIssues?: KeyIssue[];
   relationships?: TopicRelationship[];
+  projectLinks?: ProjectLink[];
   knowledgeItems?: KnowledgeItem[];
   associations?: KnowledgeAssociation[];
   assets?: Asset[];
@@ -80,6 +94,7 @@ export class FileSystemProjectStore implements ProjectRepository {
       topics: input.topics ?? [],
       keyIssues: input.keyIssues ?? [],
       relationships: input.relationships ?? [],
+      projectLinks: input.projectLinks ?? [],
       knowledgeItems: input.knowledgeItems ?? [],
       associations: input.associations ?? [],
       assets: input.assets ?? [],
@@ -99,41 +114,77 @@ export class FileSystemProjectStore implements ProjectRepository {
     return project;
   }
 
+  /**
+   * Reads the Project, finishing a checkpointed write first if one was interrupted. A plain read takes no write lock,
+   * so it never collides with a save or with another read of the same folder (such as a Project switch while a
+   * request is still in flight); only recovery, which writes, locks the folder.
+   */
   async open(): Promise<CanonicalProject> {
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      // A save in this process is never read half-way; one in another process shows up as a fingerprint change.
+      await pendingWrites.get(pendingWriteKey(this.projectDirectory));
+      if (await this.hasRecoveryCheckpoint()) break;
+      const snapshot = await this.readCanonicalSnapshot();
+      if (snapshot.fingerprint !== await this.diskFingerprint()) continue;
+      // A writer in another process checkpoints before it touches the canonical files and removes the checkpoint
+      // only after all of them are written; one paused part-way leaves stable but mixed files, which recovery finishes.
+      if (await this.hasRecoveryCheckpoint()) break;
+      this.fingerprint = snapshot.fingerprint;
+      return snapshot.project;
+    }
     return this.withWriteLock(async () => {
       await this.recoverPendingWrite();
-      const project = await this.readCanonicalProject();
+      const { project } = await this.readCanonicalSnapshot();
       this.fingerprint = await this.diskFingerprint();
       return project;
     });
   }
 
-  private async readCanonicalProject(): Promise<CanonicalProject> {
-    const [manifest, topics, keyIssues, relationships, knowledgeItems, associations, assets, collections, snapshots] =
-      await Promise.all([
-        readJson(this.projectDirectory, files.manifest),
-        readJson(this.projectDirectory, files.topics),
-        readJson(this.projectDirectory, files.keyIssues),
-        readJson(this.projectDirectory, files.relationships),
-        readJson(this.projectDirectory, files.knowledgeItems),
-        readJson(this.projectDirectory, files.associations),
-        readJson(this.projectDirectory, files.assets),
-        readJson(this.projectDirectory, files.collections),
-        readJson(this.projectDirectory, files.snapshots)
-      ]);
-
-    let theme: unknown;
+  private async hasRecoveryCheckpoint(): Promise<boolean> {
     try {
-      theme = await readJson(this.projectDirectory, files.theme);
+      await stat(resolveProjectPath(this.projectDirectory, recoveryCheckpoint));
+      return true;
     } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") return false;
+      throw error;
     }
+  }
+
+  /** Reads every canonical file once; the fingerprint is of exactly the bytes that were parsed. */
+  private async readCanonicalSnapshot(): Promise<{ project: CanonicalProject; fingerprint: string }> {
+    const contents = await Promise.all(Object.values(files).map(async (logicalPath) => {
+      try { return await readFile(resolveProjectPath(this.projectDirectory, logicalPath)); }
+      catch (error) {
+        if ((logicalPath === files.theme || logicalPath === files.projectLinks) && (error as NodeJS.ErrnoException).code === "ENOENT") return undefined;
+        throw error;
+      }
+    }));
+    const hash = createHash("sha256");
+    for (const content of contents) if (content) hash.update(content);
+    const raw = new Map<string, Buffer | undefined>(Object.values(files).map((logicalPath, index) => [logicalPath, contents[index]]));
+    const parse = (logicalPath: string): unknown => {
+      try {
+        return JSON.parse(raw.get(logicalPath)!.toString("utf8")) as unknown;
+      } catch {
+        throw new Error(`${logicalPath} contains invalid JSON`);
+      }
+    };
+    const manifest = parse(files.manifest);
+    const sourceVersion = (manifest as { formatVersion?: unknown }).formatVersion;
+    // Only format 1 Projects may lack link records; for any other, reading again surfaces the missing-file error.
+    if (!raw.get(files.projectLinks) && sourceVersion !== 1) await readFile(resolveProjectPath(this.projectDirectory, files.projectLinks));
+    const projectLinks = raw.get(files.projectLinks) ? parse(files.projectLinks) : [];
+    const [topics, keyIssues, relationships, knowledgeItems, associations, assets, collections, snapshots] = [
+      files.topics, files.keyIssues, files.relationships, files.knowledgeItems, files.associations, files.assets, files.collections, files.snapshots
+    ].map(parse);
+    const theme = raw.get(files.theme) ? parse(files.theme) : undefined;
 
     const rawProject = {
       manifest,
       topics,
       keyIssues,
       relationships,
+      projectLinks,
       knowledgeItems,
       associations,
       assets,
@@ -141,51 +192,9 @@ export class FileSystemProjectStore implements ProjectRepository {
       ...(theme ? { theme } : {}),
       snapshots
     };
-    const sourceVersion = (manifest as { formatVersion?: unknown }).formatVersion;
-    if (Number.isInteger(sourceVersion) && (sourceVersion as number) < CURRENT_FORMAT_VERSION) {
-      await this.backupBeforeMigration(rawProject, sourceVersion as number);
-    }
     const migrated = migrateProjectData(rawProject);
     assertValidProject(migrated);
-    if (Number.isInteger(sourceVersion) && (sourceVersion as number) < CURRENT_FORMAT_VERSION) {
-      await this.saveUnlocked(migrated);
-    }
-    return migrated;
-  }
-
-  private async backupBeforeMigration(rawProject: unknown, sourceVersion: number): Promise<void> {
-    const digest = createHash("sha256").update(serializeCanonicalJson(rawProject)).digest("hex").slice(0, 16);
-    const backupRoot = resolveProjectPath(this.projectDirectory, ".outmapper/migration-backups");
-    const target = path.join(backupRoot, `v${sourceVersion}-${digest}`);
-    try {
-      await readdir(target);
-      return;
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
-    }
-    const runtime = resolveProjectPath(this.projectDirectory, ".outmapper/runtime");
-    await mkdir(runtime, { recursive: true });
-    await mkdir(backupRoot, { recursive: true });
-    const staging = await mkdtemp(path.join(runtime, "migration-backup-"));
-    try {
-      for (const logicalPath of Object.values(files)) {
-        try {
-          const destination = path.join(staging, ...logicalPath.split("/"));
-          await mkdir(path.dirname(destination), { recursive: true });
-          await copyFile(resolveProjectPath(this.projectDirectory, logicalPath), destination);
-        } catch (error) {
-          if (logicalPath === files.theme && (error as NodeJS.ErrnoException).code === "ENOENT") continue;
-          throw error;
-        }
-      }
-      try {
-        await rename(staging, target);
-      } catch (error) {
-        if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
-      }
-    } finally {
-      await rm(staging, { recursive: true, force: true });
-    }
+    return { project: migrated, fingerprint: hash.digest("hex") };
   }
 
   async load(): Promise<CanonicalProject> {
@@ -202,6 +211,10 @@ export class FileSystemProjectStore implements ProjectRepository {
     });
   }
 
+  async getDiskFingerprint(): Promise<string> {
+    return this.diskFingerprint();
+  }
+
   private async saveUnlocked(project: CanonicalProject): Promise<void> {
     assertValidProject(project);
     await writeJson(this.projectDirectory, recoveryCheckpoint, project);
@@ -214,13 +227,22 @@ export class FileSystemProjectStore implements ProjectRepository {
     for (const logicalPath of Object.values(files)) {
       try { hash.update(await readFile(resolveProjectPath(this.projectDirectory, logicalPath))); }
       catch (error) {
-        if (logicalPath !== files.theme || (error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+        if ((logicalPath !== files.theme && logicalPath !== files.projectLinks) || (error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
       }
     }
     return hash.digest("hex");
   }
 
   private async withWriteLock<T>(operation: () => Promise<T>): Promise<T> {
+    const key = pendingWriteKey(this.projectDirectory);
+    const write = this.withFileLock(operation);
+    const settled = write.then(() => undefined, () => undefined);
+    pendingWrites.set(key, settled);
+    void settled.then(() => { if (pendingWrites.get(key) === settled) pendingWrites.delete(key); });
+    return write;
+  }
+
+  private async withFileLock<T>(operation: () => Promise<T>): Promise<T> {
     const lock = resolveProjectPath(this.projectDirectory, ".outmapper/runtime/write.lock");
     await mkdir(path.dirname(lock), { recursive: true });
     try {
@@ -237,7 +259,7 @@ export class FileSystemProjectStore implements ProjectRepository {
       }
       if (stale) {
         await unlink(lock);
-        return this.withWriteLock(operation);
+        return this.withFileLock(operation);
       }
       throw new DomainError("conflicting-save", "Another process is saving this Project. Try again after it finishes.");
     }
@@ -251,6 +273,7 @@ export class FileSystemProjectStore implements ProjectRepository {
       writeJson(this.projectDirectory, files.topics, project.topics),
       writeJson(this.projectDirectory, files.keyIssues, project.keyIssues),
       writeJson(this.projectDirectory, files.relationships, project.relationships),
+      writeJson(this.projectDirectory, files.projectLinks, project.projectLinks),
       writeJson(this.projectDirectory, files.knowledgeItems, project.knowledgeItems),
       writeJson(this.projectDirectory, files.associations, project.associations),
       writeJson(this.projectDirectory, files.assets, project.assets),
